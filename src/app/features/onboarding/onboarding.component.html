@@ -102,7 +102,7 @@
         <form [formGroup]="apiForm">
           <ng-template matStepLabel>IA Gemini</ng-template>
           <div class="step-content">
-            <h3>Configuration BYOK</h3>
+            <h3>Configuration "Bring Your Own Key"</h3>
             <p class="api-info">
               Pour fonctionner, NutriSnap utilise l'intelligence artificielle Google Gemini. 
               C'est <strong>gratuit</strong> et vos données restent privées.
@@ -111,7 +111,10 @@
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Votre Clé API Gemini</mat-label>
               <input matInput formControlName="apiKey" placeholder="AIza..." type="password">
-              <mat-hint>Obtenez-la gratuitement sur Google AI Studio</mat-hint>
+              <mat-hint>
+                Obtenez-la gratuitement sur 
+                <a href="https://aistudio.google.com/welcome" target="_blank">Google AI Studio</a>
+              </mat-hint>
             </mat-form-field>
 
             <div *ngIf="apiKeyError" class="error-message">

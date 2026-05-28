@@ -79,9 +79,8 @@ export class OnboardingComponent {
         apiKey: key
       };
       await this.profileService.updateProfile(profile);
-      // For now, we don't have a dashboard, but let's assume we'll redirect somewhere
       console.log('Profile saved!', profile);
-      // this.router.navigate(['/dashboard']); 
+      this.router.navigate(['/dashboard']); 
     } else {
       this.apiKeyError = 'Clé API invalide ou problème de connexion. Veuillez réessayer.';
     }
