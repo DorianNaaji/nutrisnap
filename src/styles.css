@@ -1,0 +1,17 @@
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #FBFCF8;
+  color: #1C1B1F;
+}
+
+:root {
+  --primary-color: #1A5236;
+  --surface-color: #FBFCF8;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #1A5236;
+  font-weight: 500;
+}
