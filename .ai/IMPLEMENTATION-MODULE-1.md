@@ -1,0 +1,33 @@
+# Module 1 : Onboarding - Métabolisme & API
+
+## Objectif
+Permettre à l'utilisateur de configurer son profil métabolique et de valider sa clé API Gemini pour débloquer l'application.
+
+## Étapes de l'Onboarding
+1. **Écran de Bienvenue** : Présentation des valeurs (Privacy, Gratuité via BYOK).
+2. **Consentement RGPD** : Explication claire que les données restent dans IndexedDB.
+3. **Formulaire Métabolique** :
+   - Sexe (Homme/Femme)
+   - Âge (ans)
+   - Poids (kg)
+   - Taille (cm)
+   - Niveau d'activité (Sédentaire à Extrêmement actif)
+4. **Définition de l'Objectif** :
+   - Perte de poids (Doux -300, Modéré -500, Agressif -750 kcal)
+   - Maintenance
+   - Prise de masse
+5. **Configuration API** : Champ de saisie pour la clé Gemini API.
+
+## Logique Métabolique (Mifflin-St Jeor)
+L'application doit calculer automatiquement :
+- **BMR** : `10*poids + 6.25*taille - 5*age (+5 homme / -161 femme)`
+- **TDEE** : `BMR * activite`
+- **Objectif Calorique** : `TDEE - deficit` (Minimum floor à 1200 kcal).
+
+## Validation Technique
+- Créer un `ProfileService` utilisant les Angular Signals pour stocker l'état en mémoire.
+- Implémenter une méthode `validateApiKey()` qui fait un appel simple (ex: "Hello" text-only) pour confirmer que la clé est valide avant de fermer l'onboarding.
+
+## Design
+- Utilisation de `mat-stepper` pour un parcours étape par étape.
+- Composants `mat-form-field` avec Material 3.
