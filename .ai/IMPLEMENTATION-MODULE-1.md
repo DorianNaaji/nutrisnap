@@ -28,6 +28,12 @@ L'application doit calculer automatiquement :
 - Créer un `ProfileService` utilisant les Angular Signals pour stocker l'état en mémoire.
 - Implémenter une méthode `validateApiKey()` qui fait un appel simple (ex: "Hello" text-only) pour confirmer que la clé est valide avant de fermer l'onboarding.
 
-## Design
-- Utilisation de `mat-stepper` pour un parcours étape par étape.
-- Composants `mat-form-field` avec Material 3.
+## Évolutivité & Gestion des données
+- **Page Profil** : L'utilisateur doit pouvoir modifier à tout moment ses statistiques (poids, body fat, etc.).
+- **Data Control** : La page profil doit proposer :
+  - L'export complet de la base de données (JSON).
+  - La suppression totale des données locales (IndexedDB).
+- **Privacy Policy** : Rappel clair que les données transitent par Google via l'API Key, et que le développeur (Dorian Naaji) est totalement déresponsabilisé de l'utilisation de l'API.
+
+## Étape IA "Coach de vie"
+À la fin de l'onboarding, une étape finale doit générer une analyse par Gemini basée sur les données métaboliques pour offrir un feedback de "coach" (conseils sur le déficit, l'activité, etc.).

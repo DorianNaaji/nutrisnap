@@ -12,9 +12,11 @@ export class ProfileService {
     const p = this.profile();
     if (!p) return null;
 
-    // Mifflin-St Jeor Equation
-    let bmr = 10 * p.weight + 6.25 * p.height - 5 * p.age;
-    bmr = p.gender === 'male' ? bmr + 5 : bmr - 161;
+    // Mifflin-St Jeor Equation or measured BMR
+    let bmr = p.measuredBmr || (10 * p.weight + 6.25 * p.height - 5 * p.age);
+    if (!p.measuredBmr) {
+      bmr = p.gender === 'male' ? bmr + 5 : bmr - 161;
+    }
 
     const activityMultipliers = {
       sedentary: 1.2,

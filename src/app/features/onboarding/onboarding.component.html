@@ -64,6 +64,49 @@
               </mat-select>
             </mat-form-field>
 
+            <!-- OPTIONS AVANCÉES -->
+            <mat-expansion-panel class="advanced-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Données avancées (Optionnel)
+                </mat-panel-title>
+                <mat-panel-description>
+                  Balance connectée, impédancemétrie...
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="advanced-grid">
+                <mat-form-field appearance="outline">
+                  <mat-label>Masse grasse (%)</mat-label>
+                  <input matInput type="number" formControlName="bodyFat">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Graisse sous-cutanée (%)</mat-label>
+                  <input matInput type="number" formControlName="subcutaneousFat">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Graisse viscérale</mat-label>
+                  <input matInput type="number" formControlName="visceralFat">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Masse musculaire (kg)</mat-label>
+                  <input matInput type="number" formControlName="muscleMass">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>BMR mesuré (kcal)</mat-label>
+                  <input matInput type="number" formControlName="measuredBmr">
+                </mat-form-field>
+              </div>
+              <p class="advanced-hint">
+                <mat-icon inline>info</mat-icon> 
+                Si vous renseignez votre BMR mesuré, il sera utilisé à la place de l'estimation standard.
+              </p>
+            </mat-expansion-panel>
+
             <div class="stepper-actions">
               <button mat-button matStepperPrevious>Retour</button>
               <button mat-flat-button color="primary" matStepperNext>Continuer</button>

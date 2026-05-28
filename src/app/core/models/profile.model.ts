@@ -7,6 +7,12 @@ export interface UserProfile {
   activityLevel: 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active';
   goal: 'lose_mild' | 'lose_moderate' | 'lose_aggressive' | 'maintain' | 'gain';
   apiKey?: string;
+  // Optional advanced metrics
+  bodyFat?: number;
+  subcutaneousFat?: number;
+  visceralFat?: number;
+  muscleMass?: number;
+  measuredBmr?: number;
 }
 
 export interface MetabolicStats {

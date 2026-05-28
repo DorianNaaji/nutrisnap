@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ProfileService } from '../../core/services/profile.service';
 import { GeminiService } from '../../core/services/gemini.service';
 import { Router } from '@angular/router';
@@ -27,7 +28,8 @@ import { UserProfile } from '../../core/models/profile.model';
     MatSelectModule,
     MatCardModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule
   ],
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.css']
@@ -51,7 +53,13 @@ export class OnboardingComponent {
       age: [30, [Validators.required, Validators.min(13), Validators.max(120)]],
       weight: [70, [Validators.required, Validators.min(30), Validators.max(300)]],
       height: [170, [Validators.required, Validators.min(100), Validators.max(250)]],
-      activityLevel: ['moderate', Validators.required]
+      activityLevel: ['moderate', Validators.required],
+      // Advanced optional fields
+      bodyFat: [null],
+      subcutaneousFat: [null],
+      visceralFat: [null],
+      muscleMass: [null],
+      measuredBmr: [null]
     });
 
     this.goalForm = this.fb.group({

@@ -12,15 +12,9 @@ db.version(1).stores({
 });
 ```
 
-## Services à implémenter
-1. **`StorageService`** : Wrapper autour de Dexie pour :
-   - Sauvegarder/Récupérer le profil.
-   - Ajouter une entrée de log (repas).
-   - Récupérer les logs d'une journée spécifique (index sur le champ `date`).
-   - Supprimer une entrée.
-2. **`ExportService`** :
-   - Fonction `exportToJson()` : Téléchargement d'un fichier JSON contenant toute la DB.
-   - Fonction `importFromJson()` : Restauration des données avec validation du schéma.
+## Fonctionnalités Profil
+- Implémenter la vue `ProfileComponent` permettant de modifier l'ensemble des données métaboliques (poids, body fat, etc.).
+- Ajouter les fonctionnalités d'export et de suppression des données locales (IndexedDB).
 
 ## Gestion des Images
 - Les images ne doivent pas être stockées en Base64 (trop lourd pour les index).
