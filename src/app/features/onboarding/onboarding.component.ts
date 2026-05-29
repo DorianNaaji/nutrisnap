@@ -129,7 +129,13 @@ export class OnboardingComponent {
     const dailyCalorieTarget = Math.max(1200, bmr, dailyCalorieTargetRaw);
     const isSafetyFloorHit = dailyCalorieTarget > dailyCalorieTargetRaw;
 
-    this.currentStats.set({ bmr, tdee, dailyCalorieTarget, isSafetyFloorHit });
+    const targets = {
+      proteins: Math.round((dailyCalorieTarget * 0.25) / 4),
+      carbs: Math.round((dailyCalorieTarget * 0.45) / 4),
+      fats: Math.round((dailyCalorieTarget * 0.30) / 9)
+    };
+
+    this.currentStats.set({ bmr, tdee, dailyCalorieTarget, isSafetyFloorHit, targets });
   }
 
   async validateAndSave(stepper: any) {

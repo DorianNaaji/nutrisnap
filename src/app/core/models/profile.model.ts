@@ -20,4 +20,9 @@ export interface MetabolicStats {
   tdee: number;
   dailyCalorieTarget: number;
   isSafetyFloorHit: boolean;
+  targets: {
+    proteins: number;
+    carbs: number;
+    fats: number;
+  };
 }

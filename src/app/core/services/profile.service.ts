@@ -42,7 +42,15 @@ export class ProfileService {
     const dailyCalorieTarget = Math.max(1200, bmr, dailyCalorieTargetRaw);
     const isSafetyFloorHit = dailyCalorieTarget > dailyCalorieTargetRaw;
 
-    return { bmr, tdee, dailyCalorieTarget, isSafetyFloorHit };
+    // Macro Targets (Standard 40/30/30 or similar safe split)
+    // Using Prots: 25%, Fats: 30%, Carbs: 45%
+    const targets = {
+      proteins: Math.round((dailyCalorieTarget * 0.25) / 4),
+      carbs: Math.round((dailyCalorieTarget * 0.45) / 4),
+      fats: Math.round((dailyCalorieTarget * 0.30) / 9)
+    };
+
+    return { bmr, tdee, dailyCalorieTarget, isSafetyFloorHit, targets };
   });
 
   constructor(private storage: StorageService) {

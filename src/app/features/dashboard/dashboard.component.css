@@ -87,22 +87,37 @@
   border: 1px solid #e0e0e0;
 }
 
+.macro-chart {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.macro-val {
+  position: absolute;
+  font-size: 11px;
+  font-weight: bold;
+}
+
 .macro-label {
   display: block;
   font-size: 10px;
   text-transform: uppercase;
   color: #666;
-  margin-bottom: 4px;
+  font-weight: 500;
 }
 
-.macro-value {
-  font-size: 18px;
-  font-weight: bold;
+.macro-target {
+  display: block;
+  font-size: 9px;
+  color: #999;
 }
 
-.proteins .macro-value { color: #1D4ED8; }
-.carbs .macro-value { color: #D97706; }
-.fats .macro-value { color: #7C3AED; }
+.proteins mat-progress-spinner ::ng-deep circle { stroke: #1D4ED8 !important; }
+.carbs mat-progress-spinner ::ng-deep circle { stroke: #D97706 !important; }
+.fats mat-progress-spinner ::ng-deep circle { stroke: #7C3AED !important; }
 
 /* HISTORY */
 .history-section {

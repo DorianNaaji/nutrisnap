@@ -31,20 +31,34 @@
   <div class="macros-grid">
     <mat-card class="macro-item proteins">
       <mat-card-content>
+        <div class="macro-chart">
+          <mat-progress-spinner mode="determinate" [value]="getMacroProgress('proteins')" diameter="40" strokeWidth="4"></mat-progress-spinner>
+          <span class="macro-val">{{ logService.dailyStats().totalProteins }}g</span>
+        </div>
         <span class="macro-label">Protéines</span>
-        <span class="macro-value">{{ logService.dailyStats().totalProteins }}g</span>
+        <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.proteins }}g</span>
       </mat-card-content>
     </mat-card>
+
     <mat-card class="macro-item carbs">
       <mat-card-content>
+        <div class="macro-chart">
+          <mat-progress-spinner mode="determinate" [value]="getMacroProgress('carbs')" diameter="40" strokeWidth="4"></mat-progress-spinner>
+          <span class="macro-val">{{ logService.dailyStats().totalCarbs }}g</span>
+        </div>
         <span class="macro-label">Glucides</span>
-        <span class="macro-value">{{ logService.dailyStats().totalCarbs }}g</span>
+        <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.carbs }}g</span>
       </mat-card-content>
     </mat-card>
+
     <mat-card class="macro-item fats">
       <mat-card-content>
+        <div class="macro-chart">
+          <mat-progress-spinner mode="determinate" [value]="getMacroProgress('fats')" diameter="40" strokeWidth="4"></mat-progress-spinner>
+          <span class="macro-val">{{ logService.dailyStats().totalFats }}g</span>
+        </div>
         <span class="macro-label">Lipides</span>
-        <span class="macro-value">{{ logService.dailyStats().totalFats }}g</span>
+        <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.fats }}g</span>
       </mat-card-content>
     </mat-card>
   </div>

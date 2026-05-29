@@ -3,32 +3,23 @@
 ## Objectif
 Le cœur de l'application : capturer un repas, le décrire si besoin, et obtenir une analyse nutritionnelle instantanée.
 
-## 1. Capture & Image Processing (Multi-Mode)
-- **Caméra** : Flux live avec `capture="environment"`.
-- **Mode Multi-Photos** : Pouvoir accumuler plusieurs clichés (ex: plat + boisson) avant validation.
-- **Mode Texte Seul** : Permettre de décrire le repas sans photo pour obtenir une estimation.
-- **Tagging** : Sélection du type (Petit-déj, Déjeuner, Dîner, Collation).
-- **Compression (Canvas API)** : Max 1024px, JPEG 0.7, < 200Ko.
+## 1. Capture & Image Processing (Flex-Mode)
+- **Flux Caméra** : `navigator.mediaDevices.getUserMedia` ou input file.
+- **Mode Flexible** :
+  - **Photos cumulées** : L'utilisateur peut prendre une ou plusieurs photos (ex: son assiette, son verre, l'étiquette d'un dessert).
+  - **Texte complémentaire** : Un champ de texte est toujours disponible pour ajouter des précisions (ex: "environ 200g de riz") ou pour décrire le repas si aucune photo n'est prise.
+  - **Analyse Mixte** : L'IA reçoit l'ensemble des photos ET le texte pour une analyse globale.
+- **Tagging obligatoire** : Type de repas (Petit-déj, Déjeuner, Dîner, Collation).
 
-## 2. Intégration Gemini 2.5 Flash & Contexte
-- **Analyse Contextuelle** : Envoyer à l'IA l'historique de la journée (kcal consommées) et l'objectif total.
-- **Prompt Système Strict (Gestion Hallucinations)** :
-  ```text
-  Tu es un expert en nutrition. Analyse ce repas.
-  Contexte : L'utilisateur a consommé {X} sur {Y} kcal.
-  [Optionnel] Précisions : {userText}
-
-  Réponds UNIQUEMENT en JSON :
-  {
-    "status": "success | error",
-    "food_name": "nom",
-    "calories": number,
-    "macros": { "prot": number, "carb": number, "fat": number },
-    "analysis_summary": "description",
-    "coach_tip": "Conseil personnalisé (ex: 'Allez-y doucement sur le diner' ou 'Bravo pour les protéines')",
-    "error_message": "Si status=error, raison du refus (image floue, pas de nourriture...)"
-  }
-  ```
+## 2. Intégration Gemini 2.5 Flash (Intelligence Contextuelle)
+- **Contexte envoyé** :
+  - Images (Base64).
+  - Description utilisateur.
+  - Historique calorique du jour (kcal consommées).
+  - Objectif calorique total (Profil).
+- **Gestion des Hallucinations & Erreurs** :
+  - Format JSON avec champ `status` obligatoire.
+  - Si l'utilisateur saisit du texte incohérent ou une photo non-alimentaire, l'IA doit renvoyer `status: "error"` avec un message explicatif dans `error_message`.
 
 ## 3. UI du Scanner
 - Overlay "Viseur" Material Design.
