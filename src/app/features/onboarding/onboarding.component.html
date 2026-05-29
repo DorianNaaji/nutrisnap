@@ -1,10 +1,10 @@
 <div class="onboarding-container">
   <mat-card class="onboarding-card">
-    <mat-horizontal-stepper linear #stepper>
+    <mat-stepper linear #stepper [orientation]="(stepperOrientation | async) || 'horizontal'">
       
       <!-- ÉTAPE 1 : BIENVENUE -->
       <mat-step>
-        <ng-template matStepLabel>Bienvenue</ng-template>
+        <ng-template matStepLabel>Hello</ng-template>
         <div class="step-content">
           <div class="welcome-header">
             <mat-icon class="large-icon" color="primary">eco</mat-icon>
@@ -25,7 +25,7 @@
       <!-- ÉTAPE 2 : PROFIL -->
       <mat-step [stepControl]="metabolismForm">
         <form [formGroup]="metabolismForm">
-          <ng-template matStepLabel>Votre Profil</ng-template>
+          <ng-template matStepLabel>Profil</ng-template>
           <div class="step-content">
             <h3>Parlons de vous</h3>
             <div class="form-grid">
@@ -68,10 +68,10 @@
             <mat-expansion-panel class="advanced-panel">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Données avancées (Optionnel)
+                  Données avancées
                 </mat-panel-title>
                 <mat-panel-description>
-                  Balance connectée, impédancemétrie...
+                  Balance, impédance...
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
@@ -143,7 +143,7 @@
       <!-- ÉTAPE 4 : CONFIG API -->
       <mat-step [stepControl]="apiForm">
         <form [formGroup]="apiForm">
-          <ng-template matStepLabel>IA Gemini</ng-template>
+          <ng-template matStepLabel>Clé API</ng-template>
           <div class="step-content">
             <h3>Configuration "Bring Your Own Key"</h3>
             <p class="api-info">
@@ -177,7 +177,7 @@
 
       <!-- ÉTAPE 5 : COACH IA -->
       <mat-step>
-        <ng-template matStepLabel>Coach IA</ng-template>
+        <ng-template matStepLabel>Coach</ng-template>
         <div class="step-content coach-step">
           <h3>Votre analyse personnalisée</h3>
           
@@ -187,8 +187,7 @@
           </div>
 
           <div *ngIf="!isLoadingFeedback() && coachFeedback()" class="feedback-card">
-            <div class="feedback-content">
-              {{ coachFeedback() }}
+            <div class="feedback-content" [innerHTML]="formatFeedback(coachFeedback()!)">
             </div>
           </div>
 
@@ -198,7 +197,7 @@
         </div>
       </mat-step>
 
-    </mat-horizontal-stepper>
+    </mat-stepper>
     
     <app-legal-footer></app-legal-footer>
   </mat-card>

@@ -16,6 +16,9 @@ import { GeminiService } from '../../core/services/gemini.service';
 import { LegalFooterComponent } from '../../shared/components/legal-footer/legal-footer.component';
 import { Router } from '@angular/router';
 import { UserProfile } from '../../core/models/profile.model';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-onboarding',
@@ -55,7 +58,13 @@ export class OnboardingComponent {
   isLoadingFeedback = signal(false);
   showLegal = false;
 
+  stepperOrientation: Observable<'horizontal' | 'vertical'>;
+
   constructor() {
+    this.stepperOrientation = inject(BreakpointObserver)
+      .observe('(max-width: 800px)')
+      .pipe(map(({ matches }) => (matches ? 'vertical' : 'horizontal')));
+
     this.metabolismForm = this.fb.group({
       gender: ['male', Validators.required],
       age: [30, [Validators.required, Validators.min(13), Validators.max(120)]],
@@ -120,5 +129,14 @@ export class OnboardingComponent {
 
   finish() {
     this.router.navigate(['/dashboard']);
+  }
+
+  formatFeedback(text: string): string {
+    if (!text) return '';
+    // Basic Markdown Bold: **text** -> <strong>text</strong>
+    let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Newlines to <br>
+    formatted = formatted.replace(/\n/g, '<br>');
+    return formatted;
   }
 }

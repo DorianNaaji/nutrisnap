@@ -72,7 +72,12 @@ export class GeminiService {
   }
 
   async getCoachFeedback(profile: any, stats: any): Promise<string> {
-    const model = this.getModel();
+    // For feedback, we don't want JSON, just plain text.
+    // We create a dedicated model instance WITHOUT JSON mimeType config to avoid confusion.
+    const key = this.profileService.profile()?.apiKey;
+    if (!key) throw new Error('API Key not configured');
+    
+    const textModel = new GoogleGenerativeAI(key).getGenerativeModel({ model: 'gemini-2.5-flash' });
     
     const prompt = `
       Tu es un coach de vie et nutritionniste expert. Analyse les données métaboliques suivantes et donne un feedback motivant et constructif.
@@ -94,10 +99,11 @@ export class GeminiService {
       2. Expliquer brièvement ce que signifient ces chiffres pour l'utilisateur.
       3. Donner 2-3 conseils concrets (sport, alimentation, ou habitudes).
       4. Rappeler l'importance de la régularité.
-      Gardes un ton court, impactant et formatté en paragraphes simples. Pas de JSON ici, juste du texte pur.
+      Gardes un ton court, impactant et formatté en paragraphes simples. 
+      IMPORTANT: Réponds UNIQUEMENT en texte brut. Ne mets PAS de balises JSON, pas de crochets [], pas d'accolades {}. Juste ton texte de coach.
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await textModel.generateContent(prompt);
     const response = await result.response;
     return response.text();
   }
