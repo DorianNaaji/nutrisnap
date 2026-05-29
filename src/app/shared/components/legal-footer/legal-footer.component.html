@@ -1,0 +1,46 @@
+<div class="legal-footer-container">
+  <div class="footer-buttons">
+    <button mat-button class="legal-trigger" (click)="showLegal = !showLegal; showOpenSource = false">
+      <mat-icon>gavel</mat-icon> Mentions Légales & Conditions
+    </button>
+    <button mat-button class="legal-trigger" (click)="showOpenSource = !showOpenSource; showLegal = false">
+      <mat-icon>code</mat-icon> Open Source
+    </button>
+  </div>
+
+  <!-- CONTENT: LEGAL -->
+  <div *ngIf="showLegal" class="legal-content">
+    <section>
+      <strong>1. Décharge de Responsabilité Juridique</strong>
+      <p>L'application NutriSnap est fournie "en l'état". Le développeur, Dorian Naaji, décline toute responsabilité concernant l'exactitude des calculs nutritionnels ou les décisions de santé prises sur la base des analyses générées. Ces informations ne constituent en aucun cas un avis médical.</p>
+    </section>
+
+    <section>
+      <strong>2. Responsabilité de Traitement</strong>
+      <p>En intégrant votre propre clé API Google Gemini, vous engagez une relation technique directe avec Google. <strong>Le traitement, la sécurité et la confidentialité des données transmises via l'API relèvent de la responsabilité exclusive de Google.</strong> Le développeur n'agit pas en tant que responsable de traitement pour les flux de données transitant par l'API.</p>
+    </section>
+
+    <section>
+      <strong>3. Confidentialité "Zero-Backend"</strong>
+      <p>Aucune donnée n'est collectée sur un serveur tiers par le développeur. Toutes vos informations (profil, clés, historiques) sont stockées localement dans votre navigateur (IndexedDB). Dorian Naaji n'a aucun accès technique à vos données ou à l'usage que vous faites de votre clé API.</p>
+    </section>
+  </div>
+
+  <!-- CONTENT: OPEN SOURCE -->
+  <div *ngIf="showOpenSource" class="legal-content">
+    <section>
+      <strong>1. Transparence Totale</strong>
+      <p>Le code source de NutriSnap est entièrement public et <strong>Open Source</strong>. Cette transparence permet à chaque utilisateur de vérifier le fonctionnement exact de l'application et de confirmer qu'aucun stockage tiers n'est effectué.</p>
+    </section>
+
+    <section>
+      <strong>2. Génération par IA</strong>
+      <p>La totalité du code de cette application a été générée par l'intelligence artificielle <strong>Google Gemini</strong>. Ce projet est une démonstration de la capacité des modèles de langage à concevoir des applications complexes, sécurisées et respectueuses de la vie privée.</p>
+    </section>
+
+    <section>
+      <strong>3. Accès au Code</strong>
+      <p>Vous pouvez consulter, forker ou contribuer au projet sur GitHub. L'architecture repose sur Angular, Material Design et Dexie.js pour une expérience 100% locale.</p>
+    </section>
+  </div>
+</div>

@@ -200,26 +200,6 @@
 
     </mat-horizontal-stepper>
     
-    <div class="legal-footer">
-        <button mat-button class="legal-trigger" (click)="showLegal = !showLegal">
-          <mat-icon>gavel</mat-icon> Mentions Légales & Conditions
-        </button>
-        <div *ngIf="showLegal" class="legal-content">
-          <section>
-            <strong>1. Décharge de Responsabilité Juridique</strong>
-            <p>L'application NutriSnap est fournie "en l'état". Le développeur, Dorian Naaji, décline toute responsabilité concernant l'exactitude des calculs nutritionnels ou les décisions de santé prises sur la base des analyses générées. Ces informations ne constituent en aucun cas un avis médical.</p>
-          </section>
-  
-          <section>
-            <strong>2. Responsabilité de Traitement</strong>
-            <p>En intégrant votre propre clé API Google Gemini, vous engagez une relation technique directe avec Google. <strong>Le traitement, la sécurité et la confidentialité des données transmises via l'API relèvent de la responsabilité exclusive de Google.</strong> Le développeur n'agit pas en tant que responsable de traitement pour les flux de données transitant par l'API.</p>
-          </section>
-
-        <section>
-          <strong>3. Confidentialité "Zero-Backend"</strong>
-          <p>Aucune donnée n'est collectée sur un serveur tiers par le développeur. Toutes vos informations (profil, clés, historiques) sont stockées localement dans votre navigateur (IndexedDB). Dorian Naaji n'a aucun accès technique à vos données ou à l'usage que vous faites de votre clé API.</p>
-        </section>
-      </div>
-    </div>
+    <app-legal-footer></app-legal-footer>
   </mat-card>
 </div>

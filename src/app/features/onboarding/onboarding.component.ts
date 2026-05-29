@@ -13,6 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ProfileService } from '../../core/services/profile.service';
 import { StorageService } from '../../core/services/storage.service';
 import { GeminiService } from '../../core/services/gemini.service';
+import { LegalFooterComponent } from '../../shared/components/legal-footer/legal-footer.component';
 import { Router } from '@angular/router';
 import { UserProfile } from '../../core/models/profile.model';
 
@@ -30,7 +31,8 @@ import { UserProfile } from '../../core/models/profile.model';
     MatCardModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    LegalFooterComponent
   ],
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.css']
