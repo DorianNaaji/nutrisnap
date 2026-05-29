@@ -34,7 +34,7 @@
   margin-bottom: 12px;
 }
 
-.legal-content strong {
+.legal-content section > strong {
   display: block;
   margin-bottom: 4px;
   color: #1a5236;
