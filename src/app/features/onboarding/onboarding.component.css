@@ -133,6 +133,19 @@ mat-spinner {
   color: #49454f;
   margin-top: 8px;
   line-height: 1.4;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.legal-content section {
+  margin-bottom: 12px;
+}
+
+.legal-content strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #1a5236;
 }
 
 @keyframes fadeIn {
