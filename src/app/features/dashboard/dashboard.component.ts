@@ -1,26 +1,36 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../core/services/profile.service';
+import { LogService } from '../../core/services/log.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div style="padding: 24px; text-align: center;">
-      <h1>Tableau de Bord</h1>
-      <p>Bienvenue {{ profileService.profile()?.gender === 'male' ? 'Monsieur' : 'Madame' }} !</p>
-      <div style="background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 20px;">
-        <h2>Objectif du jour</h2>
-        <p style="font-size: 32px; font-weight: bold; color: #1a5236;">
-          {{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }} kcal
-        </p>
-        <p>Métabolisme de base : {{ profileService.metabolicStats()?.bmr | number:'1.0-0' }} kcal</p>
-      </div>
-      <p style="margin-top: 40px; color: #666; font-style: italic;">Le moteur de scan arrive au module 3...</p>
-    </div>
-  `
+  imports: [
+    CommonModule, 
+    MatCardModule, 
+    MatButtonModule, 
+    MatIconModule, 
+    MatProgressBarModule,
+    RouterModule
+  ],
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
   profileService = inject(ProfileService);
+  logService = inject(LogService);
+
+  today = new Date();
+
+  get progressValue(): number {
+    const target = this.profileService.metabolicStats()?.dailyCalorieTarget || 2000;
+    const consumed = this.logService.dailyStats().totalCalories;
+    return Math.min(100, (consumed / target) * 100);
+  }
 }

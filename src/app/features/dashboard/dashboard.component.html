@@ -1,0 +1,83 @@
+<div class="dashboard-container">
+  <!-- HEADER STATS -->
+  <header class="dashboard-header">
+    <div class="greeting">
+      <h1>Hello, {{ profileService.profile()?.gender === 'male' ? 'Monsieur' : 'Madame' }}</h1>
+      <p class="date">{{ today | date:'fullDate' }}</p>
+    </div>
+    <button mat-icon-button color="primary" routerLink="/profile">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </header>
+
+  <!-- MAIN CALORIE RING / PROGRESS -->
+  <mat-card class="calorie-card">
+    <div class="calorie-info">
+      <div class="main-stat">
+        <span class="value">{{ logService.dailyStats().remainingCalories | number:'1.0-0' }}</span>
+        <span class="label">kcal restantes</span>
+      </div>
+      <div class="progress-container">
+        <mat-progress-bar mode="determinate" [value]="progressValue" color="primary"></mat-progress-bar>
+        <div class="progress-details">
+          <span>Consommé: {{ logService.dailyStats().totalCalories }} kcal</span>
+          <span>Objectif: {{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }} kcal</span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- MACROS WIDGETS -->
+  <div class="macros-grid">
+    <mat-card class="macro-item proteins">
+      <mat-card-content>
+        <span class="macro-label">Protéines</span>
+        <span class="macro-value">{{ logService.dailyStats().totalProteins }}g</span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="macro-item carbs">
+      <mat-card-content>
+        <span class="macro-label">Glucides</span>
+        <span class="macro-value">{{ logService.dailyStats().totalCarbs }}g</span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="macro-item fats">
+      <mat-card-content>
+        <span class="macro-label">Lipides</span>
+        <span class="macro-value">{{ logService.dailyStats().totalFats }}g</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- RECENT LOGS -->
+  <section class="history-section">
+    <div class="section-header">
+      <h2>Historique du jour</h2>
+      <button mat-button color="primary">Tout voir</button>
+    </div>
+
+    <div *ngIf="logService.dailyLogs().length === 0" class="empty-state">
+      <mat-icon>restaurant_menu</mat-icon>
+      <p>Aucun repas enregistré aujourd'hui.</p>
+    </div>
+
+    <div class="logs-list">
+      <mat-card *ngFor="let log of logService.dailyLogs()" class="log-item">
+        <mat-card-content>
+          <div class="log-main">
+            <span class="log-name">{{ log.foodName }}</span>
+            <span class="log-calories">{{ log.calories }} kcal</span>
+          </div>
+          <div class="log-macros">
+            P: {{ log.macros.proteins }}g | G: {{ log.macros.carbs }}g | L: {{ log.macros.fats }}g
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- FAB FOR SCAN -->
+  <button mat-fab color="primary" class="fab-scan" routerLink="/scanner">
+    <mat-icon>photo_camera</mat-icon>
+  </button>
+</div>

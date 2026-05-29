@@ -1,0 +1,164 @@
+.dashboard-container {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 80px; /* Space for FAB */
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.greeting h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #1a5236;
+}
+
+.date {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* CALORIE CARD */
+.calorie-card {
+  border-radius: 28px;
+  background: #e8f3eb;
+  box-shadow: none;
+  border: 1px solid #c8e6c9;
+}
+
+.calorie-info {
+  padding: 24px;
+  text-align: center;
+}
+
+.main-stat {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.main-stat .value {
+  font-size: 48px;
+  font-weight: bold;
+  color: #1a5236;
+}
+
+.main-stat .label {
+  font-size: 14px;
+  color: #49454f;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #49454f;
+}
+
+/* MACROS GRID */
+.macros-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.macro-item {
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: none;
+  border: 1px solid #e0e0e0;
+}
+
+.macro-label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.macro-value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.proteins .macro-value { color: #1D4ED8; }
+.carbs .macro-value { color: #D97706; }
+.fats .macro-value { color: #7C3AED; }
+
+/* HISTORY */
+.history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+}
+
+.logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.log-item {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.log-main {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.log-macros {
+  font-size: 12px;
+  color: #666;
+}
+
+/* FAB */
+.fab-scan {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+}

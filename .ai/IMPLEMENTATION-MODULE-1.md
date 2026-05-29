@@ -22,11 +22,12 @@ Permettre à l'utilisateur de configurer son profil métabolique et de valider s
 L'application doit calculer automatiquement :
 - **BMR** : `10*poids + 6.25*taille - 5*age (+5 homme / -161 femme)`
 - **TDEE** : `BMR * activite`
-- **Objectif Calorique** : `TDEE - deficit` (Minimum floor à 1200 kcal).
+- **Objectif Calorique** : `TDEE - deficit` (Minimum floor au BMR de l'utilisateur pour éviter les risques de santé).
 
-## Validation Technique
+## Validation Technique & Composants Partagés
 - Créer un `ProfileService` utilisant les Angular Signals pour stocker l'état en mémoire.
-- Implémenter une méthode `validateApiKey()` qui fait un appel simple (ex: "Hello" text-only) pour confirmer que la clé est valide avant de fermer l'onboarding.
+- Implémenter une méthode `validateApiKey()` qui fait un appel simple (ex: "Hello" text-only) pour confirmer que la clé est valide.
+- **LegalFooterComponent** : Composant partagé pour les mentions légales et les informations Open Source (Transparence IA).
 
 ## Évolutivité & Gestion des données
 - **Page Profil** : L'utilisateur doit pouvoir modifier à tout moment ses statistiques (poids, body fat, etc.).
