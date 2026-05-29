@@ -4,7 +4,7 @@
 Permettre à l'utilisateur de configurer son profil métabolique et de valider sa clé API Gemini pour débloquer l'application.
 
 ## Étapes de l'Onboarding
-1. **Écran de Bienvenue** : Présentation des valeurs (Privacy, Gratuité via BYOK).
+1. **Écran de Bienvenue** : Présentation des valeurs (Privacy, Gratuité via Bring Your Own Key).
 2. **Consentement RGPD** : Explication claire que les données restent dans IndexedDB.
 3. **Formulaire Métabolique** :
    - Sexe (Homme/Femme)

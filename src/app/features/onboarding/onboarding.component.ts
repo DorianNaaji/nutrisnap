@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ProfileService } from '../../core/services/profile.service';
+import { StorageService } from '../../core/services/storage.service';
 import { GeminiService } from '../../core/services/gemini.service';
 import { Router } from '@angular/router';
 import { UserProfile } from '../../core/models/profile.model';
@@ -39,6 +40,7 @@ export class OnboardingComponent {
   private profileService = inject(ProfileService);
   private geminiService = inject(GeminiService);
   private router = inject(Router);
+  private storage = inject(StorageService);
 
   metabolismForm: FormGroup;
   goalForm: FormGroup;

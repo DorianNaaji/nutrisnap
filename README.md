@@ -5,7 +5,7 @@ NutriSnap est une application mobile-first permettant de suivre sa nutrition quo
 ## 🚀 Vision
 - **Privacy-First** : Aucune donnée ne quitte le téléphone (sauf vers l'API Gemini).
 - **Zéro Backend** : Pas de base de données centrale, pas de compte utilisateur.
-- **BYOK** : L'utilisateur utilise sa propre clé API Google Gemini.
+- **Bring Your Own Key** : L'utilisateur utilise sa propre clé API Google Gemini.
 - **Expérience Premium** : Interface Material Design 3 ultra-fluide.
 
 ## 🛠 Stack Technique

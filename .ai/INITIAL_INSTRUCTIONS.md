@@ -1,7 +1,7 @@
 # NutriSnap - Full Application Specification
 
 ## 1. Vision du Projet
-NutriSnap est une PWA (Progressive Web App) "Privacy-First" permettant le suivi nutritionnel automatisé par IA. L'application est conçue pour être ultra-rapide, élégante (Style Google/Material 3) et sans coût d'infrastructure pour l'utilisateur (Modèle BYOK).
+NutriSnap est une PWA (Progressive Web App) "Privacy-First" permettant le suivi nutritionnel automatisé par IA. L'application est conçue pour être ultra-rapide, élégante (Style Google/Material 3) et sans coût d'infrastructure pour l'utilisateur (Modèle "Bring Your Own Key").
 
 ## 2. Stack Technique & Design System
 - **Framework** : Angular (v17+) avec Signals pour une réactivité optimale.
@@ -21,7 +21,7 @@ NutriSnap est une PWA (Progressive Web App) "Privacy-First" permettant le suivi 
 - **Core Components** :
   - `LayoutComponent` : Shell avec barre de navigation inférieure (Material Bottom Navigation).
   - `CameraService` : Gestion de l'accès caméra et compression Canvas (JPEG 70%, 1024px max).
-  - `GeminiService` : Orchestrateur BYOK pour l'API Vision (Utilise `gemini-2.5-flash`).
+  - `GeminiService` : Orchestrateur "Bring Your Own Key" pour l'API Vision (Utilise `gemini-2.5-flash`).
 - **Feature Modules** :
   - **Dashboard** : Anneau de progression central (Calories), widgets de macros, timeline quotidienne.
   - **Scanner** : Interface de capture plein écran avec feedback visuel.
