@@ -132,6 +132,25 @@
               </mat-select>
             </mat-form-field>
 
+            <!-- RÉSUMÉ MÉTABOLIQUE SÉCURISÉ -->
+            <div *ngIf="currentStats()" class="metabolic-summary">
+              <div class="stat-item">
+                <span class="label">Métabolisme de base (BMR)</span>
+                <span class="value">{{ currentStats()!.bmr | number:'1.0-0' }} kcal</span>
+              </div>
+              <div class="stat-item target" [class.warning]="currentStats()!.isSafetyFloorHit">
+                <span class="label">Objectif quotidien</span>
+                <span class="value">{{ currentStats()!.dailyCalorieTarget | number:'1.0-0' }} kcal</span>
+              </div>
+              
+              <div *ngIf="currentStats()!.isSafetyFloorHit" class="safety-warning">
+                <mat-icon>warning</mat-icon>
+                <span>
+                  <strong>Protection métabolique activée :</strong> Votre objectif a été ajusté à votre BMR ({{ currentStats()!.bmr | number:'1.0-0' }} kcal) pour éviter de ralentir votre métabolisme et préserver votre santé.
+                </span>
+              </div>
+            </div>
+
             <div class="stepper-actions">
               <button mat-button matStepperPrevious>Retour</button>
               <button mat-flat-button color="primary" matStepperNext>Continuer</button>

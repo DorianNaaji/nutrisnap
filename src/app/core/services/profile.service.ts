@@ -36,9 +36,13 @@ export class ProfileService {
       gain: 300
     };
 
-    const dailyCalorieTarget = Math.max(1200, tdee + goalAdjustments[p.goal]);
+    const dailyCalorieTargetRaw = tdee + goalAdjustments[p.goal];
+    
+    // Safety Floor: Never go below BMR to avoid metabolic damage, and absolute floor of 1200
+    const dailyCalorieTarget = Math.max(1200, bmr, dailyCalorieTargetRaw);
+    const isSafetyFloorHit = dailyCalorieTarget > dailyCalorieTargetRaw;
 
-    return { bmr, tdee, dailyCalorieTarget };
+    return { bmr, tdee, dailyCalorieTarget, isSafetyFloorHit };
   });
 
   constructor(private storage: StorageService) {

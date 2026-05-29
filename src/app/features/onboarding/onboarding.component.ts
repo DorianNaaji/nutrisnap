@@ -15,10 +15,10 @@ import { StorageService } from '../../core/services/storage.service';
 import { GeminiService } from '../../core/services/gemini.service';
 import { LegalFooterComponent } from '../../shared/components/legal-footer/legal-footer.component';
 import { Router } from '@angular/router';
-import { UserProfile } from '../../core/models/profile.model';
+import { UserProfile, MetabolicStats } from '../../core/models/profile.model';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-onboarding',
@@ -59,6 +59,7 @@ export class OnboardingComponent {
   showLegal = false;
 
   stepperOrientation: Observable<'horizontal' | 'vertical'>;
+  currentStats = signal<MetabolicStats | null>(null);
 
   constructor() {
     this.stepperOrientation = inject(BreakpointObserver)
@@ -86,6 +87,49 @@ export class OnboardingComponent {
     this.apiForm = this.fb.group({
       apiKey: ['', Validators.required]
     });
+
+    combineLatest([
+      this.metabolismForm.valueChanges.pipe(startWith(this.metabolismForm.value)),
+      this.goalForm.valueChanges.pipe(startWith(this.goalForm.value))
+    ]).subscribe(([metabolism, goal]) => {
+      this.calculateStats(metabolism, goal);
+    });
+  }
+
+  private calculateStats(metabolism: any, goal: any) {
+    if (this.metabolismForm.invalid) {
+      this.currentStats.set(null);
+      return;
+    }
+
+    let bmr = metabolism.measuredBmr || (10 * metabolism.weight + 6.25 * metabolism.height - 5 * metabolism.age);
+    if (!metabolism.measuredBmr) {
+      bmr = metabolism.gender === 'male' ? bmr + 5 : bmr - 161;
+    }
+
+    const activityMultipliers: any = {
+      sedentary: 1.2,
+      light: 1.375,
+      moderate: 1.55,
+      active: 1.725,
+      very_active: 1.9
+    };
+
+    const tdee = bmr * activityMultipliers[metabolism.activityLevel];
+
+    const goalAdjustments: any = {
+      lose_mild: -300,
+      lose_moderate: -500,
+      lose_aggressive: -750,
+      maintain: 0,
+      gain: 300
+    };
+
+    const dailyCalorieTargetRaw = tdee + goalAdjustments[goal.goal];
+    const dailyCalorieTarget = Math.max(1200, bmr, dailyCalorieTargetRaw);
+    const isSafetyFloorHit = dailyCalorieTarget > dailyCalorieTargetRaw;
+
+    this.currentStats.set({ bmr, tdee, dailyCalorieTarget, isSafetyFloorHit });
   }
 
   async validateAndSave(stepper: any) {

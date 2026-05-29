@@ -19,4 +19,5 @@ export interface MetabolicStats {
   bmr: number;
   tdee: number;
   dailyCalorieTarget: number;
+  isSafetyFloorHit: boolean;
 }

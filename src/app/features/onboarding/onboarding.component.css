@@ -121,6 +121,53 @@ mat-spinner {
   padding: 16px 0;
 }
 
+.metabolic-summary {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.stat-item.target {
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #ccc;
+  color: #1a5236;
+}
+
+.stat-item.warning {
+  color: #b3261e;
+}
+
+.safety-warning {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 12px;
+  padding: 12px;
+  background: #fff4e5;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #663c00;
+}
+
+.safety-warning mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #ed6c02;
+}
+
 .advanced-panel {
   box-shadow: none !important;
   border: 1px solid #e0e0e0;

@@ -88,9 +88,10 @@ export class GeminiService {
       - Taille: ${profile.height} cm
       - Activité: ${profile.activityLevel}
       - Objectif: ${profile.goal}
-      - BMR (estimé): ${stats.bmr} kcal
-      - TDEE (dépense totale): ${stats.tdee} kcal
-      - Cible calorique: ${stats.dailyCalorieTarget} kcal
+      - BMR (besoin vital au repos): ${stats.bmr} kcal
+      - TDEE (dépense totale estimée): ${stats.tdee} kcal
+      - Cible calorique calculée: ${stats.dailyCalorieTarget} kcal
+      ${stats.isSafetyFloorHit ? `(Note: La cible a été bloquée au niveau du BMR car l'objectif initial était trop bas et dangereux pour le métabolisme)` : ''}
       ${profile.bodyFat ? `- Masse grasse: ${profile.bodyFat}%` : ''}
       ${profile.muscleMass ? `- Masse musculaire: ${profile.muscleMass}kg` : ''}
 
