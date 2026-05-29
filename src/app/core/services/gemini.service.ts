@@ -70,4 +70,35 @@ export class GeminiService {
     const response = await result.response;
     return JSON.parse(response.text());
   }
+
+  async getCoachFeedback(profile: any, stats: any): Promise<string> {
+    const model = this.getModel();
+    
+    const prompt = `
+      Tu es un coach de vie et nutritionniste expert. Analyse les données métaboliques suivantes et donne un feedback motivant et constructif.
+      Données :
+      - Sexe: ${profile.gender}
+      - Âge: ${profile.age} ans
+      - Poids: ${profile.weight} kg
+      - Taille: ${profile.height} cm
+      - Activité: ${profile.activityLevel}
+      - Objectif: ${profile.goal}
+      - BMR (estimé): ${stats.bmr} kcal
+      - TDEE (dépense totale): ${stats.tdee} kcal
+      - Cible calorique: ${stats.dailyCalorieTarget} kcal
+      ${profile.bodyFat ? `- Masse grasse: ${profile.bodyFat}%` : ''}
+      ${profile.muscleMass ? `- Masse musculaire: ${profile.muscleMass}kg` : ''}
+
+      Ton feedback doit :
+      1. Être bienveillant et encourageant ("style coach").
+      2. Expliquer brièvement ce que signifient ces chiffres pour l'utilisateur.
+      3. Donner 2-3 conseils concrets (sport, alimentation, ou habitudes).
+      4. Rappeler l'importance de la régularité.
+      Gardes un ton court, impactant et formatté en paragraphes simples. Pas de JSON ici, juste du texte pur.
+    `;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  }
 }

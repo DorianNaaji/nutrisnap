@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -46,6 +46,10 @@ export class OnboardingComponent {
   
   isValidatingKey = false;
   apiKeyError = '';
+  
+  coachFeedback = signal<string | null>(null);
+  isLoadingFeedback = signal(false);
+  showLegal = false;
 
   constructor() {
     this.metabolismForm = this.fb.group({
@@ -71,7 +75,7 @@ export class OnboardingComponent {
     });
   }
 
-  async validateAndSave() {
+  async validateAndSave(stepper: any) {
     if (this.apiForm.invalid) return;
 
     this.isValidatingKey = true;
@@ -87,11 +91,30 @@ export class OnboardingComponent {
         apiKey: key
       };
       await this.profileService.updateProfile(profile);
-      console.log('Profile saved!', profile);
-      this.router.navigate(['/dashboard']); 
+      this.isValidatingKey = false;
+      stepper.next();
+      this.generateCoachFeedback();
     } else {
       this.apiKeyError = 'Clé API invalide ou problème de connexion. Veuillez réessayer.';
+      this.isValidatingKey = false;
     }
-    this.isValidatingKey = false;
+  }
+
+  async generateCoachFeedback() {
+    this.isLoadingFeedback.set(true);
+    try {
+      const profile = { ...this.metabolismForm.value, ...this.goalForm.value };
+      const stats = this.profileService.metabolicStats();
+      const feedback = await this.geminiService.getCoachFeedback(profile, stats);
+      this.coachFeedback.set(feedback);
+    } catch (e) {
+      this.coachFeedback.set("Désolé, je n'ai pas pu générer votre analyse pour le moment, mais vos données sont bien enregistrées !");
+    } finally {
+      this.isLoadingFeedback.set(false);
+    }
+  }
+
+  finish() {
+    this.router.navigate(['/dashboard']);
   }
 }

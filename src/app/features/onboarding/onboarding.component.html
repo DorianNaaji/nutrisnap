@@ -166,15 +166,48 @@
 
             <div class="stepper-actions">
               <button mat-button matStepperPrevious [disabled]="isValidatingKey">Retour</button>
-              <button mat-flat-button color="primary" (click)="validateAndSave()" [disabled]="isValidatingKey">
+              <button mat-flat-button color="primary" (click)="validateAndSave(stepper)" [disabled]="isValidatingKey">
                 <mat-spinner diameter="20" *ngIf="isValidatingKey"></mat-spinner>
-                <span *ngIf="!isValidatingKey">Finaliser</span>
+                <span *ngIf="!isValidatingKey">Valider & Analyser</span>
               </button>
             </div>
           </div>
         </form>
       </mat-step>
 
+      <!-- ÉTAPE 5 : COACH IA -->
+      <mat-step>
+        <ng-template matStepLabel>Coach IA</ng-template>
+        <div class="step-content coach-step">
+          <h3>Votre analyse personnalisée</h3>
+          
+          <div *ngIf="isLoadingFeedback()" class="loading-feedback">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Le coach analyse vos données...</p>
+          </div>
+
+          <div *ngIf="!isLoadingFeedback() && coachFeedback()" class="feedback-card">
+            <div class="feedback-content">
+              {{ coachFeedback() }}
+            </div>
+          </div>
+
+          <div class="stepper-actions">
+            <button mat-flat-button color="primary" (click)="finish()">Commencer l'aventure</button>
+          </div>
+        </div>
+      </mat-step>
+
     </mat-horizontal-stepper>
+    
+    <div class="legal-footer">
+      <button mat-button class="legal-trigger" (click)="showLegal = !showLegal">
+        <mat-icon>info</mat-icon> Mentions légales
+      </button>
+      <div *ngIf="showLegal" class="legal-content">
+        <p><strong>Déresponsabilisation :</strong> Le développeur de l'application, Dorian Naaji, décline toute responsabilité juridique concernant les résultats fournis. NutriSnap est un outil d'agrégation de données locales.</p>
+        <p><strong>Traitement des données :</strong> Une fois votre clé API saisie, les informations métaboliques et images de repas sont transmises à l'IA de Google pour analyse. NutriSnap ne stocke rien sur un serveur externe ; tout reste dans la base de données de votre navigateur (IndexedDB).</p>
+      </div>
+    </div>
   </mat-card>
 </div>
