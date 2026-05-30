@@ -1,9 +1,15 @@
 <div class="scanner-container">
   <div class="camera-preview">
     <video #video autoplay playsinline></video>
-    <button mat-fab color="primary" class="capture-btn" (click)="capture()">
-      <mat-icon>camera_alt</mat-icon>
-    </button>
+    <div class="scanner-controls">
+      <button mat-fab color="primary" class="capture-btn" (click)="capture()">
+        <mat-icon>camera_alt</mat-icon>
+      </button>
+      <button mat-icon-button class="gallery-btn" (click)="fileInput.click()">
+        <mat-icon>photo_library</mat-icon>
+      </button>
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" multiple hidden>
+    </div>
   </div>
 
   <div class="gallery" *ngIf="capturedImages().length > 0">

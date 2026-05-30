@@ -66,6 +66,17 @@ export class ScannerComponent {
     this.capturedImages.update(imgs => imgs.filter((_, i) => i !== index));
   }
 
+  onFileSelected(event: any) {
+    const files = event.target.files;
+    if (files) {
+      for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => this.capturedImages.update(imgs => [...imgs, e.target.result]);
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
   async submit() {
     if (this.isLoading()) return;
     this.isLoading.set(true);
