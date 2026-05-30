@@ -1,12 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ProfileService } from './profile.service';
+import { LogService } from './log.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeminiService {
   private profileService = inject(ProfileService);
+  private logService = inject(LogService);
   private genAI: GoogleGenerativeAI | null = null;
 
   async validateApiKey(key: string): Promise<boolean> {
@@ -34,41 +36,47 @@ export class GeminiService {
     });
   }
 
-  async analyzeMeal(imageB64: string, userText?: string) {
+  async analyzeMeal(imagesB64: string[], userText: string, mealType: string) {
     const model = this.getModel();
-
+    const stats = this.profileService.metabolicStats();
+    const history = this.logService.dailyStats();
+    
     const prompt = `
-      Tu es un expert en nutrition. Analyse cette image de repas.
-      ${userText ? 'Précisions de l utilisateur : ' + userText : ''}
-      
-      Retourne un objet JSON valide avec cette structure précise :
+      Tu es un expert en nutrition. Analyse ce repas de type "${mealType}".
+      Contexte utilisateur :
+      - Objectif quotidien: ${stats?.dailyCalorieTarget} kcal
+      - Déjà consommé ce jour: ${history.totalCalories} kcal
+
+      [Optionnel] Précisions utilisateur : ${userText || 'Aucune'}
+
+      Réponds UNIQUEMENT en JSON valide avec cette structure stricte (sans markdown ou autre texte):
       {
-        "food_name": "nom précis du plat",
+        "status": "success | error",
+        "food_name": "nom précis",
         "calories": number,
         "macros": { "prot": number, "carb": number, "fat": number },
-        "ingredients_detected": [
-          { "name": "nom", "est_weight_g": number, "confidence": number }
-        ],
-        "analysis_summary": "courte description de l'analyse",
-        "confidence_score": "low|medium|high",
-        "vegan_alternative": { "name": "string", "calories": number } | null
+        "analysis_summary": "courte description",
+        "coach_tip": "Conseil personnalisé basé sur la journée",
+        "error_message": "Si status=error, explique pourquoi l'analyse est impossible (ex: pas de nourriture, flou...)"
       }
     `;
 
-    const base64Data = imageB64.split(',')[1] || imageB64;
-
-    const result = await model.generateContent([
-      prompt,
-      {
+    const parts: any[] = [prompt];
+    imagesB64.forEach(img => {
+      parts.push({
         inlineData: {
-          data: base64Data,
+          data: img.split(',')[1] || img,
           mimeType: 'image/jpeg'
         }
-      }
-    ]);
+      });
+    });
 
+    const result = await model.generateContent(parts);
     const response = await result.response;
-    return JSON.parse(response.text());
+    
+    // Clean response just in case
+    const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(text);
   }
 
   async getCoachFeedback(profile: any, stats: any): Promise<string> {

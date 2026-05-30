@@ -1,0 +1,75 @@
+.scanner-container {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.camera-preview {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: #000;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.capture-btn {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gallery {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.thumb {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.thumb button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: white;
+}
+
+.scanner-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.error-banner {
+  color: #b3261e;
+  padding: 8px;
+  border: 1px solid #b3261e;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.submit-btn {
+  height: 50px;
+  font-size: 16px;
+}
