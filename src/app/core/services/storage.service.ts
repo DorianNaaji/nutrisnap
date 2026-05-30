@@ -18,28 +18,24 @@ export class StorageService extends Dexie {
   settings!: Table<AppSettings, string>;
 
   constructor() {
-    super('NutriSnapDB');
+    super('NutriSnapDB_v2');
     this.version(1).stores({
-      profile: '++id',
+      profile: 'id',
       logs: '++id, date, timestamp',
       settings: 'id'
     });
   }
 
+
   // Profile Methods
   async getProfile(): Promise<UserProfile | undefined> {
-    const profiles = await this.profile.toArray();
-    return profiles[0];
+    return await this.profile.get(1);
   }
 
   async saveProfile(profile: Partial<UserProfile>): Promise<void> {
-    const existingList = await this.profile.toArray();
-    if (existingList.length > 0) {
-      const existing = existingList[0];
-      await this.profile.update(existing.id as any, { ...existing, ...profile });
-    } else {
-      await this.profile.add(profile as UserProfile);
-    }
+    const existing = await this.getProfile();
+    const updatedProfile = { id: 1, ...existing, ...profile } as UserProfile;
+    await this.profile.put(updatedProfile);
   }
 
   // Logs Methods
