@@ -60,3 +60,8 @@ Retourne un objet JSON valide avec cette structure précise :
 3. **Module 3 : Scanner** - Intégration caméra + Gemini Vision.
 4. **Module 4 : UI/UX** - Raffinement Material Design 3, mode sombre/clair adaptatif.
 5. **Module 5 : PWA** - Service Worker, Manifest, et Offline Support.
+
+## 6. Protocole de Fin d'Étape (Commit & Documentation)
+Après chaque modification importante ou finalisation d'étape, l'agent de développement doit obligatoirement réaliser les actions suivantes :
+1. **Créer un rapport d'implémentation** au format Markdown dans le dossier `.ai/` (nommé `IMPLEMENTATION-[NOM-DE-L-ETAPE]-REPORT.md`) récapitulant le travail réalisé, les prochaines étapes et les éventuelles notes techniques.
+2. **Faire un commit Git** clair et précis résumant les fichiers modifiés et l'objectif de la modification (ex: `feat(seo): prevent search indexing, configure .htaccess and localhost.run tunnel`).
