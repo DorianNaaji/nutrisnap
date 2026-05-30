@@ -18,11 +18,17 @@ Permettre à l'utilisateur de configurer son profil métabolique et de valider s
    - Prise de masse
 5. **Configuration API** : Champ de saisie pour la clé Gemini API.
 
-## Logique Métabolique (Mifflin-St Jeor)
-L'application doit calculer automatiquement :
-- **BMR** : `10*poids + 6.25*taille - 5*age (+5 homme / -161 femme)`
+## Logique Métabolique (Mifflin-St Jeor & Katch-McArdle)
+L'application calcule automatiquement :
+- **BMR** : 
+  - Si `bodyFat` fourni : Formule **Katch-McArdle** (370 + 21.6 * Masse Maigre) pour une précision accrue.
+  - Sinon : Formule **Mifflin-St Jeor** (10*poids + 6.25*taille - 5*age + offset).
 - **TDEE** : `BMR * activite`
-- **Objectif Calorique** : `TDEE - deficit` (Minimum floor au BMR de l'utilisateur pour éviter les risques de santé).
+- **Objectif Calorique** : `TDEE - deficit` (Minimum floor au BMR pour la sécurité).
+
+## Gestion Dev/Prod
+- Utilisation des `environments` Angular pour séparer les configurations.
+- Un composant `DevResetComponent` (visible uniquement en mode développement) est injecté globalement pour permettre la réinitialisation rapide de la base de données (IndexedDB).
 
 ## Validation Technique & Composants Partagés
 - Créer un `ProfileService` utilisant les Angular Signals pour stocker l'état en mémoire.

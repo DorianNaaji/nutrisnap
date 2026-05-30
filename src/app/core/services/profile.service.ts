@@ -12,10 +12,16 @@ export class ProfileService {
     const p = this.profile();
     if (!p) return null;
 
-    // Mifflin-St Jeor Equation or measured BMR
-    let bmr = p.measuredBmr || (10 * p.weight + 6.25 * p.height - 5 * p.age);
-    if (!p.measuredBmr) {
-      bmr = p.gender === 'male' ? bmr + 5 : bmr - 161;
+    // Mifflin-St Jeor Equation or Katch-McArdle if BodyFat is provided
+    let bmr: number;
+    if (p.bodyFat && p.weight) {
+      const leanBodyMass = p.weight * (1 - p.bodyFat / 100);
+      bmr = 370 + 21.6 * leanBodyMass; // Katch-McArdle
+    } else {
+      bmr = p.measuredBmr || (10 * p.weight + 6.25 * p.height - 5 * p.age);
+      if (!p.measuredBmr) {
+        bmr = p.gender === 'male' ? bmr + 5 : bmr - 161;
+      }
     }
 
     const activityMultipliers = {
