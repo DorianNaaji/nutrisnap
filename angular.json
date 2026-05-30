@@ -63,12 +63,6 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
-          "options": {
-            "allowedHosts": [
-              ".lhr.life",
-              "localhost"
-            ]
-          },
           "configurations": {
             "production": {
               "buildTarget": "nutrisnap:build:production"

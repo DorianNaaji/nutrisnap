@@ -40,8 +40,10 @@ Nous allons créer un script Node.js (ex: `deploy.js` utilisant la bibliothèque
    ```
 2. **Watcher de synchronisation** :
    Un script surveille le dossier `dist/nutrisnap/browser/` et envoie automatiquement par FTP uniquement les fichiers modifiés vers le serveur OVH.
-3. **Configuration du script** :
-   - Les identifiants FTP OVH seront stockés de manière sécurisée dans un fichier local `.env` (exclu de Git par `.gitignore`).
+### Configuration du script :
+- Les identifiants FTP OVH seront chargés via des variables d'environnement (`process.env.FTP_HOST`, `process.env.FTP_USER`, `process.env.FTP_PASSWORD`).
+- Ces variables devront être définies localement sur la machine de développement ou via un fichier `.env` (impérativement exclu de Git par `.gitignore`).
+
 
 ---
 
