@@ -97,6 +97,16 @@ export class OnboardingComponent {
     ]).subscribe(([metabolism, goal]) => {
       this.calculateStats(metabolism, goal);
     });
+
+    this.loadPartialProfile();
+  }
+
+  private async loadPartialProfile() {
+    const profile = await this.storage.getProfile();
+    if (profile) {
+      this.metabolismForm.patchValue(profile, { emitEvent: false });
+      this.goalForm.patchValue(profile, { emitEvent: false });
+    }
   }
 
   private async savePartialProfile() {
@@ -104,7 +114,9 @@ export class OnboardingComponent {
       ...this.metabolismForm.value,
       ...this.goalForm.value
     };
+    console.log('DEBUG: Saving partial profile:', partialProfile);
     await this.storage.saveProfile(partialProfile);
+    console.log('DEBUG: Save complete');
   }
 
 
