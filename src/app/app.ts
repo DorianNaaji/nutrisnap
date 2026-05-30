@@ -9,11 +9,17 @@ import { CommonModule } from '@angular/common';
   imports: [RouterOutlet, DevResetComponent, CommonModule],
   template: `
     <router-outlet />
-    <app-dev-reset *ngIf="!isProd" />
+    @if (!isProd) {
+      <app-dev-reset />
+    }
   `,
   styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('nutrisnap');
   isProd = environment.production;
+
+  constructor() {
+    console.log('Environment:', environment);
+  }
 }

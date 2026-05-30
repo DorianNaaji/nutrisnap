@@ -32,12 +32,13 @@ export class StorageService extends Dexie {
     return profiles[0];
   }
 
-  async saveProfile(profile: UserProfile): Promise<void> {
-    const existing = await this.profile.toArray();
-    if (existing.length > 0) {
-      await this.profile.update(existing[0].id as any, profile);
+  async saveProfile(profile: Partial<UserProfile>): Promise<void> {
+    const existingList = await this.profile.toArray();
+    if (existingList.length > 0) {
+      const existing = existingList[0];
+      await this.profile.update(existing.id as any, { ...existing, ...profile });
     } else {
-      await this.profile.add(profile);
+      await this.profile.add(profile as UserProfile);
     }
   }
 

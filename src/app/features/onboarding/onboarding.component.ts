@@ -17,7 +17,7 @@ import { LegalFooterComponent } from '../../shared/components/legal-footer/legal
 import { Router } from '@angular/router';
 import { UserProfile, MetabolicStats } from '../../core/models/profile.model';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, debounceTime } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 
 @Component({
@@ -72,7 +72,6 @@ export class OnboardingComponent {
       weight: [70, [Validators.required, Validators.min(30), Validators.max(300)]],
       height: [170, [Validators.required, Validators.min(100), Validators.max(250)]],
       activityLevel: ['moderate', Validators.required],
-      // Advanced optional fields
       bodyFat: [null],
       subcutaneousFat: [null],
       visceralFat: [null],
@@ -88,6 +87,10 @@ export class OnboardingComponent {
       apiKey: ['', Validators.required]
     });
 
+    // Save incrementally when form changes
+    this.metabolismForm.valueChanges.pipe(debounceTime(500)).subscribe(() => this.savePartialProfile());
+    this.goalForm.valueChanges.pipe(debounceTime(500)).subscribe(() => this.savePartialProfile());
+
     combineLatest([
       this.metabolismForm.valueChanges.pipe(startWith(this.metabolismForm.value)),
       this.goalForm.valueChanges.pipe(startWith(this.goalForm.value))
@@ -95,6 +98,15 @@ export class OnboardingComponent {
       this.calculateStats(metabolism, goal);
     });
   }
+
+  private async savePartialProfile() {
+    const partialProfile: UserProfile = {
+      ...this.metabolismForm.value,
+      ...this.goalForm.value
+    };
+    await this.storage.saveProfile(partialProfile);
+  }
+
 
   private calculateStats(metabolism: any, goal: any) {
     if (this.metabolismForm.invalid) {
@@ -145,9 +157,9 @@ export class OnboardingComponent {
     this.apiKeyError = '';
     
     const key = this.apiForm.value.apiKey;
-    const isValid = await this.geminiService.validateApiKey(key);
+    const result = await this.geminiService.validateApiKey(key);
 
-    if (isValid) {
+    if (result.success) {
       const profile: UserProfile = {
         ...this.metabolismForm.value,
         ...this.goalForm.value,
@@ -158,7 +170,7 @@ export class OnboardingComponent {
       stepper.next();
       this.generateCoachFeedback();
     } else {
-      this.apiKeyError = 'Clé API invalide ou problème de connexion. Veuillez réessayer.';
+      this.apiKeyError = result.error || 'Erreur inconnue.';
       this.isValidatingKey = false;
     }
   }

@@ -11,16 +11,23 @@ export class GeminiService {
   private logService = inject(LogService);
   private genAI: GoogleGenerativeAI | null = null;
 
-  async validateApiKey(key: string): Promise<boolean> {
+  async validateApiKey(key: string): Promise<{ success: boolean; error?: string }> {
     try {
       const tempAI = new GoogleGenerativeAI(key);
       const model = tempAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-      await model.generateContent('Health check');
-      return true;
-    } catch (e) {
-      return false;
+      await model.generateContent('Hello');
+      return { success: true };
+    } catch (e: any) {
+      let message = 'Une erreur est survenue.';
+      if (e.message?.includes('503')) {
+        message = 'Le modèle est surchargé. Veuillez réessayer dans quelques instants.';
+      } else if (e.message?.includes('403') || e.message?.includes('401')) {
+        message = 'Clé API invalide.';
+      }
+      return { success: false, error: message };
     }
   }
+
 
   private getModel() {
     const key = this.profileService.profile()?.apiKey;
