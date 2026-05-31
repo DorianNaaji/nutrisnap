@@ -188,21 +188,6 @@ html .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
    All colors via tokens for automatic dark mode support.
    ========================================================================== */
 
-/* Neutralize Material's built-in hover on editable step headers.
-   Two channels to override: CSS token (state layer) + ripple element. */
-html .mat-step-header {
-  --mat-step-header-hover-state-layer-color: transparent;
-  --mat-step-header-focus-state-layer-color: transparent;
-}
-
-html .mat-step-header:hover {
-  background-color: transparent;
-}
-
-html .mat-step-header .mat-ripple-element {
-  display: none;
-}
-
 html .mat-step-header .mat-step-icon-selected,
 html .mat-step-header .mat-step-icon-state-edit {
   background-color: var(--primary);
