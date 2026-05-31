@@ -188,14 +188,6 @@ html .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
    All colors via tokens for automatic dark mode support.
    ========================================================================== */
 
-html .mat-stepper-vertical .mat-step-header {
-  padding: var(--sp-2) var(--sp-6);
-}
-
-html .mat-stepper-vertical .mat-step-label {
-  margin-left: var(--sp-3);
-}
-
 html .mat-step-header:hover {
   background-color: var(--surface-variant);
 }
