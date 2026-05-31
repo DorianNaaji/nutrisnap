@@ -71,18 +71,33 @@ html, body {
   background-color: var(--background);
   color: #1e293b;
   transition: background-color 0.3s ease;
+  
+  /* Force Material app background to be pure white/dark, overriding M3 auto-generation */
+  --mat-app-background-color: #ffffff !important;
 }
 
 [data-theme="dark"] body {
   color: #f1f5f9;
+  --mat-app-background-color: #0f172a !important;
 }
 
 /* ==========================================================================
    MATERIAL COMPONENT OVERRIDES (SOCLE)
    ========================================================================== */
 
-/* Fixing the "Double Border" and "Material Blue" conflict */
+/* 
+  CRITICAL FIX: Force pure white backgrounds on all Material surfaces to override 
+  Angular Material 3's automatic tonal palette generation which introduces unwanted yellowish tints.
+*/
 :root {
+  --mat-card-elevated-container-color: #ffffff !important;
+  --mat-card-filled-container-color: #ffffff !important;
+  --mat-card-outlined-container-color: #ffffff !important;
+  --mat-expansion-container-background-color: #ffffff !important;
+  --mat-stepper-container-color: #ffffff !important;
+  --mat-dialog-container-color: #ffffff !important;
+
+  /* Field focus states */
   --mdc-outlined-text-field-focus-outline-color: var(--primary);
   --mdc-outlined-text-field-focus-label-text-color: var(--primary);
   --mdc-outlined-text-field-caret-color: var(--primary);
@@ -98,39 +113,33 @@ html, body {
   --mat-option-selected-state-layer-color: rgba(5, 150, 105, 0.15);
 }
 
-/* Unified Card Style */
-.mat-mdc-card {
-  background-color: var(--surface) !important;
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-sm) !important;
-  border: 1px solid var(--outline) !important;
-  overflow: hidden;
+.mat-mdc-card,
+.mat-expansion-panel,
+.mat-expansion-panel-content,
+.mat-stepper-horizontal,
+.mat-stepper-vertical {
+  background-color: #ffffff !important;
 }
 
-.mat-mdc-card.variant-card {
-  background-color: var(--surface-variant) !important;
+.mat-mdc-card.variant-card,
+.mat-expansion-panel.variant-card {
+  background-color: #f8fafc !important; /* Neutral background, no tint */
   box-shadow: none !important;
   border: none !important;
 }
 
-/* Unified Button Elevation */
 .mat-mdc-flat-button {
   border-radius: var(--radius-full) !important;
   font-weight: 600 !important;
   letter-spacing: 0.2px !important;
 }
 
-/* Form Fields Refinement */
 .mat-mdc-form-field {
   width: 100%;
 }
 
 .mat-mdc-text-field-wrapper {
   background-color: var(--surface) !important;
-}
-
-.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
-  background-color: var(--surface) !important; /* Pure white even on focus */
 }
 
 /* Fix for Select Panel background appearing grey */
