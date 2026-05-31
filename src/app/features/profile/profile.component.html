@@ -31,7 +31,7 @@
           </div>
         </div>
         
-        <div *ngIf="profileService.metabolicStats()?.isSafetyFloorHit" class="safety-alert">
+        <div class="safety-alert" [style.visibility]="profileService.metabolicStats()?.isSafetyFloorHit ? 'visible' : 'hidden'">
           <mat-icon fontSet="material-symbols-rounded">security</mat-icon>
           <p><strong>Protection métabolique active :</strong> Objectif maintenu au BMR.</p>
         </div>
