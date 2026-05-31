@@ -64,7 +64,7 @@ async function reconnect() {
             host: config.host,
             user: config.user,
             password: config.password,
-            secure: false
+            secure: false // plain FTP — most shared hosts do not support FTPS; credentials come from .env (gitignored)
         });
         console.log("🔓 Reconnected.");
         return true;
@@ -98,7 +98,7 @@ async function startSync() {
             host: config.host,
             user: config.user,
             password: config.password,
-            secure: false
+            secure: false // plain FTP — most shared hosts do not support FTPS; credentials come from .env (gitignored)
         });
         console.log("🔓 Connected to FTP server.");
         startKeepalive();

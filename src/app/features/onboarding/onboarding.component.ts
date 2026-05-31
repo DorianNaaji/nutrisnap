@@ -194,10 +194,15 @@ export class OnboardingComponent {
 
   formatFeedback(text: string): string {
     if (!text) return '';
-    // Basic Markdown Bold: **text** -> <strong>text</strong>
-    let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    // Newlines to <br>
-    formatted = formatted.replace(/\n/g, '<br>');
-    return formatted;
+    // Escape HTML entities first to neutralise any injected markup
+    const safe = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+    // Then apply safe markdown transforms on the sanitised string
+    return safe
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
   }
 }
