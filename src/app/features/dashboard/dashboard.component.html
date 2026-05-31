@@ -51,7 +51,7 @@
       <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
         <div class="macro-header">
           <span class="macro-value">{{ logService.dailyStats().totalProteins }}g</span>
-          <span class="macro-label">{{ 'dashboard.proteins' | t }}</span>
+          <span class="macro-label">{{ 'meal_detail.proteins' | t }}</span>
         </div>
         <div class="macro-footer">
           <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.proteins }}g</span>
@@ -64,7 +64,7 @@
       <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
         <div class="macro-header">
           <span class="macro-value">{{ logService.dailyStats().totalCarbs }}g</span>
-          <span class="macro-label">{{ 'dashboard.carbs' | t }}</span>
+          <span class="macro-label">{{ 'meal_detail.carbs' | t }}</span>
         </div>
         <div class="macro-footer">
           <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.carbs }}g</span>
@@ -77,7 +77,7 @@
       <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
         <div class="macro-header">
           <span class="macro-value">{{ logService.dailyStats().totalFats }}g</span>
-          <span class="macro-label">{{ 'dashboard.fats' | t }}</span>
+          <span class="macro-label">{{ 'meal_detail.fats' | t }}</span>
         </div>
         <div class="macro-footer">
           <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.fats }}g</span>
