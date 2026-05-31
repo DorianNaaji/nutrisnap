@@ -115,7 +115,6 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 | SW Cache Busting | ✅ Complet (@angular/service-worker, SwUpdate snackbar, .htaccess no-cache) |
 | M7 — IA Coach (recap journalier + analyse multi-jours) | ✅ Complet |
 | M8 — i18n | ⏳ Planifié |
-| M9 — Daily Coach Chat IA | ⏳ Planifié |
 
 ---
 
@@ -123,7 +122,8 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 
 Tout est dans `.ai/` :
 - `INITIAL_INSTRUCTIONS.md` — vision produit complète
-- `IMPLEMENTATION-MODULE-[1-9].md` — specs par module
+- `IMPLEMENTATION-MODULE-[1-8].md` — specs par module
+- *(idée archivée : chat libre IA avec historique configurable — couvert fonctionnellement par M7)*
 - `IMPLEMENTATION-DELIVERY-MODULE.md` — plan deploy OVH ✅ fait
 - `SESSION_REPORT-*.md` — rapports de session (lire les plus récents en premier)
 - `design-overhaul/IMPLEMENTATION-DESIGN-OVERHAUL-MODULE.md` — design system
