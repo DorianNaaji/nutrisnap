@@ -40,7 +40,7 @@
 
 /* PREVIEW CARD */
 .preview-card {
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
 }
 
 .stats-row {
@@ -140,15 +140,15 @@
 
 /* ADVANCED PANEL */
 .advanced-panel {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-sm) !important;
-  border: 1px solid var(--outline) !important;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--outline);
   overflow: hidden;
 }
 
 .advanced-panel mat-expansion-panel-header {
-  padding: var(--sp-6) !important;
-  height: auto !important;
+  padding: var(--sp-6);
+  height: auto;
 }
 
 .advanced-grid {
@@ -172,8 +172,8 @@
 
 /* STORAGE */
 .storage-card {
-  border: 2px dashed var(--outline) !important;
-  background: transparent !important;
+  border: 2px dashed var(--outline);
+  background: transparent;
 }
 
 .storage-info {
@@ -229,48 +229,6 @@
 .key-icon {
   color: var(--md-sys-color-on-surface-variant);
   font-size: 24px;
-}
-
-.api-status {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-4);
-  background: var(--surface-variant);
-  border-radius: var(--radius-md);
-  color: var(--md-sys-color-on-surface);
-}
-
-.api-status span {
-  flex: 1;
-  font-weight: 500;
-}
-
-.api-edit-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-}
-
-.input-row {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-4);
-}
-
-.key-icon {
-  color: var(--md-sys-color-on-surface-variant);
-  font-size: 24px;
-}
-
-.api-input {
-  flex: 1;
-  padding: var(--sp-4);
-  border: 1px solid var(--outline);
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  background-color: var(--surface);
-  color: var(--md-sys-color-on-surface);
 }
 
 .api-input:focus {

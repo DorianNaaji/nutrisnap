@@ -51,9 +51,9 @@
 }
 
 .icon-circle mat-icon {
-  font-size: 40px !important;
-  width: 40px !important;
-  height: 40px !important;
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
 }
 
 .welcome-header h1 {
@@ -125,9 +125,9 @@ h3 {
 }
 
 .advanced-panel {
-  border: 1px solid var(--outline) !important;
-  box-shadow: none !important;
-  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--outline);
+  box-shadow: none;
+  border-radius: var(--radius-lg);
   margin: 1rem 0;
 }
 
@@ -253,83 +253,6 @@ h3 {
 
 .wide-btn {
   width: 100%;
-  height: 56px !important;
-  font-size: 1rem !important;
-}
-
-/* Refinement: Stepper label wrapping and alignment */
-::ng-deep .mat-step-label {
-  white-space: normal !important;
-  text-align: center !important;
-  line-height: 1.3 !important;
-  margin-top: 8px !important;
-  padding: 0 !important;
-  width: 100% !important;
-  display: block !important;
-}
-
-/* Ensure the header content is centered */
-::ng-deep .mat-step-header {
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 16px 4px !important;
-  cursor: pointer !important;
-  transition: background-color 0.2s !important;
-  height: auto !important;
-  min-height: 90px !important;
-  overflow: visible !important;
-}
-
-/* Force centering of inner content container */
-::ng-deep .mat-step-header .mat-step-label-content {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  width: 100% !important;
-}
-
-/* Fix for internal alignment */
-::ng-deep .mat-step-header .mat-step-icon {
-  margin: 0 !important;
-}
-
-/* --- Responsive & Orientation Specific --- */
-
-/* Horizontal Stepper Overrides */
-:not(.mat-stepper-vertical) ::ng-deep .mat-stepper-horizontal-line {
-  margin: 0 4px !important;
-  border-top-width: 1px !important;
-  opacity: 0.3;
-}
-
-/* Vertical Stepper Overrides (Mobile) */
-.mat-stepper-vertical ::ng-deep .mat-step-header {
-  flex-direction: row !important;
-  justify-content: flex-start !important;
-  min-height: 48px !important;
-  padding: 8px 16px !important;
-}
-
-.mat-stepper-vertical ::ng-deep .mat-step-label {
-  text-align: left !important;
-  margin-top: 0 !important;
-  margin-left: 12px !important;
-  width: auto !important;
-}
-
-/* Fix vertical line alignment */
-.mat-stepper-vertical ::ng-deep .mat-stepper-vertical-line {
-  right: 8px !important;
-}
-
-/* Existing overrides */
-::ng-deep .mat-step-header:hover {
-  background-color: var(--surface-variant) !important;
-}
-::ng-deep .mat-step-header:active {
-  background-color: var(--outline) !important;
-}
-::ng-deep .mat-step-header .mat-step-icon-selected {
-  background-color: var(--primary) !important;
+  height: 56px;
+  font-size: 1rem;
 }
