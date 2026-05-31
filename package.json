@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
+    "start:sync": "concurrently \"ng build --watch --configuration development\" \"node scripts/deploy.js\"",
     "tunnel": "ssh -R 80:localhost:4200 localhost.run",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -29,6 +30,10 @@
     "@angular/build": "^21.2.13",
     "@angular/cli": "^21.2.13",
     "@angular/compiler-cli": "^21.2.0",
+    "basic-ftp": "^6.0.1",
+    "chokidar": "^5.0.0",
+    "concurrently": "^10.0.0",
+    "dotenv": "^17.4.2",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",

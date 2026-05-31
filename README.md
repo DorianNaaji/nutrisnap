@@ -23,3 +23,24 @@ Si vous êtes un agent IA, veuillez lire ces fichiers dans l'ordre (1 à 5) pour
 3. `.ai/IMPLEMENTATION-MODULE-3.md` : Scanner & Gemini Vision
 4. `.ai/IMPLEMENTATION-MODULE-4.md` : UI/UX & Dashboard
 5. `.ai/IMPLEMENTATION-MODULE-5.md` : PWA & Offline
+
+## 🚢 Déploiement & DevX (OVH)
+
+L'application est conçue pour être déployée sur un hébergement mutualisé (ex: OVH) via FTP.
+
+### Mode Développement Synchronisé
+Pour voir vos changements en temps réel sur votre serveur de production (nécessaire pour tester la caméra en HTTPS sur mobile) :
+
+1. **Configuration** : Créez un fichier `.env` à la racine (exclu de Git) :
+   ```env
+   FTP_HOST=votre.serveur.com
+   FTP_USER=votre_utilisateur
+   FTP_PASSWORD=votre_mot_de_passe
+   FTP_REMOTE_DIR=/www/nutrisnap
+   ```
+
+2. **Lancer la synchronisation** :
+   ```bash
+   npm run start:sync
+   ```
+   Ce script lance `ng build --watch` et synchronise chaque modification via FTP automatiquement avec un logging détaillé.
