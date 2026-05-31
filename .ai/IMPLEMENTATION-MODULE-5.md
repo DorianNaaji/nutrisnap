@@ -1,10 +1,14 @@
-# Module 5 : IA Coach - Analyse de progression
+# Module 5 : PWA / Offline
 
-## Objectif
-Donner à l'utilisateur une vision long-terme de ses progrès, au-delà de la simple saisie quotidienne.
+## Statut : ✅ Complet (testé sur mobile HTTPS, 31/05/2026)
 
-## Fonctionnalités
-- **Analyse d'Historique** : Envoyer à Gemini un récapitulatif structuré des X derniers jours (calories moyennes, poids, évolution des macros).
-- **Feedback Constructif** : L'IA analyse les tendances (ex: "Tu as perdu du poids mais ta masse musculaire stagne, augmente tes protéines") et propose des ajustements d'objectifs si nécessaire.
-- **Visualisation de Progression** : Graphiques d'évolution du poids, de la masse grasse et de la masse musculaire.
-- **Récapitulatif de fin de journée** : Analyse IA quotidienne pour conclure la journée avec un bilan.
+## Réalisé
+- Service Worker Angular (`ngsw-config.json`) en place
+- `manifest.webmanifest` configuré (icônes, `display: standalone`, `theme_color`)
+- App installable sur mobile via HTTPS OVH (`nutrisnap.dorian-naaji.fr`)
+- Anti-indexation : `robots.txt` + `<meta robots>` + `.htaccess` X-Robots-Tag
+
+## Notes
+- L'URL de production est `https://nutrisnap.dorian-naaji.fr`
+- Le déploiement se fait via `npm run start:sync` (FTP delta sync OVH)
+- Voir `SESSION_REPORT-31-05-2026-DEPLOY.md` pour les détails techniques OVH

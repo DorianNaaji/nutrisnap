@@ -6,8 +6,8 @@ export interface Ingredient {
 
 export interface MealLog {
   id?: number;
-  timestamp: number; // For sorting and specific time
-  date: string; // YYYY-MM-DD for indexing and filtering
+  timestamp: number;
+  date: string; // YYYY-MM-DD
   foodName: string;
   calories: number;
   macros: {
@@ -18,6 +18,7 @@ export interface MealLog {
   ingredients: Ingredient[];
   analysisSummary: string;
   confidence: 'low' | 'medium' | 'high';
+  coachTip?: string | null;
   imageBlob?: Blob;
 }
 

@@ -99,10 +99,15 @@ export class ScannerComponent {
           date: new Date().toISOString().split('T')[0],
           foodName: response.food_name,
           calories: response.calories,
-          macros: response.macros,
-          ingredients: [], // Could be expanded later
+          macros: {
+            proteins: response.macros?.prot ?? 0,
+            carbs: response.macros?.carb ?? 0,
+            fats: response.macros?.fat ?? 0
+          },
+          ingredients: [],
           analysisSummary: response.analysis_summary,
-          confidence: 'high' as any // Placeholder
+          coachTip: response.coach_tip ?? null,
+          confidence: response.confidence_score ?? 'medium'
         };
         
         await this.logService.addLog(mealLog);

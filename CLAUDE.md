@@ -15,19 +15,22 @@ src/
   app/
     core/
       services/
-        storage.service.ts    ← NutriDB (Dexie) : profile, logs, settings
+        storage.service.ts    ← NutriDB (Dexie) : profile, logs, settings, (v2: recaps)
         profile.service.ts    ← Signals, calcul métabolique (Mifflin-St Jeor / Katch-McArdle)
         theme.service.ts      ← Dark/Light/System, APP_INITIALIZER, data-theme sur <html>
-        gemini.service.ts     ← Appels Gemini Vision
+        gemini.service.ts     ← analyzeMeal, getCoachFeedback, (v2: getDailyRecap, getWeeklyAnalysis)
+        log.service.ts        ← dailyLogs signal, dailyStats computed, addLog/deleteLog
         export.service.ts     ← Export/Import JSON
       models/
         profile.model.ts
-        meal.model.ts
+        meal.model.ts         ← MealLog (macros: proteins/carbs/fats), DailyStats
     features/
       onboarding/             ← 5 étapes : Welcome → RGPD → Métabolisme → Objectif → API
-      dashboard/              ← Ring calories, macro cards, timeline
-      scanner/                ← Capture photo + analyse Gemini
+      dashboard/              ← Ring calories, macro cards, timeline, FAB scanner
+      scanner/                ← Capture photo + galerie + analyse Gemini
       profile/                ← Édition profil + card Apparence (thème)
+      meal-detail/            ← (M6) Détail d'un repas : photo, macros, ingrédients, suppression
+      history/                ← (M6) Calendrier mensuel + vue journée + navigation
     shared/
       components/
         design-system/
@@ -69,15 +72,19 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 
 ## NutriDB (Dexie.js)
 
-**Base** : `NutriSnapDB` v1
+**Base** : `NutriSnapDB` v1 (v2 prévu en M7 pour la table `recaps`)
 
 | Table | Clé | Modèle |
 |---|---|---|
 | `profile` | `id` (singleton 1) | `UserProfile` — données métaboliques + apiKey |
 | `logs` | `++id` indexé `date, timestamp` | `MealLog` — repas + imageBlob |
 | `settings` | `id` (singleton `'app'`) | `AppSettings { theme, language }` |
+| `recaps` *(v2)* | `++id` indexé `date` | `DailyRecap` — résumé IA journalier |
 
 **API StorageService** : `getProfile/saveProfile`, `addMealLog/getLogsByDate/deleteLog`, `getSettings/saveSettings`, `clearAllData`.
+**À ajouter en M6** : `getLogsByMonth(year, month)` → Map des calories par jour pour le calendrier.
+
+**⚠️ Mapping critique** : `MealLog.macros` utilise les clés `proteins / carbs / fats`. Le prompt Gemini retourne `prot / carb / fat` → remapping obligatoire dans `scanner.component.ts` avant de persister.
 
 ---
 
@@ -98,10 +105,12 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 | M1 — Onboarding 5 étapes | ✅ Complet |
 | M2 — Data Engine (Dexie) | ✅ Complet |
 | M2.5 — Profile page | ✅ Complet |
-| M3 — Scanner Gemini | ✅ Complet |
-| M4 — Dashboard & Dark Mode | ✅ Complet |
-| M5 — PWA / Offline | À vérifier |
-| Delivery — DevX / Deploy OVH | 🔜 Prochaine session |
+| M3 — Scanner Gemini | ✅ Complet (bug macros NaN à corriger en M6) |
+| M4 — Dashboard & Dark Mode | ✅ Complet (bugs "Tout voir" + clic repas à corriger en M6) |
+| M5 — PWA / Offline | ✅ Complet (installable HTTPS, testé sur mobile) |
+| Delivery — DevX / Deploy OVH | ✅ Complet (FTP sync, SPA routing, anti-indexation) |
+| M6 — Meal Detail + History & Calendar | 🔜 Prochaine session |
+| M7 — IA Coach (analyse progression) | ⏳ Planifié |
 
 ---
 
@@ -109,8 +118,8 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 
 Tout est dans `.ai/` :
 - `INITIAL_INSTRUCTIONS.md` — vision produit complète
-- `IMPLEMENTATION-MODULE-[1-5].md` — specs par module
-- `IMPLEMENTATION-DELIVERY-MODULE.md` — plan deploy OVH (prochaine étape)
+- `IMPLEMENTATION-MODULE-[1-7].md` — specs par module
+- `IMPLEMENTATION-DELIVERY-MODULE.md` — plan deploy OVH ✅ fait
 - `SESSION_REPORT-*.md` — rapports de session (lire les plus récents en premier)
 - `design-overhaul/IMPLEMENTATION-DESIGN-OVERHAUL-MODULE.md` — design system
 

@@ -1,0 +1,97 @@
+<!-- LOADING -->
+<div *ngIf="isLoading()" class="loading-state">
+  <mat-spinner diameter="40"></mat-spinner>
+</div>
+
+<!-- NOT FOUND -->
+<div *ngIf="!isLoading() && notFound()" class="not-found">
+  <mat-icon>error_outline</mat-icon>
+  <p>Repas introuvable.</p>
+  <button mat-flat-button color="primary" routerLink="/dashboard">Retour</button>
+</div>
+
+<!-- DETAIL PAGE -->
+<div *ngIf="!isLoading() && !notFound() && meal() as log" class="detail-page">
+
+  <!-- HEADER -->
+  <header class="detail-header">
+    <button mat-icon-button (click)="goBack()" class="back-btn" aria-label="Retour">
+      <mat-icon fontSet="material-symbols-rounded">arrow_back</mat-icon>
+    </button>
+    <h1 class="detail-title">Détail du repas</h1>
+    <div class="header-spacer"></div>
+  </header>
+
+  <main class="detail-content">
+
+    <!-- PHOTO -->
+    <div class="photo-section" *ngIf="imageUrl()">
+      <img [src]="imageUrl()" alt="Photo du repas" class="meal-photo" />
+    </div>
+
+    <!-- HERO : nom + calories + confidence -->
+    <div class="hero-section">
+      <div class="meal-name-row">
+        <h2 class="meal-name">{{ log.foodName }}</h2>
+        <span class="confidence-badge" [class]="'confidence-' + log.confidence">
+          {{ confidenceLabel(log.confidence) }}
+        </span>
+      </div>
+      <div class="calories-row">
+        <span class="calories-value">{{ log.calories }}</span>
+        <span class="calories-unit">kcal</span>
+      </div>
+      <p class="meal-time">
+        <mat-icon class="time-icon" fontSet="material-symbols-rounded">schedule</mat-icon>
+        {{ log.timestamp | date:'EEEE d MMMM, HH:mm' }}
+      </p>
+    </div>
+
+    <!-- MACROS -->
+    <div class="macros-grid">
+      <ns-card variant="surface-variant" padding="1rem" customClass="macro-card">
+        <div class="macro-inner">
+          <span class="macro-val">{{ log.macros.proteins }}g</span>
+          <span class="macro-lbl">Protéines</span>
+        </div>
+      </ns-card>
+      <ns-card variant="surface-variant" padding="1rem" customClass="macro-card">
+        <div class="macro-inner">
+          <span class="macro-val">{{ log.macros.carbs }}g</span>
+          <span class="macro-lbl">Glucides</span>
+        </div>
+      </ns-card>
+      <ns-card variant="surface-variant" padding="1rem" customClass="macro-card">
+        <div class="macro-inner">
+          <span class="macro-val">{{ log.macros.fats }}g</span>
+          <span class="macro-lbl">Lipides</span>
+        </div>
+      </ns-card>
+    </div>
+
+    <!-- ANALYSIS SUMMARY -->
+    <ns-card padding="1.25rem" customClass="summary-card">
+      <div class="summary-inner">
+        <mat-icon class="summary-icon" fontSet="material-symbols-rounded">auto_awesome</mat-icon>
+        <p class="summary-text">{{ log.analysisSummary }}</p>
+      </div>
+    </ns-card>
+
+    <!-- COACH TIP -->
+    <ns-card *ngIf="log.coachTip" padding="1.25rem" customClass="coach-card">
+      <div class="summary-inner">
+        <mat-icon class="coach-icon" fontSet="material-symbols-rounded">emoji_objects</mat-icon>
+        <p class="summary-text">{{ log.coachTip }}</p>
+      </div>
+    </ns-card>
+
+    <!-- DANGER ZONE -->
+    <div class="danger-zone">
+      <button mat-stroked-button color="warn" class="delete-btn" (click)="openDeleteDialog()">
+        <mat-icon>delete_outline</mat-icon>
+        Supprimer ce repas
+      </button>
+    </div>
+
+  </main>
+</div>

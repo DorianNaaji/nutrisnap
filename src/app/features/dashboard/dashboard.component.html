@@ -92,7 +92,7 @@
     <section class="logs-section">
       <div class="section-header">
         <h2>Historique du jour</h2>
-        <button mat-button color="primary">Tout voir</button>
+        <button mat-button color="primary" routerLink="/history">Tout voir</button>
       </div>
 
       <!-- EMPTY STATE -->
@@ -108,7 +108,7 @@
 
       <!-- LOGS LIST -->
       <div class="logs-list" *ngIf="logService.dailyLogs().length > 0">
-        <div *ngFor="let log of logService.dailyLogs()" class="log-row">
+        <div *ngFor="let log of logService.dailyLogs()" class="log-row" (click)="goToMeal(log.id!)">
           <div class="log-info">
             <span class="log-title">{{ log.foodName }}</span>
             <span class="log-time">{{ log.timestamp | date:'HH:mm' }}</span>

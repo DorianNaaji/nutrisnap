@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NsCardComponent } from '../../shared/components/design-system/card.component';
 import { CountUpDirective } from '../../shared/directives/count-up.directive';
 
@@ -31,8 +31,13 @@ import { CountUpDirective } from '../../shared/directives/count-up.directive';
 export class DashboardComponent {
   profileService = inject(ProfileService);
   logService = inject(LogService);
+  private router = inject(Router);
 
   today = new Date();
+
+  goToMeal(id: number) {
+    this.router.navigate(['/meal', id]);
+  }
 
   get progressValue(): number {
     const target = this.profileService.metabolicStats()?.dailyCalorieTarget || 2000;

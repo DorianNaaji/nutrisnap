@@ -43,8 +43,19 @@ export class StorageService extends Dexie {
     return await this.logs.add(log);
   }
 
+  async getLogById(id: number): Promise<MealLog | undefined> {
+    return await this.logs.get(id);
+  }
+
   async getLogsByDate(date: string): Promise<MealLog[]> {
     return await this.logs.where('date').equals(date).sortBy('timestamp');
+  }
+
+  async getLogsByMonth(year: number, month: number): Promise<MealLog[]> {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const from = `${year}-${pad(month)}-01`;
+    const to = `${year}-${pad(month)}-31`;
+    return await this.logs.where('date').between(from, to, true, true).toArray();
   }
 
   async deleteLog(id: number): Promise<void> {

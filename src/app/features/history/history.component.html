@@ -1,0 +1,119 @@
+<div class="history-page">
+
+  <!-- HEADER -->
+  <header class="history-header">
+    <button mat-icon-button routerLink="/dashboard" class="back-btn" aria-label="Retour">
+      <mat-icon fontSet="material-symbols-rounded">arrow_back</mat-icon>
+    </button>
+    <h1 class="header-title">Historique</h1>
+    <div class="header-spacer"></div>
+  </header>
+
+  <main class="history-content">
+
+    <!-- MONTH NAVIGATOR -->
+    <div class="month-nav">
+      <button mat-icon-button (click)="prevMonth()" aria-label="Mois précédent">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="month-label">{{ MONTHS[currentMonth()] }} {{ currentYear() }}</span>
+      <button mat-icon-button (click)="nextMonth()" [disabled]="isNextMonthDisabled()" aria-label="Mois suivant">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <!-- LOADING -->
+    <div *ngIf="isLoading()" class="spinner-wrapper">
+      <mat-spinner diameter="36"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="!isLoading()">
+
+      <!-- CALENDAR -->
+      <div class="calendar">
+
+        <!-- WEEKDAY HEADERS -->
+        <div class="weekday-header" *ngFor="let wd of WEEKDAYS">{{ wd }}</div>
+
+        <!-- DAY CELLS -->
+        <div
+          *ngFor="let day of calendarDays()"
+          class="day-cell"
+          [class.other-month]="!day.isCurrentMonth"
+          [class.is-today]="day.isToday"
+          [class.is-future]="day.isFuture"
+          [class.is-selected]="selectedDateStr() === day.dateStr"
+          [class.clickable]="day.isCurrentMonth && !day.isFuture"
+          (click)="selectDay(day)"
+        >
+          <span class="day-number">{{ day.date.getDate() }}</span>
+          <span class="day-kcal" *ngIf="day.logCount > 0 && day.isCurrentMonth">
+            {{ day.totalCalories }}
+          </span>
+          <span
+            class="day-dot"
+            *ngIf="day.dotColor !== 'none'"
+            [class]="'dot-' + day.dotColor"
+          ></span>
+        </div>
+      </div>
+
+      <!-- LEGEND -->
+      <div class="legend">
+        <span class="legend-item"><span class="dot-green legend-dot"></span> 80–105% objectif</span>
+        <span class="legend-item"><span class="dot-orange legend-dot"></span> Partiel ou surplus</span>
+        <span class="legend-item"><span class="dot-red legend-dot"></span> &lt; 50% objectif</span>
+      </div>
+
+      <!-- SELECTED DAY PANEL -->
+      <div class="day-panel" *ngIf="selectedDateStr()">
+        <div class="day-panel-header">
+          <h2 class="day-panel-title">{{ selectedDateFormatted }}</h2>
+          <span class="day-panel-kcal">{{ selectedDayTotalCalories }} kcal</span>
+        </div>
+
+        <!-- Empty day -->
+        <div *ngIf="selectedDateLogs().length === 0" class="day-empty">
+          <mat-icon>restaurant</mat-icon>
+          <p>Aucun repas enregistré ce jour-là.</p>
+          <button
+            *ngIf="isToday(selectedDateStr()!)"
+            mat-flat-button color="primary"
+            routerLink="/scanner"
+            class="add-btn"
+          >
+            <mat-icon>add</mat-icon>
+            Ajouter un repas
+          </button>
+        </div>
+
+        <!-- Meal list -->
+        <div class="day-logs" *ngIf="selectedDateLogs().length > 0">
+          <div
+            *ngFor="let log of selectedDateLogs()"
+            class="log-row"
+            (click)="goToMeal(log.id!)"
+          >
+            <div class="log-info">
+              <span class="log-title">{{ log.foodName }}</span>
+              <span class="log-time">{{ log.timestamp | date:'HH:mm' }}</span>
+            </div>
+            <div class="log-meta">
+              <span class="log-calories">{{ log.calories }} <small>kcal</small></span>
+              <mat-icon class="chevron">chevron_right</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scan today button -->
+        <div class="day-scan-cta" *ngIf="isToday(selectedDateStr()!) && selectedDateLogs().length > 0">
+          <button mat-stroked-button color="primary" routerLink="/scanner">
+            <mat-icon>add</mat-icon>
+            Ajouter un repas
+          </button>
+        </div>
+      </div>
+
+    </ng-container>
+  </main>
+</div>

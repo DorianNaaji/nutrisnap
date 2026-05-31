@@ -1,0 +1,199 @@
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { StorageService } from '../../core/services/storage.service';
+import { ProfileService } from '../../core/services/profile.service';
+import { MealLog } from '../../core/models/meal.model';
+
+interface CalendarDay {
+  date: Date;
+  dateStr: string; // YYYY-MM-DD
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  isFuture: boolean;
+  totalCalories: number;
+  logCount: number;
+  dotColor: 'none' | 'green' | 'orange' | 'red';
+}
+
+@Component({
+  selector: 'app-history',
+  standalone: true,
+  imports: [
+    CommonModule, RouterModule, MatButtonModule, MatIconModule,
+    MatProgressSpinnerModule
+  ],
+  templateUrl: './history.component.html',
+  styleUrls: ['./history.component.css']
+})
+export class HistoryComponent implements OnInit {
+  private storage = inject(StorageService);
+  private profileService = inject(ProfileService);
+  private router = inject(Router);
+
+  isLoading = signal(true);
+  currentYear = signal(new Date().getFullYear());
+  currentMonth = signal(new Date().getMonth()); // 0-indexed
+  monthLogs = signal<MealLog[]>([]);
+  selectedDateStr = signal<string | null>(null);
+  selectedDateLogs = signal<MealLog[]>([]);
+
+  readonly WEEKDAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  readonly MONTHS = [
+    'Janvier','Février','Mars','Avril','Mai','Juin',
+    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'
+  ];
+
+  calendarDays = computed<CalendarDay[]>(() => {
+    const year = this.currentYear();
+    const month = this.currentMonth();
+    const logs = this.monthLogs();
+    const target = this.profileService.metabolicStats()?.dailyCalorieTarget ?? 2000;
+    const today = new Date();
+    const todayStr = this.toDateStr(today);
+
+    const calMap = new Map<string, { totalCalories: number; logCount: number }>();
+    for (const log of logs) {
+      const existing = calMap.get(log.date) ?? { totalCalories: 0, logCount: 0 };
+      calMap.set(log.date, {
+        totalCalories: existing.totalCalories + log.calories,
+        logCount: existing.logCount + 1
+      });
+    }
+
+    // First day of month (Monday = 0 in our grid, but JS getDay(): 0=Sun, 1=Mon...)
+    const firstDay = new Date(year, month, 1);
+    // Shift so Monday is col 0
+    const startOffset = (firstDay.getDay() + 6) % 7;
+
+    const days: CalendarDay[] = [];
+
+    // Padding days from previous month
+    for (let i = startOffset - 1; i >= 0; i--) {
+      const d = new Date(year, month, -i);
+      const dateStr = this.toDateStr(d);
+      days.push(this.buildDay(d, dateStr, false, todayStr, target, calMap));
+    }
+
+    // Days of current month
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(year, month, d);
+      const dateStr = this.toDateStr(date);
+      days.push(this.buildDay(date, dateStr, true, todayStr, target, calMap));
+    }
+
+    // Trailing days to complete last row (multiple of 7)
+    while (days.length % 7 !== 0) {
+      const d = new Date(year, month + 1, days.length - startOffset - daysInMonth + 1);
+      const dateStr = this.toDateStr(d);
+      days.push(this.buildDay(d, dateStr, false, todayStr, target, calMap));
+    }
+
+    return days;
+  });
+
+  private buildDay(
+    date: Date,
+    dateStr: string,
+    isCurrentMonth: boolean,
+    todayStr: string,
+    target: number,
+    calMap: Map<string, { totalCalories: number; logCount: number }>
+  ): CalendarDay {
+    const data = calMap.get(dateStr);
+    const isToday = dateStr === todayStr;
+    const isFuture = dateStr > todayStr;
+    const totalCalories = data?.totalCalories ?? 0;
+    const logCount = data?.logCount ?? 0;
+
+    let dotColor: CalendarDay['dotColor'] = 'none';
+    if (data && isCurrentMonth && !isFuture) {
+      const pct = (totalCalories / target) * 100;
+      dotColor = pct >= 80 && pct <= 105 ? 'green' : pct >= 50 ? 'orange' : 'red';
+    }
+
+    return { date, dateStr, isCurrentMonth, isToday, isFuture, totalCalories, logCount, dotColor };
+  }
+
+  private toDateStr(d: Date): string {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  async ngOnInit() {
+    await this.loadMonth();
+  }
+
+  async loadMonth() {
+    this.isLoading.set(true);
+    // month is 0-indexed, getLogsByMonth expects 1-indexed
+    const logs = await this.storage.getLogsByMonth(this.currentYear(), this.currentMonth() + 1);
+    this.monthLogs.set(logs);
+    this.selectedDateStr.set(null);
+    this.selectedDateLogs.set([]);
+    this.isLoading.set(false);
+  }
+
+  async prevMonth() {
+    let m = this.currentMonth() - 1;
+    let y = this.currentYear();
+    if (m < 0) { m = 11; y--; }
+    this.currentMonth.set(m);
+    this.currentYear.set(y);
+    await this.loadMonth();
+  }
+
+  async nextMonth() {
+    const today = new Date();
+    const y = this.currentYear();
+    const m = this.currentMonth();
+    // Block navigation beyond current month
+    if (y === today.getFullYear() && m === today.getMonth()) return;
+    let nm = m + 1;
+    let ny = y;
+    if (nm > 11) { nm = 0; ny++; }
+    this.currentMonth.set(nm);
+    this.currentYear.set(ny);
+    await this.loadMonth();
+  }
+
+  isNextMonthDisabled(): boolean {
+    const today = new Date();
+    return this.currentYear() === today.getFullYear() && this.currentMonth() === today.getMonth();
+  }
+
+  async selectDay(day: CalendarDay) {
+    if (!day.isCurrentMonth || day.isFuture) return;
+    if (this.selectedDateStr() === day.dateStr) {
+      this.selectedDateStr.set(null);
+      this.selectedDateLogs.set([]);
+      return;
+    }
+    this.selectedDateStr.set(day.dateStr);
+    const logs = await this.storage.getLogsByDate(day.dateStr);
+    this.selectedDateLogs.set(logs);
+  }
+
+  goToMeal(id: number) {
+    this.router.navigate(['/meal', id]);
+  }
+
+  get selectedDateFormatted(): string {
+    const str = this.selectedDateStr();
+    if (!str) return '';
+    const [y, m, d] = str.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    return date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+
+  get selectedDayTotalCalories(): number {
+    return this.selectedDateLogs().reduce((acc, l) => acc + l.calories, 0);
+  }
+
+  isToday(dateStr: string): boolean {
+    return dateStr === this.toDateStr(new Date());
+  }
+}
