@@ -9,10 +9,9 @@
   </header>
 
   <div class="profile-container">
-    <form [formGroup]="profileForm">
       
-      <!-- RÉSUMÉ MÉTABOLIQUE (DYNAMIQUE) -->
-      <ns-card title="Objectifs calculés" subtitle="Ajustement en temps réel" customClass="preview-card" variant="surface-variant">
+      <!-- RÉSUMÉ MÉTABOLIQUE -->
+      <ns-card title="Objectifs calculés" customClass="preview-card" variant="surface-variant">
         <div class="stats-row">
           <div class="stat-box">
             <span class="stat-value">{{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }}</span>
@@ -32,16 +31,15 @@
           </div>
         </div>
         
-        <div *ngIf="profileService.metabolicStats()?.isSafetyFloorHit" class="safety-alert">
+        <div class="safety-alert" [style.visibility]="profileService.metabolicStats()?.isSafetyFloorHit ? 'visible' : 'hidden'">
           <mat-icon fontSet="material-symbols-rounded">security</mat-icon>
           <p><strong>Protection métabolique active :</strong> Objectif maintenu au BMR.</p>
         </div>
       </ns-card>
 
       <!-- INFORMATIONS DE BASE -->
-      <section class="profile-section">
-        <h2 class="section-title">Mes Informations</h2>
-        <ns-card>
+      <form [formGroup]="personalForm">
+        <ns-card title="Mes Informations">
           <div class="form-grid">
             <mat-form-field appearance="outline">
               <mat-label>Sexe</mat-label>
@@ -89,49 +87,49 @@
             </mat-select>
           </mat-form-field>
 
-          <div card-footer class="card-footer">
-            <button mat-flat-button color="primary" type="button" (click)="saveProfile()" [disabled]="profileForm.invalid">
+          <div class="card-footer">
+            <button mat-flat-button color="primary" type="button" (click)="savePersonal()" [disabled]="personalForm.invalid">
               <mat-icon>check</mat-icon> Enregistrer
             </button>
           </div>
         </ns-card>
-      </section>
+      </form>
 
       <!-- DONNÉES AVANCÉES -->
-      <section class="profile-section">
-        <h2 class="section-title">Données Avancées</h2>
-        <mat-expansion-panel class="advanced-panel" #advancedPanel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Métriques corporelles</mat-panel-title>
-            <mat-panel-description>Balance connectée</mat-panel-description>
-          </mat-expansion-panel-header>
-          
-          <div class="advanced-grid">
-            <mat-form-field appearance="outline">
-              <mat-label>Masse grasse (%)</mat-label>
-              <input matInput type="number" formControlName="bodyFat">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Masse musculaire (kg)</mat-label>
-              <input matInput type="number" formControlName="muscleMass">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Graisse viscérale</mat-label>
-              <input matInput type="number" formControlName="visceralFat">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>BMR mesuré (kcal)</mat-label>
-              <input matInput type="number" formControlName="measuredBmr">
-            </mat-form-field>
-          </div>
-          <p class="hint">Le BMR mesuré remplace le calcul théorique.</p>
-          <mat-action-row>
-            <button mat-flat-button color="primary" type="button" (click)="saveProfile(); advancedPanel.close()" [disabled]="profileForm.invalid">
-              Mettre à jour
+      <form [formGroup]="advancedForm">
+        <ns-card title="Données Avancées" subtitle="Balance connectée">
+          <mat-expansion-panel class="advanced-panel" #advancedPanel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Métriques corporelles</mat-panel-title>
+            </mat-expansion-panel-header>
+            
+            <div class="advanced-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>Masse grasse (%)</mat-label>
+                <input matInput type="number" formControlName="bodyFat">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Masse musculaire (kg)</mat-label>
+                <input matInput type="number" formControlName="muscleMass">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Graisse viscérale</mat-label>
+                <input matInput type="number" formControlName="visceralFat">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>BMR mesuré (kcal)</mat-label>
+                <input matInput type="number" formControlName="measuredBmr">
+              </mat-form-field>
+            </div>
+            <p class="hint">Le BMR mesuré remplace le calcul théorique.</p>
+          </mat-expansion-panel>
+          <div class="card-footer">
+            <button mat-flat-button color="primary" type="button" (click)="saveAdvanced(); advancedPanel.close()" [disabled]="advancedForm.invalid">
+              <mat-icon>check</mat-icon> Enregistrer
             </button>
-          </mat-action-row>
-        </mat-expansion-panel>
-      </section>
+          </div>
+        </ns-card>
+      </form>
 
       <!-- API KEY -->
       <ns-card title="IA Gemini">
@@ -150,7 +148,7 @@
             <p class="hint">La nouvelle clé remplacera l'ancienne.</p>
             <div class="card-footer">
               <button mat-flat-button color="primary" type="button" (click)="saveApiKey(apiKeyInput.value)">
-                <mat-icon>save</mat-icon> Enregistrer
+                <mat-icon>check</mat-icon> Enregistrer
               </button>
               <button mat-button type="button" (click)="showApiKey.set(false)">Annuler</button>
             </div>
@@ -159,29 +157,24 @@
       </ns-card>
 
       <!-- DATA MANAGEMENT -->
-      <section class="profile-section">
-        <h2 class="section-title subtle">Espace de stockage</h2>
-        <ns-card customClass="storage-card">
-          <p class="storage-info">Vos données sont stockées <strong>exclusivement</strong> en local sur ce navigateur.</p>
-          <div class="data-actions">
-            <button mat-button color="primary" type="button" (click)="exportData()">
-              <mat-icon>download</mat-icon> Exporter mes données
-            </button>
-            <button mat-button color="primary" type="button" (click)="fileInput.click()">
-              <mat-icon>upload</mat-icon> Importer un fichier
-            </button>
-            <input type="file" #fileInput (change)="importData($event)" hidden accept=".json">
-          </div>
-          <mat-divider></mat-divider>
-          <div class="reset-zone">
-            <button mat-button color="warn" type="button" (click)="resetApp()">
-              <mat-icon>delete_forever</mat-icon> Réinitialiser l'application
-            </button>
-          </div>
-        </ns-card>
-      </section>
-
-    </form>
+      <ns-card title="Espace de stockage" customClass="storage-card">
+        <p class="storage-info">Vos données sont stockées <strong>exclusivement</strong> en local sur ce navigateur.</p>
+        <div class="data-actions">
+          <button mat-button color="primary" type="button" (click)="exportData()">
+            <mat-icon>download</mat-icon> Exporter mes données
+          </button>
+          <button mat-button color="primary" type="button" (click)="fileInput.click()">
+            <mat-icon>upload</mat-icon> Importer un fichier
+          </button>
+          <input type="file" #fileInput (change)="importData($event)" hidden accept=".json">
+        </div>
+        <mat-divider></mat-divider>
+        <div class="reset-zone">
+          <button mat-button color="warn" type="button" (click)="resetApp()">
+            <mat-icon>delete_forever</mat-icon> Réinitialiser l'application
+          </button>
+        </div>
+      </ns-card>
     
     <app-legal-footer></app-legal-footer>
   </div>
