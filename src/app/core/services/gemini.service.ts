@@ -12,24 +12,27 @@ export class GeminiService {
   private profileService = inject(ProfileService);
   private logService = inject(LogService);
   private genAI: GoogleGenerativeAI | null = null;
+  private cachedKey: string | null = null;
 
-
-
-  private getModel() {
+  private getGenAI(): GoogleGenerativeAI {
     const key = this.profileService.profile()?.apiKey;
     if (!key) throw new Error('API Key not configured');
-    if (!this.genAI) this.genAI = new GoogleGenerativeAI(key);
-    return this.genAI.getGenerativeModel({
+    if (!this.genAI || this.cachedKey !== key) {
+      this.genAI = new GoogleGenerativeAI(key);
+      this.cachedKey = key;
+    }
+    return this.genAI;
+  }
+
+  private getModel() {
+    return this.getGenAI().getGenerativeModel({
       model: 'gemini-2.5-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
   }
 
   private getTextModel() {
-    const key = this.profileService.profile()?.apiKey;
-    if (!key) throw new Error('API Key not configured');
-    if (!this.genAI) this.genAI = new GoogleGenerativeAI(key);
-    return this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    return this.getGenAI().getGenerativeModel({ model: 'gemini-2.5-flash' });
   }
 
   async analyzeMeal(imagesB64: string[], userText: string, mealType: string) {
