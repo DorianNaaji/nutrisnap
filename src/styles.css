@@ -127,11 +127,10 @@ html, body {
 
 .mat-mdc-text-field-wrapper {
   background-color: var(--surface) !important;
-  transition: background-color 0.2s ease !important;
 }
 
 .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
-  background-color: #f0fdf4 !important; /* Very soft emerald tint on focus */
+  background-color: var(--surface) !important; /* Pure white even on focus */
 }
 
 /* Fix for Select Panel background appearing grey */
