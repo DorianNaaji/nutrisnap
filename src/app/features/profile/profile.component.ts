@@ -11,7 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProfileService } from '../../core/services/profile.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { ExportService } from '../../core/services/export.service';
 import { StorageService } from '../../core/services/storage.service';
 import { UserProfile } from '../../core/models/profile.model';
@@ -34,6 +36,7 @@ import { NsCardComponent } from '../../shared/components/design-system/card.comp
     MatExpansionModule,
     MatSnackBarModule,
     MatDividerModule,
+    MatButtonToggleModule,
     LegalFooterComponent,
     NsCardComponent
   ],
@@ -45,6 +48,7 @@ export class ProfileComponent implements OnInit {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   protected profileService = inject(ProfileService);
+  protected themeService = inject(ThemeService);
   private exportService = inject(ExportService);
   private storage = inject(StorageService);
 
@@ -154,6 +158,10 @@ export class ProfileComponent implements OnInit {
       await this.storage.clearAllData();
       window.location.reload();
     }
+  }
+
+  onThemeChange(event: MatButtonToggleChange) {
+    this.themeService.setTheme(event.value);
   }
 
   goBack() {

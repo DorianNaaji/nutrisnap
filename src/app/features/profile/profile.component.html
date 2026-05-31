@@ -152,6 +152,29 @@
         }
       </ns-card>
 
+      <!-- APPARENCE -->
+      <ns-card title="Apparence">
+        <div class="theme-toggle-wrapper">
+          <mat-button-toggle-group
+            [value]="themeService.currentTheme()"
+            (change)="onThemeChange($event)"
+            class="theme-toggle-group">
+            <mat-button-toggle value="system">
+              <mat-icon fontSet="material-symbols-rounded">settings_suggest</mat-icon>
+              Système
+            </mat-button-toggle>
+            <mat-button-toggle value="light">
+              <mat-icon fontSet="material-symbols-rounded">light_mode</mat-icon>
+              Clair
+            </mat-button-toggle>
+            <mat-button-toggle value="dark">
+              <mat-icon fontSet="material-symbols-rounded">dark_mode</mat-icon>
+              Sombre
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </ns-card>
+
       <!-- DATA MANAGEMENT -->
       <ns-card title="Espace de stockage" customClass="storage-card">
         <p class="storage-info">Vos données sont stockées <strong>exclusivement</strong> en local sur ce navigateur.</p>

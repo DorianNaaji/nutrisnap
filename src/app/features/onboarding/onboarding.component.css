@@ -246,6 +246,11 @@ h3 {
   line-height: 1.6;
 }
 
+mat-hint a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 /* ACTIONS */
 .stepper-actions {
   margin-top: auto;

@@ -51,6 +51,23 @@ export class StorageService extends Dexie {
     await this.logs.delete(id);
   }
 
+  // Settings Methods
+  async getSettings(): Promise<AppSettings | undefined> {
+    return await this.settings.get('app');
+  }
+
+  async saveSettings(patch: Partial<Omit<AppSettings, 'id'>>): Promise<void> {
+    const existing = await this.getSettings();
+    const updated: AppSettings = {
+      theme: 'system',
+      language: 'fr',
+      ...existing,
+      ...patch,
+      id: 'app'
+    };
+    await this.settings.put(updated);
+  }
+
   async clearAllData(): Promise<void> {
     await this.profile.clear();
     await this.logs.clear();

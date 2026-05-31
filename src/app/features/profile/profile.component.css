@@ -235,3 +235,44 @@
   outline: 2px solid var(--primary);
   border-color: transparent;
 }
+
+/* THEME TOGGLE */
+.theme-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--sp-2) 0 var(--sp-4);
+}
+
+.theme-toggle-group {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--outline);
+}
+
+.theme-toggle-group .mat-button-toggle {
+  flex: 1;
+  background-color: var(--surface);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.theme-toggle-group .mat-button-toggle-checked {
+  background-color: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.theme-toggle-group .mat-button-toggle button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-3) var(--sp-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.theme-toggle-group mat-icon {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}

@@ -143,6 +143,11 @@ html .mat-stepper-vertical {
   background-color: var(--surface);
 }
 
+html .onboarding-main-card.mat-mdc-card {
+  --mat-card-elevated-container-shape: var(--radius-xl);
+  overflow: hidden;
+}
+
 html .mat-mdc-card.variant-card,
 html .mat-expansion-panel.variant-card {
   background-color: var(--background);
