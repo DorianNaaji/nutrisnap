@@ -1,6 +1,5 @@
 const ftp = require("basic-ftp");
 const path = require("path");
-const fs = require("fs");
 const chokidar = require("chokidar");
 require("dotenv").config();
 
@@ -12,23 +11,76 @@ const config = {
     localDir: path.join(__dirname, "../dist/nutrisnap/browser")
 };
 
-async function deployFile(client, localPath) {
+const queue = new Set();
+let isProcessing = false;
+let client = null;
+
+function enqueue(localPath) {
+    queue.add(localPath);
+    processQueue();
+}
+
+async function processQueue() {
+    if (isProcessing || queue.size === 0) return;
+    isProcessing = true;
+
+    while (queue.size > 0) {
+        const [localPath] = queue;
+        queue.delete(localPath);
+        await uploadFile(localPath);
+    }
+
+    isProcessing = false;
+}
+
+async function uploadFile(localPath, attempt = 1) {
     const relativePath = path.relative(config.localDir, localPath);
     const remotePath = path.join(config.remoteDir, relativePath).replace(/\\/g, "/");
-    
+    const timestamp = new Date().toLocaleTimeString();
+
     try {
-        const timestamp = new Date().toLocaleTimeString();
-        process.stdout.write(`[${timestamp}] 🚀 Transferring: ${relativePath} ... `);
-        
-        // Ensure remote directory exists
+        process.stdout.write(`[${timestamp}] 🚀 ${relativePath}${attempt > 1 ? ` (retry ${attempt})` : ""} ... `);
         await client.ensureDir(path.dirname(remotePath));
         await client.uploadFrom(localPath, remotePath);
-        
-        console.log("✅ SUCCESS");
+        console.log("✅");
     } catch (err) {
-        console.log("❌ ERROR");
-        console.error(`   Error details: ${err.message}`);
+        console.log("❌ " + err.message);
+
+        const isConnError = err.message.includes("closed") || err.message.includes("ECONNRESET") || err.message.includes("FIN");
+        if (isConnError && attempt < 3) {
+            const ok = await reconnect();
+            if (ok) return uploadFile(localPath, attempt + 1);
+        }
     }
+}
+
+async function reconnect() {
+    try {
+        console.log("🔄 Reconnecting...");
+        if (client) client.close();
+        client = new ftp.Client();
+        client.ftp.verbose = false;
+        await client.access({
+            host: config.host,
+            user: config.user,
+            password: config.password,
+            secure: false
+        });
+        console.log("🔓 Reconnected.");
+        return true;
+    } catch (err) {
+        console.error("❌ Reconnection failed:", err.message);
+        return false;
+    }
+}
+
+// Keepalive: NOOP toutes les 30s pour éviter que OVH coupe la connexion idle
+function startKeepalive() {
+    setInterval(async () => {
+        if (!isProcessing && client && !client.closed) {
+            try { await client.send("NOOP"); } catch { await reconnect(); }
+        }
+    }, 30000);
 }
 
 async function startSync() {
@@ -38,7 +90,7 @@ async function startSync() {
     console.log(`📁 Remote Dir: ${config.remoteDir}`);
     console.log("-----------------------------------------");
 
-    const client = new ftp.Client();
+    client = new ftp.Client();
     client.ftp.verbose = false;
 
     try {
@@ -46,30 +98,25 @@ async function startSync() {
             host: config.host,
             user: config.user,
             password: config.password,
-            secure: false // OVH default is often plain or implicit SSL, adjust if needed
+            secure: false
         });
-
         console.log("🔓 Connected to FTP server.");
+        startKeepalive();
 
         const watcher = chokidar.watch(config.localDir, {
             persistent: true,
-            ignoreInitial: true, // Don't sync everything at start, wait for changes
-            awaitWriteFinish: {
-                stabilityThreshold: 500,
-                pollInterval: 100
-            }
+            ignoreInitial: true,
+            awaitWriteFinish: { stabilityThreshold: 500, pollInterval: 100 }
         });
 
-        watcher.on("change", (filePath) => deployFile(client, filePath));
-        watcher.on("add", (filePath) => deployFile(client, filePath));
+        watcher.on("add", enqueue);
+        watcher.on("change", enqueue);
 
         console.log(`👀 Watching for changes in ${config.localDir}...`);
-
     } catch (err) {
         console.error("❌ FTP Connection failed:", err.message);
         process.exit(1);
     }
 }
 
-// Start the process
 startSync();

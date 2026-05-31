@@ -1,17 +1,12 @@
-<IfModule mod_rewrite.c>
-  RewriteEngine On
+Options +FollowSymLinks -Indexes
 
-  # 1. Block common search engine bots and crawlers by User-Agent (returns 403 Forbidden)
-  RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|yandex|baidu|slurp|duckduckgo|crawler|spider|bot|semrush|ahrefs|rogerbot|exabot|fast-webcrawler|ia_archiver) [NC]
-  RewriteRule .* - [F,L]
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.html [L,QSA]
 
-  # 2. Angular SPA Routing
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.*)$ index.html [L]
-</IfModule>
+ErrorDocument 404 /index.html
 
-# 3. Add HTTP header to enforce noindex/nofollow for security & scrapers
 <IfModule mod_headers.c>
   Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
 </IfModule>

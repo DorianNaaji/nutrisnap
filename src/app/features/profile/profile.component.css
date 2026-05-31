@@ -158,12 +158,6 @@
   padding: var(--sp-4) 0;
 }
 
-@media (min-width: 480px) {
-  .advanced-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 .hint {
   font-size: 0.8rem;
   color: var(--md-sys-color-on-surface-variant);
