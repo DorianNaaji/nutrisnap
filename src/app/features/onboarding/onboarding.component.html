@@ -27,7 +27,7 @@
                 <mat-icon color="primary">bolt</mat-icon>
                 <div class="value-text">
                   <strong>Instant Tracking</strong>
-                  <span>IA Gemini 1.5 Flash</span>
+                  <span>IA Gemini 2.5 Flash</span>
                 </div>
               </div>
               <div class="value-item">
@@ -89,16 +89,14 @@
 
               <mat-expansion-panel class="advanced-panel">
                 <mat-expansion-panel-header>
-                  <mat-panel-title>Données avancées</mat-panel-title>
-                  <mat-panel-description>
-                    Balance connectée
-                  </mat-panel-description>
+                  <mat-panel-title>Métriques corporelles (opt.)</mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="advanced-grid">
                   <mat-form-field appearance="outline"><mat-label>Masse grasse (%)</mat-label><input matInput type="number" formControlName="bodyFat"></mat-form-field>
                   <mat-form-field appearance="outline"><mat-label>Masse musculaire (kg)</mat-label><input matInput type="number" formControlName="muscleMass"></mat-form-field>
-                  <mat-form-field appearance="outline"><mat-label>BMR mesuré (kcal)</mat-label><input matInput type="number" formControlName="measuredBmr"></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>BMR mesuré (kcal)</mat-label><input matInput type="number" formControlName="measuredBmr"></mat-form-field>
                 </div>
+                <div class="advanced-hint">Le BMR mesuré remplace le calcul théorique.</div>
               </mat-expansion-panel>
 
               <div class="stepper-actions">

@@ -128,22 +128,26 @@ h3 {
   border: 1px solid var(--outline);
   box-shadow: none;
   border-radius: var(--radius-lg);
-  margin: 1rem 0;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.advanced-panel mat-expansion-panel-header {
+  padding: 0 1.5rem;
+  height: 64px !important;
 }
 
 .advanced-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--sp-4);
-  padding: 1rem 0;
+  padding: 1.5rem;
 }
 
-/* METABOLIC PREVIEW */
-.metabolic-preview {
-  background-color: var(--surface-variant);
-  border-radius: var(--radius-xl);
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+.advanced-hint {
+  font-size: 0.8rem;
+  color: var(--md-sys-color-on-surface-variant);
+  padding: 0 1.5rem 1.5rem;
 }
 
 .preview-header {
