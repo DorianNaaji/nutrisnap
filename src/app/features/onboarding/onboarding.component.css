@@ -257,6 +257,28 @@ h3 {
   font-size: 1rem !important;
 }
 
+/* Refinement: Stepper label wrapping to prevent truncation */
+::ng-deep .mat-step-label {
+  white-space: normal !important;
+  text-align: center;
+  line-height: 1.2 !important;
+}
+
+/* Refinement: Cleaner stepper interaction (remove hover tint and ripple) */
+::ng-deep .mat-step-header {
+  background-color: transparent !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+::ng-deep .mat-step-header:hover,
+::ng-deep .mat-step-header:active {
+  background-color: transparent !important;
+}
+
+::ng-deep .mat-step-header .mat-ripple {
+  display: none !important;
+}
+
 /* OVERRIDES */
 ::ng-deep .mat-step-header .mat-step-icon-selected {
   background-color: var(--primary) !important;
