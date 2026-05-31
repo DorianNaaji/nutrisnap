@@ -1,181 +1,314 @@
-.dashboard-container {
-  padding: 16px;
-  max-width: 600px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding-bottom: 80px; /* Space for FAB */
+.dashboard-page {
+  padding-bottom: 80px;
 }
 
-.dashboard-header {
+.app-header {
+  padding: var(--sp-6) var(--sp-6) var(--sp-4) var(--sp-6);
+  background-color: var(--surface);
+}
+
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.greeting h1 {
+.user-greeting h1 {
   margin: 0;
-  font-size: 24px;
-  color: #1a5236;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-.date {
+.current-date {
   margin: 0;
-  font-size: 14px;
-  color: #666;
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+  text-transform: capitalize;
 }
 
-/* CALORIE CARD */
-.calorie-card {
-  border-radius: 28px;
-  background: #e8f3eb;
-  box-shadow: none;
-  border: 1px solid #c8e6c9;
+.profile-btn {
+  color: var(--primary) !important;
 }
 
-.calorie-info {
-  padding: 24px;
-  text-align: center;
+.dashboard-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--sp-4);
 }
 
-.main-stat {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
+/* HERO CARD */
+.hero-card {
+  background: linear-gradient(135deg, var(--primary) 0%, #065f46 100%) !important;
+  color: white !important;
+  position: relative;
+  overflow: hidden;
+  border: none !important;
 }
 
-.main-stat .value {
-  font-size: 48px;
-  line-height: 1;
-  font-weight: bold;
-  color: #1a5236;
-  margin-bottom: 4px;
+.hero-inner {
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
-.main-stat .label {
-  font-size: 14px;
-  color: #49454f;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.hero-bg-icon {
+  position: absolute;
+  right: -2rem;
+  top: -2rem;
+  font-size: 10rem !important;
+  width: 10rem !important;
+  height: 10rem !important;
+  opacity: 0.1;
+  z-index: 1;
 }
 
-.progress-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.progress-details {
+.hero-main {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
-  color: #49454f;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.hero-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.hero-value {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 0.25rem;
+}
+
+.hero-secondary {
+  text-align: right;
+  gap: 1rem;
+}
+
+.secondary-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.sec-label {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.sec-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.hero-progress-container {
+  height: 8px;
+  background: rgba(255,255,255,0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.hero-progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
 }
 
 /* MACROS GRID */
 .macros-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
 }
 
-.macro-item {
-  border-radius: 20px;
+@media (max-width: 500px) {
+  .macros-grid {
+    gap: var(--sp-2);
+  }
+}
+
+.macro-card {
   text-align: center;
-  box-shadow: none;
-  border: 1px solid #e0e0e0;
 }
 
-.macro-chart {
-  position: relative;
+.macro-header {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 8px;
+  flex-direction: column;
+  margin-bottom: 1rem;
 }
 
-.macro-val {
-  position: absolute;
-  font-size: 11px;
-  font-weight: bold;
+.macro-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
 }
 
 .macro-label {
-  display: block;
-  font-size: 10px;
+  font-size: 0.65rem;
+  font-weight: 700;
   text-transform: uppercase;
-  color: #666;
-  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.macro-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .macro-target {
-  display: block;
-  font-size: 9px;
-  color: #999;
+  font-size: 0.6rem;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.proteins mat-progress-spinner ::ng-deep circle { stroke: #1D4ED8 !important; }
-.carbs mat-progress-spinner ::ng-deep circle { stroke: #D97706 !important; }
-.fats mat-progress-spinner ::ng-deep circle { stroke: #7C3AED !important; }
+.mini-progress {
+  height: 4px;
+  background: rgba(0,0,0,0.05);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
 
-/* HISTORY */
-.history-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.mini-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.mini-fill.protein { background-color: var(--md-sys-color-secondary); }
+.mini-fill.carbs { background-color: var(--md-sys-color-tertiary); }
+.mini-fill.fats { background-color: var(--warning); }
+
+/* LOGS SECTION */
+.logs-section {
+  margin-top: var(--sp-10);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: var(--sp-4);
 }
 
 .section-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
   margin: 0;
-  font-size: 18px;
 }
 
-.empty-state {
+.empty-state-card {
+  background: var(--surface);
+  border: 2px dashed var(--outline);
+  border-radius: var(--radius-xl);
+  padding: 3rem 2rem;
   text-align: center;
-  padding: 40px;
-  color: #999;
-}
-
-.empty-state mat-icon {
-  font-size: 48px;
-  width: 48px;
-  height: 48px;
-  margin-bottom: 12px;
-}
-
-.logs-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: center;
 }
 
-.log-item {
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+.empty-icon {
+  font-size: 3rem !important;
+  width: 3rem !important;
+  height: 3rem !important;
+  color: var(--outline);
+  margin-bottom: 1rem;
 }
 
-.log-main {
+.empty-state-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.empty-state-card p {
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.add-meal-btn {
+  border-radius: var(--radius-full) !important;
+}
+
+/* LOGS LIST */
+.logs-list {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--outline);
+  overflow: hidden;
+}
+
+.log-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--outline);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.log-row:last-child {
+  border-bottom: none;
+}
+
+.log-row:hover {
+  background-color: var(--surface-variant);
+}
+
+.log-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.log-time {
+  font-size: 0.75rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.log-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.log-calories {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.log-calories small {
+  font-size: 0.7rem;
   font-weight: 500;
-  margin-bottom: 4px;
+  opacity: 0.7;
 }
 
-.log-macros {
-  font-size: 12px;
-  color: #666;
+.chevron {
+  color: var(--outline);
 }
 
-/* FAB */
 .fab-scan {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 2rem;
+  right: 1.5rem;
+  z-index: 100;
 }

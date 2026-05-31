@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System - Premium Health OS (Angular Material 3)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. DESIGN TOKENS (LIGHT MODE)
+           ========================================================================== */
+        :root {
+            /* Palette Primaire (Vert Émeraude Profond) */
+            --md-sys-color-primary: #059669;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-primary-container: #d1fae5;
+            --md-sys-color-on-primary-container: #064e3b;
+
+            /* Palette Secondaire (Teal Médical) */
+            --md-sys-color-secondary: #0f766e;
+            --md-sys-color-on-secondary: #ffffff;
+            --md-sys-color-secondary-container: #ccfbf1;
+            --md-sys-color-on-secondary-container: #115e59;
+
+            /* Palette Tertiaire (Bleu Analytics) */
+            --md-sys-color-tertiary: #2563eb;
+            --md-sys-color-on-tertiary: #ffffff;
+            --md-sys-color-tertiary-container: #dbeafe;
+            --md-sys-color-on-tertiary-container: #1e3a8a;
+
+            /* Semantic Colors */
+            --md-sys-color-error: #dc2626;
+            --md-sys-color-on-error: #ffffff;
+            --md-sys-color-error-container: #fee2e2;
+            --md-sys-color-on-error-container: #991b1b;
+            --md-sys-color-success: #16a34a;
+            --md-sys-color-warning: #ea580c;
+
+            /* Surfaces & Neutres */
+            --md-sys-color-background: #f8fafc;
+            --md-sys-color-on-background: #0f172a;
+            --md-sys-color-surface: #ffffff;
+            --md-sys-color-on-surface: #1e293b;
+            --md-sys-color-surface-variant: #f1f5f9;
+            --md-sys-color-on-surface-variant: #475569;
+            --md-sys-color-outline: #cbd5e1;
+
+            /* Spacing Scale (Base 4px) */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-12: 48px;
+
+            /* Border Radius System */
+            --radius-xs: 4px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+
+            /* Elevation / Shadows System */
+            --elevation-0: none;
+            --elevation-1: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.02);
+            --elevation-2: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.02);
+            --elevation-3: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -4px rgba(15, 23, 42, 0.02);
+
+            /* Typography */
+            --font-family: 'Inter', sans-serif;
+            --text-xs: 0.75rem; /* 12px */
+            --text-sm: 0.875rem; /* 14px */
+            --text-base: 1rem; /* 16px */
+            --text-lg: 1.125rem; /* 18px */
+            --text-xl: 1.25rem; /* 20px */
+            --text-2xl: 1.5rem; /* 24px */
+            --text-3xl: 1.875rem; /* 30px */
+            --text-4xl: 2.25rem; /* 36px */
+        }
+
+        /* ==========================================================================
+           2. DESIGN TOKENS (DARK MODE)
+           ========================================================================== */
+        [data-theme="dark"] {
+            --md-sys-color-background: #0f172a;
+            --md-sys-color-on-background: #f8fafc;
+            --md-sys-color-surface: #1e293b;
+            --md-sys-color-on-surface: #f1f5f9;
+            --md-sys-color-surface-variant: #334155;
+            --md-sys-color-on-surface-variant: #cbd5e1;
+            --md-sys-color-outline: #475569;
+
+            --md-sys-color-primary: #10b981;
+            --md-sys-color-primary-container: #064e3b;
+            --md-sys-color-on-primary-container: #a7f3d0;
+
+            --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --elevation-2: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --elevation-3: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ==========================================================================
+           BASE STYLES & LAYOUT
+           ========================================================================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-family);
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            line-height: 1.5;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .ds-sidebar {
+            width: 280px;
+            background-color: var(--md-sys-color-surface);
+            border-right: 1px solid var(--md-sys-color-outline);
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: var(--spacing-6);
+        }
+        .ds-sidebar h1 {
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+            margin-bottom: var(--spacing-8);
+        }
+        .ds-sidebar a {
+            display: block;
+            color: var(--md-sys-color-on-surface-variant);
+            text-decoration: none;
+            padding: var(--spacing-2) 0;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .ds-sidebar a:hover { color: var(--md-sys-color-primary); }
+
+        /* Main Content */
+        .ds-main {
+            margin-left: 280px;
+            padding: var(--spacing-12);
+            max-width: 1200px;
+            width: 100%;
+        }
+        section { margin-bottom: 80px; }
+        h2 { font-size: var(--text-3xl); margin-bottom: var(--spacing-6); color: var(--md-sys-color-on-background); font-weight: 600; letter-spacing: -0.02em; }
+        h3 { font-size: var(--text-xl); margin-bottom: var(--spacing-4); color: var(--md-sys-color-on-background); font-weight: 600; margin-top: var(--spacing-8); }
+        p { margin-bottom: var(--spacing-4); color: var(--md-sys-color-on-surface-variant); }
+
+        /* Documenting Elements */
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--spacing-4);
+        }
+        .color-swatch {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--elevation-1);
+        }
+        .color-swatch-box { height: 80px; width: 100%; }
+        .color-swatch-info { padding: var(--spacing-3); background: var(--md-sys-color-surface); }
+        .color-swatch-name { font-size: var(--text-xs); font-weight: 600; }
+        .color-swatch-var { font-size: 10px; color: var(--md-sys-color-on-surface-variant); font-family: monospace; }
+
+        .agent-note {
+            background-color: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+            padding: var(--spacing-4);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--md-sys-color-tertiary);
+            font-family: monospace;
+            font-size: var(--text-sm);
+            margin-bottom: var(--spacing-6);
+        }
+
+        /* Composants Mockup */
+        .component-preview {
+            border: 1px solid var(--md-sys-color-outline);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-8);
+            background: var(--md-sys-color-background);
+            display: flex;
+            gap: var(--spacing-4);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-4);
+        }
+
+        /* Material Button Mimic */
+        .mat-btn {
+            padding: 0 var(--spacing-6);
+            height: 40px;
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            font-size: var(--text-sm);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+        }
+        .mat-btn-primary { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+        .mat-btn-tonal { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+        .mat-btn-outline { background: transparent; border: 1px solid var(--md-sys-color-outline); color: var(--md-sys-color-primary); }
+        
+        /* Material Card Mimic */
+        .mat-card {
+            background: var(--md-sys-color-surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-6);
+            box-shadow: var(--elevation-1);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .mat-card-variant { background: var(--md-sys-color-surface-variant); box-shadow: none; border: none; }
+
+        /* Dashboard Concept Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-6);
+        }
+        .hero-card {
+            grid-column: span 3;
+            background: linear-gradient(135deg, var(--md-sys-color-primary) 0%, var(--md-sys-color-secondary) 100%);
+            color: var(--md-sys-color-on-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-value { font-size: var(--text-4xl); font-weight: 700; margin-top: var(--spacing-4); }
+        .hero-label { font-size: var(--text-sm); opacity: 0.9; }
+        
+        .macro-card { text-align: center; }
+        .macro-value { font-size: var(--text-2xl); font-weight: 700; color: var(--md-sys-color-on-surface); }
+        .macro-label { font-size: var(--text-xs); color: var(--md-sys-color-on-surface-variant); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: var(--spacing-2); }
+        
+        .progress-bar-container { height: 6px; background: var(--md-sys-color-surface-variant); border-radius: var(--radius-full); margin-top: var(--spacing-3); overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--md-sys-color-primary); border-radius: var(--radius-full); width: 45%; }
+        .progress-bar-fill.protein { background: var(--md-sys-color-secondary); width: 30%; }
+        .progress-bar-fill.carbs { background: var(--md-sys-color-tertiary); width: 60%; }
+        .progress-bar-fill.fats { background: var(--md-sys-color-warning); width: 20%; }
+
+        /* Forms */
+        .mat-input-field {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-1);
+            width: 100%;
+            max-width: 300px;
+        }
+        .mat-label { font-size: var(--text-xs); font-weight: 500; color: var(--md-sys-color-on-surface-variant); }
+        .mat-input {
+            height: 48px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--md-sys-color-outline);
+            background: var(--md-sys-color-surface);
+            padding: 0 var(--spacing-3);
+            font-size: var(--text-base);
+            color: var(--md-sys-color-on-surface);
+            transition: border-color 0.2s;
+        }
+        .mat-input:focus { outline: none; border-color: var(--md-sys-color-primary); border-width: 2px; }
+
+        /* Controls */
+        .theme-toggle {
+            position: fixed;
+            top: var(--spacing-6);
+            right: var(--spacing-6);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="ds-sidebar">
+        <h1>Health OS System</h1>
+        <a href="#vision">1. Vision & Direction</a>
+        <a href="#tokens">2. Design Tokens</a>
+        <a href="#angular-mapping">3. Angular Material Map</a>
+        <a href="#components">4. Composants</a>
+        <a href="#dashboard-concept">5. Dashboard Concept</a>
+        <a href="#dark-mode">6. Dark Mode</a>
+    </nav>
+
+    <button class="mat-btn mat-btn-tonal theme-toggle" onclick="document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')">
+        <span class="material-symbols-rounded">dark_mode</span> Toggle Theme
+    </button>
+
+    <main class="ds-main">
+        
+        <section id="vision">
+            <h2>1. Vision Produit & Direction Artistique</h2>
+            <div class="agent-note">
+                <strong>AGENT INSTRUCTION:</strong><br>
+                Abandonner le vert pastel (#e8f5e9) et les bordures vertes fluo. Le nouveau standard est "Premium Health OS". L'interface doit ressembler à un outil clinique moderne, SaaS (ex: Apple Health, Oura, Linear). Utiliser des ombres douces (--elevation-1), des coins très arrondis (--radius-xl pour les cartes principales) et un fond d'écran légèrement teinté (--md-sys-color-background).
+            </div>
+            <ul>
+                <li><strong>ADN Visuel :</strong> Crédible, scientifique, clair, premium.</li>
+                <li><strong>Principes UI :</strong> Haut contraste pour les données (noir/blanc), couleurs sémantiques uniquement pour les statuts ou les visualisations (graphiques).</li>
+                <li><strong>Surfaces :</strong> Utilisation du Material 3 (Surface, Surface Container, Surface Variant) pour créer de la profondeur sans abuser des bordures.</li>
+            </ul>
+        </section>
+
+        <section id="tokens">
+            <h2>2. Design Tokens</h2>
+            
+            <h3>Couleurs (Material 3 Structure)</h3>
+            <div class="token-grid">
+                <div class="color-swatch">
+                    <div class="color-swatch-box" style="background: var(--md-sys-color-primary)"></div>
+                    <div class="color-swatch-info">
+                        <div class="color-swatch-name">Primary</div>
+                        <div class="color-swatch-var">--md-sys-color-primary</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-swatch-box" style="background: var(--md-sys-color-primary-container)"></div>
+                    <div class="color-swatch-info">
+                        <div class="color-swatch-name">Primary Ctnr</div>
+                        <div class="color-swatch-var">--md-sys-color-primary-container</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-swatch-box" style="background: var(--md-sys-color-secondary)"></div>
+                    <div class="color-swatch-info">
+                        <div class="color-swatch-name">Secondary</div>
+                        <div class="color-swatch-var">--md-sys-color-secondary</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-swatch-box" style="background: var(--md-sys-color-tertiary)"></div>
+                    <div class="color-swatch-info">
+                        <div class="color-swatch-name">Tertiary</div>
+                        <div class="color-swatch-var">--md-sys-color-tertiary</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-swatch-box" style="background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline)"></div>
+                    <div class="color-swatch-info">
+                        <div class="color-swatch-name">Surface</div>
+                        <div class="color-swatch-var">--md-sys-color-surface</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-swatch-box" style="background: var(--md-sys-color-surface-variant)"></div>
+                    <div class="color-swatch-info">
+                        <div class="color-swatch-name">Surface Variant</div>
+                        <div class="color-swatch-var">--md-sys-color-surface-variant</div>
+                    </div>
+                </div>
+            </div>
+
+            </section>
+
+        <section id="angular-mapping">
+            <h2>3. Angular Material 3 Mapping Rules</h2>
+            <div class="agent-note">
+                <strong>AGENT INSTRUCTION - THEME CONFIGURATION:</strong><br>
+                Générer un thème personnalisé Angular Material utilisant M3.
+                <br><br>
+                <strong>Règles de mapping des composants :</strong><br>
+                - <code>mat-card</code> : Ne jamais utiliser "mat-elevation-z*". Utiliser les tokens CSS personnalisés (<code>box-shadow: var(--elevation-1)</code>) et <code>border-radius: var(--radius-xl)</code>.<br>
+                - <code>mat-form-field</code> : Utiliser <code>appearance="outline"</code> systématiquement.<br>
+                - <code>mat-button</code> : <br>
+                  &nbsp;&nbsp;* Action principale (Enregistrer) : <code>mat-flat-button color="primary"</code><br>
+                  &nbsp;&nbsp;* Action secondaire : <code>mat-stroked-button</code><br>
+                  &nbsp;&nbsp;* Navigation tab (Retour) : <code>mat-button</code><br>
+                - <code>mat-progress-bar</code> : Utiliser <code>color="primary"</code> pour les calories globales, personnaliser via CSS pour les macros spécifiques.
+            </div>
+        </section>
+
+        <section id="components">
+            <h2>4. Composants & Règles d'usage</h2>
+
+            <h3>Boutons (Angular Material: mat-button)</h3>
+            <div class="component-preview">
+                <button class="mat-btn mat-btn-primary">Enregistrer</button>
+                <button class="mat-btn mat-btn-tonal">Continuer</button>
+                <button class="mat-btn mat-btn-outline">Retour</button>
+            </div>
+            
+            <h3>Inputs (Angular Material: mat-form-field)</h3>
+            <div class="component-preview">
+                <div class="mat-input-field">
+                    <label class="mat-label">Poids (kg)*</label>
+                    <input type="text" class="mat-input" value="82" readonly>
+                </div>
+                <div class="mat-input-field">
+                    <label class="mat-label">Sexe*</label>
+                    <select class="mat-input" disabled><option>Homme</option></select>
+                </div>
+            </div>
+
+            <h3>Surfaces / Cards</h3>
+            <div class="component-preview" style="background: var(--md-sys-color-background);">
+                <div class="mat-card" style="width: 250px;">
+                    <h4 style="margin-bottom: 8px;">Elevated Card</h4>
+                    <p style="font-size: var(--text-sm);">Utilisé pour les conteneurs principaux, les formulaires, les modales.</p>
+                </div>
+                <div class="mat-card mat-card-variant" style="width: 250px;">
+                    <h4 style="margin-bottom: 8px;">Variant Card</h4>
+                    <p style="font-size: var(--text-sm);">Utilisé pour regrouper des sous-informations (ex: les cartes de Macros) sans surcharger l'élévation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard-concept">
+            <h2>5. Dashboard Redesign Concept</h2>
+            <div class="agent-note">
+                <strong>AGENT INSTRUCTION - HTML STRUCTURE:</strong><br>
+                Reproduire cette structure exacte en utilisant les directives Angular appropriées (ex: <code>*ngIf</code>, <code>*ngFor</code>). Ceci remplace l'ancienne grande carte vert clair peu contrastée et les trois sous-cartes grises.
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="mat-card hero-card">
+                    <span class="material-symbols-rounded" style="position: absolute; right: -20px; top: -20px; font-size: 140px; opacity: 0.1;">local_fire_department</span>
+                    <div style="position: relative; z-index: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <div class="hero-label">KCAL RESTANTES</div>
+                                <div class="hero-value">2,045</div>
+                            </div>
+                            <div style="text-align: right; font-size: var(--text-sm); opacity: 0.9;">
+                                <div>Objectif: 2,045 kcal</div>
+                                <div>Consommé: 0 kcal</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container" style="background: rgba(255,255,255,0.2);">
+                            <div class="progress-bar-fill" style="background: #ffffff; width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mat-card mat-card-variant macro-card">
+                    <div class="macro-value">0g</div>
+                    <div class="macro-label">Protéines</div>
+                    <div style="font-size: 10px; color: var(--md-sys-color-on-surface-variant);">sur 128g</div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill protein" style="width: 0%;"></div></div>
+                </div>
+
+                <div class="mat-card mat-card-variant macro-card">
+                    <div class="macro-value">0g</div>
+                    <div class="macro-label">Glucides</div>
+                    <div style="font-size: 10px; color: var(--md-sys-color-on-surface-variant);">sur 230g</div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill carbs" style="width: 0%;"></div></div>
+                </div>
+
+                <div class="mat-card mat-card-variant macro-card">
+                    <div class="macro-value">0g</div>
+                    <div class="macro-label">Lipides</div>
+                    <div style="font-size: 10px; color: var(--md-sys-color-on-surface-variant);">sur 68g</div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill fats" style="width: 0%;"></div></div>
+                </div>
+
+                <div style="grid-column: span 3; display: flex; justify-content: space-between; align-items: center; margin-top: var(--spacing-6);">
+                    <h3 style="margin: 0;">Historique du jour</h3>
+                    <button class="mat-btn mat-btn-outline" style="height: 32px;">Tout voir</button>
+                </div>
+                
+                <div class="mat-card" style="grid-column: span 3; text-align: center; padding: var(--spacing-12); border: 1px dashed var(--md-sys-color-outline); box-shadow: none;">
+                    <span class="material-symbols-rounded" style="font-size: 48px; color: var(--md-sys-color-outline); margin-bottom: var(--spacing-4);">restaurant</span>
+                    <h4 style="color: var(--md-sys-color-on-surface); margin-bottom: var(--spacing-2);">Aucun repas enregistré aujourd'hui</h4>
+                    <p style="font-size: var(--text-sm);">Commencez à suivre votre alimentation pour voir vos statistiques.</p>
+                    <button class="mat-btn mat-btn-primary" style="margin-top: var(--spacing-4);">
+                        <span class="material-symbols-rounded" style="font-size: 18px; margin-right: 8px;">add</span>
+                        Ajouter un repas
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="dark-mode">
+            <h2>6. Dark Mode & Implémentation</h2>
+            <div class="agent-note">
+                <strong>AGENT INSTRUCTION - THEME SWITCHING:</strong><br>
+                Angular Material 3 gère le dark mode via les classes ou attributs HTML (ex: <code>&lt;html data-theme="dark"&gt;</code>).
+                Il faut lier le toggle utilisateur à cet attribut. Ne pas forcer les couleurs en dur (`#fff` ou `#000`) dans le SCSS des composants. Utiliser strictement les tokens définis dans la section 2. Les contrastes doivent respecter AA minimum.
+            </div>
+        </section>
+        
+    </main>
+</body>
+</html>

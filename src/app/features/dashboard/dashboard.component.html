@@ -1,97 +1,128 @@
-<div class="dashboard-container">
-  <!-- HEADER STATS -->
-  <header class="dashboard-header">
-    <div class="greeting">
-      <h1>Hello</h1>
-      <p class="date">{{ today | date:'fullDate' }}</p>
+<div class="dashboard-page">
+  <!-- TOP APP BAR / HEADER -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="user-greeting">
+        <h1>Hello</h1>
+        <p class="current-date">{{ today | date:'EEEE, d MMMM' }}</p>
+      </div>
+      <button mat-icon-button routerLink="/profile" class="profile-btn">
+        <mat-icon fontSet="material-symbols-rounded">account_circle</mat-icon>
+      </button>
     </div>
-    <button mat-icon-button color="primary" routerLink="/profile">
-      <mat-icon>account_circle</mat-icon>
-    </button>
   </header>
 
-  <!-- MAIN CALORIE RING / PROGRESS -->
-  <mat-card class="calorie-card">
-    <div class="calorie-info">
-      <div class="main-stat">
-        <span class="value">{{ logService.dailyStats().remainingCalories | number:'1.0-0' }}</span>
-        <span class="label">kcal restantes</span>
-      </div>
-      <div class="progress-container">
-        <mat-progress-bar mode="determinate" [value]="progressValue" color="primary"></mat-progress-bar>
-        <div class="progress-details">
-          <span>Consommé: {{ logService.dailyStats().totalCalories }} kcal</span>
-          <span>Objectif: {{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }} kcal</span>
-        </div>
-      </div>
-    </div>
-  </mat-card>
-
-  <!-- MACROS WIDGETS -->
-  <div class="macros-grid">
-    <mat-card class="macro-item proteins">
-      <mat-card-content>
-        <div class="macro-chart">
-          <mat-progress-spinner mode="determinate" [value]="getMacroProgress('proteins')" diameter="40" strokeWidth="4"></mat-progress-spinner>
-          <span class="macro-val">{{ logService.dailyStats().totalProteins }}g</span>
-        </div>
-        <span class="macro-label">Protéines</span>
-        <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.proteins }}g</span>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="macro-item carbs">
-      <mat-card-content>
-        <div class="macro-chart">
-          <mat-progress-spinner mode="determinate" [value]="getMacroProgress('carbs')" diameter="40" strokeWidth="4"></mat-progress-spinner>
-          <span class="macro-val">{{ logService.dailyStats().totalCarbs }}g</span>
-        </div>
-        <span class="macro-label">Glucides</span>
-        <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.carbs }}g</span>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="macro-item fats">
-      <mat-card-content>
-        <div class="macro-chart">
-          <mat-progress-spinner mode="determinate" [value]="getMacroProgress('fats')" diameter="40" strokeWidth="4"></mat-progress-spinner>
-          <span class="macro-val">{{ logService.dailyStats().totalFats }}g</span>
-        </div>
-        <span class="macro-label">Lipides</span>
-        <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.fats }}g</span>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <!-- RECENT LOGS -->
-  <section class="history-section">
-    <div class="section-header">
-      <h2>Historique du jour</h2>
-      <button mat-button color="primary">Tout voir</button>
-    </div>
-
-    <div *ngIf="logService.dailyLogs().length === 0" class="empty-state">
-      <mat-icon>restaurant_menu</mat-icon>
-      <p>Aucun repas enregistré aujourd'hui.</p>
-    </div>
-
-    <div class="logs-list">
-      <mat-card *ngFor="let log of logService.dailyLogs()" class="log-item">
-        <mat-card-content>
-          <div class="log-main">
-            <span class="log-name">{{ log.foodName }}</span>
-            <span class="log-calories">{{ log.calories }} kcal</span>
+  <main class="dashboard-content">
+    
+    <!-- HERO STATS: KCAL REMAINING -->
+    <ns-card customClass="hero-card" padding="0">
+      <div class="hero-inner">
+        <mat-icon class="hero-bg-icon">local_fire_department</mat-icon>
+        <div class="hero-data">
+          <div class="hero-main">
+            <div class="hero-col">
+              <span class="hero-label">KCAL RESTANTES</span>
+              <span class="hero-value">{{ logService.dailyStats().remainingCalories | number:'1.0-0' }}</span>
+            </div>
+            <div class="hero-col hero-secondary">
+              <div class="secondary-stat">
+                <span class="sec-label">Objectif</span>
+                <span class="sec-value">{{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }}</span>
+              </div>
+              <div class="secondary-stat">
+                <span class="sec-label">Consommé</span>
+                <span class="sec-value">{{ logService.dailyStats().totalCalories }}</span>
+              </div>
+            </div>
           </div>
-          <div class="log-macros">
-            P: {{ log.macros.proteins }}g | G: {{ log.macros.carbs }}g | L: {{ log.macros.fats }}g
+          <div class="hero-progress-container">
+            <div class="hero-progress-bar">
+              <div class="hero-progress-fill" [style.width.%]="progressValue"></div>
+            </div>
           </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </section>
+        </div>
+      </div>
+    </ns-card>
 
-  <!-- FAB FOR SCAN -->
+    <!-- MACROS GRID -->
+    <div class="macros-grid">
+      <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
+        <div class="macro-header">
+          <span class="macro-value">{{ logService.dailyStats().totalProteins }}g</span>
+          <span class="macro-label">Protéines</span>
+        </div>
+        <div class="macro-footer">
+          <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.proteins }}g</span>
+          <div class="mini-progress">
+            <div class="mini-fill protein" [style.width.%]="getMacroProgress('proteins')"></div>
+          </div>
+        </div>
+      </ns-card>
+
+      <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
+        <div class="macro-header">
+          <span class="macro-value">{{ logService.dailyStats().totalCarbs }}g</span>
+          <span class="macro-label">Glucides</span>
+        </div>
+        <div class="macro-footer">
+          <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.carbs }}g</span>
+          <div class="mini-progress">
+            <div class="mini-fill carbs" [style.width.%]="getMacroProgress('carbs')"></div>
+          </div>
+        </div>
+      </ns-card>
+
+      <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
+        <div class="macro-header">
+          <span class="macro-value">{{ logService.dailyStats().totalFats }}g</span>
+          <span class="macro-label">Lipides</span>
+        </div>
+        <div class="macro-footer">
+          <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.fats }}g</span>
+          <div class="mini-progress">
+            <div class="mini-fill fats" [style.width.%]="getMacroProgress('fats')"></div>
+          </div>
+        </div>
+      </ns-card>
+    </div>
+
+    <!-- RECENT LOGS SECTION -->
+    <section class="logs-section">
+      <div class="section-header">
+        <h2>Historique du jour</h2>
+        <button mat-button color="primary">Tout voir</button>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div *ngIf="logService.dailyLogs().length === 0" class="empty-state-card">
+        <mat-icon class="empty-icon">restaurant</mat-icon>
+        <h3>Aucun repas enregistré aujourd'hui</h3>
+        <p>Commencez à suivre votre alimentation pour voir vos statistiques.</p>
+        <button mat-flat-button color="primary" routerLink="/scanner" class="add-meal-btn">
+          <mat-icon>add</mat-icon>
+          Ajouter un repas
+        </button>
+      </div>
+
+      <!-- LOGS LIST -->
+      <div class="logs-list" *ngIf="logService.dailyLogs().length > 0">
+        <div *ngFor="let log of logService.dailyLogs()" class="log-row">
+          <div class="log-info">
+            <span class="log-title">{{ log.foodName }}</span>
+            <span class="log-time">{{ log.timestamp | date:'HH:mm' }}</span>
+          </div>
+          <div class="log-meta">
+            <span class="log-calories">{{ log.calories }} <small>kcal</small></span>
+            <mat-icon class="chevron">chevron_right</mat-icon>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FAB SCAN -->
   <button mat-fab color="primary" class="fab-scan" routerLink="/scanner">
-    <mat-icon>photo_camera</mat-icon>
+    <mat-icon fontSet="material-symbols-rounded">photo_camera</mat-icon>
   </button>
 </div>

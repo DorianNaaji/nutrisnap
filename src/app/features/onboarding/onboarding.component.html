@@ -1,223 +1,208 @@
-<div class="onboarding-container">
-  <mat-card class="onboarding-card">
-    <mat-stepper linear #stepper [orientation]="(stepperOrientation | async) || 'horizontal'">
-      
-      <!-- ÉTAPE 1 : BIENVENUE -->
-      <mat-step>
-        <ng-template matStepLabel>Hello</ng-template>
-        <div class="step-content">
-          <div class="welcome-header">
-            <mat-icon class="large-icon" color="primary">eco</mat-icon>
-            <h1>Bienvenue sur NutriSnap</h1>
-          </div>
-          <p>L'application nutritionnelle <strong>Privacy-First</strong>.</p>
-          <ul class="values-list">
-            <li><mat-icon color="primary">security</mat-icon> Vos données ne quittent jamais votre téléphone.</li>
-            <li><mat-icon color="primary">favorite</mat-icon> Pas de compte, pas de tracking.</li>
-            <li><mat-icon color="primary">bolt</mat-icon> Suivi instantané grâce à l'IA Gemini.</li>
-          </ul>
-          <div class="stepper-actions">
-            <button mat-flat-button color="primary" matStepperNext>C'est parti !</button>
-          </div>
-        </div>
-      </mat-step>
+<div class="onboarding-page">
+  <div class="onboarding-container">
+    <ns-card customClass="onboarding-main-card" padding="0">
+      <mat-stepper linear #stepper [orientation]="(stepperOrientation | async) || 'horizontal'">
+        
+        <!-- ÉTAPE 1 : BIENVENUE -->
+        <mat-step>
+          <ng-template matStepLabel>Hello</ng-template>
+          <div class="step-content welcome-step">
+            <div class="welcome-header">
+              <div class="icon-circle">
+                <mat-icon fontSet="material-symbols-rounded">eco</mat-icon>
+              </div>
+              <h1>NutriSnap</h1>
+              <p class="subtitle">Premium Health OS</p>
+            </div>
+            
+            <div class="values-grid">
+              <div class="value-item">
+                <mat-icon color="primary">security</mat-icon>
+                <div class="value-text">
+                  <strong>Privacy-First</strong>
+                  <span>Données locales uniquement</span>
+                </div>
+              </div>
+              <div class="value-item">
+                <mat-icon color="primary">bolt</mat-icon>
+                <div class="value-text">
+                  <strong>Instant Tracking</strong>
+                  <span>IA Gemini 1.5 Flash</span>
+                </div>
+              </div>
+              <div class="value-item">
+                <mat-icon color="primary">favorite</mat-icon>
+                <div class="value-text">
+                  <strong>Sans compte</strong>
+                  <span>Pas de tracking publicitaire</span>
+                </div>
+              </div>
+            </div>
 
-      <!-- ÉTAPE 2 : PROFIL -->
-      <mat-step [stepControl]="metabolismForm">
-        <form [formGroup]="metabolismForm">
-          <ng-template matStepLabel>Profil</ng-template>
-          <div class="step-content">
-            <h3>Parlons de vous</h3>
-            <div class="form-grid">
-              <mat-form-field appearance="outline">
-                <mat-label>Sexe</mat-label>
-                <mat-select formControlName="gender">
-                  <mat-option value="male">Homme</mat-option>
-                  <mat-option value="female">Femme</mat-option>
+            <div class="stepper-actions">
+              <button mat-flat-button color="primary" matStepperNext class="wide-btn">Commencer l'aventure</button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- ÉTAPE 2 : PROFIL -->
+        <mat-step [stepControl]="metabolismForm">
+          <form [formGroup]="metabolismForm">
+            <ng-template matStepLabel>Profil</ng-template>
+            <div class="step-content">
+              <h3>Parlons de vous</h3>
+              <div class="form-grid">
+                <mat-form-field appearance="outline">
+                  <mat-label>Sexe</mat-label>
+                  <mat-select formControlName="gender">
+                    <mat-option value="male">Homme</mat-option>
+                    <mat-option value="female">Femme</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Âge</mat-label>
+                  <input matInput type="number" formControlName="age">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Poids (kg)</mat-label>
+                  <input matInput type="number" formControlName="weight">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Taille (cm)</mat-label>
+                  <input matInput type="number" formControlName="height">
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Niveau d'activité</mat-label>
+                <mat-select formControlName="activityLevel">
+                  <mat-option value="sedentary">Sédentaire (Bureau, peu de sport)</mat-option>
+                  <mat-option value="light">Léger (1-2 fois / semaine)</mat-option>
+                  <mat-option value="moderate">Modéré (3-5 fois / semaine)</mat-option>
+                  <mat-option value="active">Actif (6-7 fois / semaine)</mat-option>
+                  <mat-option value="very_active">Très Actif (Sport intense quotidien)</mat-option>
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Âge</mat-label>
-                <input matInput type="number" formControlName="age">
-              </mat-form-field>
+              <mat-expansion-panel class="advanced-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Données avancées</mat-panel-title>
+                  <mat-panel-description>Balance connectée...</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="advanced-grid">
+                  <mat-form-field appearance="outline"><mat-label>Masse grasse (%)</mat-label><input matInput type="number" formControlName="bodyFat"></mat-form-field>
+                  <mat-form-field appearance="outline"><mat-label>Graisse viscérale</mat-label><input matInput type="number" formControlName="visceralFat"></mat-form-field>
+                  <mat-form-field appearance="outline"><mat-label>Masse musculaire (kg)</mat-label><input matInput type="number" formControlName="muscleMass"></mat-form-field>
+                  <mat-form-field appearance="outline"><mat-label>BMR mesuré (kcal)</mat-label><input matInput type="number" formControlName="measuredBmr"></mat-form-field>
+                </div>
+              </mat-expansion-panel>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Poids (kg)</mat-label>
-                <input matInput type="number" formControlName="weight">
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Taille (cm)</mat-label>
-                <input matInput type="number" formControlName="height">
-              </mat-form-field>
+              <div class="stepper-actions">
+                <button mat-button matStepperPrevious>Retour</button>
+                <button mat-flat-button color="primary" matStepperNext>Suivant</button>
+              </div>
             </div>
+          </form>
+        </mat-step>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Niveau d'activité</mat-label>
-              <mat-select formControlName="activityLevel">
-                <mat-option value="sedentary">Sédentaire (Bureau, peu de sport)</mat-option>
-                <mat-option value="light">Léger (1-2 fois / semaine)</mat-option>
-                <mat-option value="moderate">Modéré (3-5 fois / semaine)</mat-option>
-                <mat-option value="active">Actif (6-7 fois / semaine)</mat-option>
-                <mat-option value="very_active">Très Actif (Sport intense quotidien)</mat-option>
-              </mat-select>
-            </mat-form-field>
+        <!-- ÉTAPE 3 : OBJECTIF -->
+        <mat-step [stepControl]="goalForm">
+          <form [formGroup]="goalForm">
+            <ng-template matStepLabel>Objectif</ng-template>
+            <div class="step-content">
+              <h3>Votre but nutritionnel</h3>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Objectif</mat-label>
+                <mat-select formControlName="goal">
+                  <mat-option value="lose_mild">Perte de poids douce (-300 kcal)</mat-option>
+                  <mat-option value="lose_moderate">Perte de poids modérée (-500 kcal)</mat-option>
+                  <mat-option value="lose_aggressive">Perte de poids agressive (-750 kcal)</mat-option>
+                  <mat-option value="maintain">Maintenir mon poids</mat-option>
+                  <mat-option value="gain">Prise de masse (+300 kcal)</mat-option>
+                </mat-select>
+              </mat-form-field>
 
-            <!-- OPTIONS AVANCÉES -->
-            <mat-expansion-panel class="advanced-panel">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Données avancées
-                </mat-panel-title>
-                <mat-panel-description>
-                  Balance, impédance...
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-
-              <div class="advanced-grid">
-                <mat-form-field appearance="outline">
-                  <mat-label>Masse grasse (%)</mat-label>
-                  <input matInput type="number" formControlName="bodyFat">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Graisse sous-cutanée (%)</mat-label>
-                  <input matInput type="number" formControlName="subcutaneousFat">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Graisse viscérale</mat-label>
-                  <input matInput type="number" formControlName="visceralFat">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Masse musculaire (kg)</mat-label>
-                  <input matInput type="number" formControlName="muscleMass">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>BMR mesuré (kcal)</mat-label>
-                  <input matInput type="number" formControlName="measuredBmr">
-                </mat-form-field>
+              <div *ngIf="currentStats()" class="metabolic-preview">
+                <div class="preview-header">RÉSUMÉ CALCULÉ</div>
+                <div class="preview-main">
+                  <div class="preview-item">
+                    <span class="p-val">{{ currentStats()!.dailyCalorieTarget | number:'1.0-0' }}</span>
+                    <span class="p-lab">kcal / jour</span>
+                  </div>
+                  <div class="preview-divider"></div>
+                  <div class="preview-item">
+                    <span class="p-val">{{ currentStats()!.targets.proteins }}g</span>
+                    <span class="p-lab">Protéines</span>
+                  </div>
+                </div>
+                <div *ngIf="currentStats()!.isSafetyFloorHit" class="safety-tag">
+                  <mat-icon>security</mat-icon> Protection métabolique activée
+                </div>
               </div>
-              <p class="advanced-hint">
-                <mat-icon inline>info</mat-icon> 
-                Si vous renseignez votre BMR mesuré, il sera utilisé à la place de l'estimation standard.
-              </p>
-            </mat-expansion-panel>
 
-            <div class="stepper-actions">
-              <button mat-button matStepperPrevious>Retour</button>
-              <button mat-flat-button color="primary" matStepperNext>Continuer</button>
+              <div class="stepper-actions">
+                <button mat-button matStepperPrevious>Retour</button>
+                <button mat-flat-button color="primary" matStepperNext>Suivant</button>
+              </div>
             </div>
-          </div>
-        </form>
-      </mat-step>
+          </form>
+        </mat-step>
 
-      <!-- ÉTAPE 3 : OBJECTIF -->
-      <mat-step [stepControl]="goalForm">
-        <form [formGroup]="goalForm">
-          <ng-template matStepLabel>Objectif</ng-template>
-          <div class="step-content">
-            <h3>Quel est votre but ?</h3>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Votre objectif</mat-label>
-              <mat-select formControlName="goal">
-                <mat-option value="lose_mild">Perte de poids douce (-300 kcal)</mat-option>
-                <mat-option value="lose_moderate">Perte de poids modérée (-500 kcal)</mat-option>
-                <mat-option value="lose_aggressive">Perte de poids agressive (-750 kcal)</mat-option>
-                <mat-option value="maintain">Maintenir mon poids</mat-option>
-                <mat-option value="gain">Prise de masse (+300 kcal)</mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <!-- RÉSUMÉ MÉTABOLIQUE SÉCURISÉ -->
-            <div *ngIf="currentStats()" class="metabolic-summary">
-              <div class="stat-item">
-                <span class="label">Métabolisme de base (BMR)</span>
-                <span class="value">{{ currentStats()!.bmr | number:'1.0-0' }} kcal</span>
-              </div>
-              <div class="stat-item target" [class.warning]="currentStats()!.isSafetyFloorHit">
-                <span class="label">Objectif quotidien</span>
-                <span class="value">{{ currentStats()!.dailyCalorieTarget | number:'1.0-0' }} kcal</span>
-              </div>
+        <!-- ÉTAPE 4 : CONFIG API -->
+        <mat-step [stepControl]="apiForm">
+          <form [formGroup]="apiForm">
+            <ng-template matStepLabel>IA</ng-template>
+            <div class="step-content">
+              <h3>Intelligence Artificielle</h3>
+              <p class="api-intro">NutriSnap utilise Google Gemini pour analyser vos repas. C'est gratuit et sécurisé.</p>
               
-              <div *ngIf="currentStats()!.isSafetyFloorHit" class="safety-warning">
-                <mat-icon>warning</mat-icon>
-                <span>
-                  <strong>Protection métabolique activée :</strong> Votre objectif a été ajusté à votre BMR ({{ currentStats()!.bmr | number:'1.0-0' }} kcal) pour éviter de ralentir votre métabolisme et préserver votre santé.
-                </span>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Clé API Gemini</mat-label>
+                <input matInput formControlName="apiKey" placeholder="Entrez votre clé API..." type="password">
+                <mat-hint>Obtenez-la sur <a href="https://aistudio.google.com/welcome" target="_blank">AI Studio</a></mat-hint>
+              </mat-form-field>
+
+              <div *ngIf="apiKeyError" class="error-box">
+                <mat-icon>error_outline</mat-icon> {{ apiKeyError }}
+              </div>
+
+              <div class="stepper-actions">
+                <button mat-button matStepperPrevious [disabled]="isValidatingKey">Retour</button>
+                <button mat-flat-button color="primary" (click)="validateAndSave(stepper)" [disabled]="isValidatingKey">
+                  <mat-spinner diameter="20" *ngIf="isValidatingKey"></mat-spinner>
+                  <span *ngIf="!isValidatingKey">Valider & Continuer</span>
+                </button>
               </div>
             </div>
+          </form>
+        </mat-step>
 
-            <div class="stepper-actions">
-              <button mat-button matStepperPrevious>Retour</button>
-              <button mat-flat-button color="primary" matStepperNext>Continuer</button>
-            </div>
-          </div>
-        </form>
-      </mat-step>
-
-      <!-- ÉTAPE 4 : CONFIG API -->
-      <mat-step [stepControl]="apiForm">
-        <form [formGroup]="apiForm">
-          <ng-template matStepLabel>Clé API</ng-template>
-          <div class="step-content">
-            <h3>Configuration "Bring Your Own Key"</h3>
-            <p class="api-info">
-              Pour fonctionner, NutriSnap utilise l'intelligence artificielle Google Gemini. 
-              C'est <strong>gratuit</strong> et vos données restent privées.
-            </p>
+        <!-- ÉTAPE 5 : COACH IA -->
+        <mat-step>
+          <ng-template matStepLabel>Coach</ng-template>
+          <div class="step-content coach-step">
+            <h3>Analyse du Coach</h3>
             
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Votre Clé API Gemini</mat-label>
-              <input matInput formControlName="apiKey" placeholder="Entrez votre clé API..." type="password">
-              <mat-hint>
-                Obtenez-la gratuitement sur 
-                <a href="https://aistudio.google.com/welcome" target="_blank">Google AI Studio</a>
-              </mat-hint>
-            </mat-form-field>
+            <div *ngIf="isLoadingFeedback()" class="loading-coach">
+              <mat-spinner diameter="40"></mat-spinner>
+              <p>Analyse de votre profil métabolique...</p>
+            </div>
 
-            <div *ngIf="apiKeyError" class="error-message">
-              {{ apiKeyError }}
+            <div *ngIf="!isLoadingFeedback() && coachFeedback()" class="feedback-container">
+              <div class="feedback-content" [innerHTML]="formatFeedback(coachFeedback()!)"></div>
             </div>
 
             <div class="stepper-actions">
-              <button mat-button matStepperPrevious [disabled]="isValidatingKey">Retour</button>
-              <button mat-flat-button color="primary" (click)="validateAndSave(stepper)" [disabled]="isValidatingKey">
-                <mat-spinner diameter="20" *ngIf="isValidatingKey"></mat-spinner>
-                <span *ngIf="!isValidatingKey">Valider & Analyser</span>
-              </button>
+              <button mat-flat-button color="primary" (click)="finish()" class="wide-btn">Terminer la configuration</button>
             </div>
           </div>
-        </form>
-      </mat-step>
+        </mat-step>
 
-      <!-- ÉTAPE 5 : COACH IA -->
-      <mat-step>
-        <ng-template matStepLabel>Coach</ng-template>
-        <div class="step-content coach-step">
-          <h3>Votre analyse personnalisée</h3>
-          
-          <div *ngIf="isLoadingFeedback()" class="loading-feedback">
-            <mat-spinner diameter="40"></mat-spinner>
-            <p>Le coach analyse vos données...</p>
-          </div>
-
-          <div *ngIf="!isLoadingFeedback() && coachFeedback()" class="feedback-card">
-            <div class="feedback-content" [innerHTML]="formatFeedback(coachFeedback()!)">
-            </div>
-          </div>
-
-          <div class="stepper-actions">
-            <button mat-flat-button color="primary" (click)="finish()">Commencer l'aventure</button>
-          </div>
-        </div>
-      </mat-step>
-
-    </mat-stepper>
-    
-    <app-legal-footer></app-legal-footer>
-  </mat-card>
+      </mat-stepper>
+      <app-legal-footer></app-legal-footer>
+    </ns-card>
+  </div>
 </div>

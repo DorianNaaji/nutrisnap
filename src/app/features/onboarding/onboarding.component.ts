@@ -17,6 +17,7 @@ import { LegalFooterComponent } from '../../shared/components/legal-footer/legal
 import { Router } from '@angular/router';
 import { UserProfile, MetabolicStats } from '../../core/models/profile.model';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { NsCardComponent } from '../../shared/components/design-system/card.component';
 import { map, startWith, debounceTime } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 
@@ -35,7 +36,8 @@ import { Observable, combineLatest } from 'rxjs';
     MatIconModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
-    LegalFooterComponent
+    LegalFooterComponent,
+    NsCardComponent
   ],
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.css']

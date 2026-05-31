@@ -31,12 +31,9 @@ L'application est conçue pour être déployée sur un hébergement mutualisé (
 ### Mode Développement Synchronisé
 Pour voir vos changements en temps réel sur votre serveur de production (nécessaire pour tester la caméra en HTTPS sur mobile) :
 
-1. **Configuration** : Créez un fichier `.env` à la racine (exclu de Git) :
-   ```env
-   FTP_HOST=votre.serveur.com
-   FTP_USER=votre_utilisateur
-   FTP_PASSWORD=votre_mot_de_passe
-   FTP_REMOTE_DIR=/www/nutrisnap
+1. **Configuration** : Copiez le fichier `.env.example` vers `.env` et remplissez vos accès :
+   ```bash
+   cp .env.example .env
    ```
 
 2. **Lancer la synchronisation** :

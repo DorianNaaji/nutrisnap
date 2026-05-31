@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+import { NsCardComponent } from '../../shared/components/design-system/card.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +20,8 @@ import { RouterModule } from '@angular/router';
     MatIconModule, 
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    RouterModule
+    RouterModule,
+    NsCardComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']

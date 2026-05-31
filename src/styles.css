@@ -1,17 +1,120 @@
-html, body { 
-  height: 100%; 
-  margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #FBFCF8;
-  color: #1C1B1F;
-}
+/* ==========================================================================
+   DESIGN TOKENS - PREMIUM HEALTH OS
+   ========================================================================== */
 
 :root {
-  --primary-color: #1A5236;
-  --surface-color: #FBFCF8;
+  /* Core Brand Colors (Emerald Premium) */
+  --primary: #059669;
+  --primary-hover: #047857;
+  --primary-container: #d1fae5;
+  --on-primary-container: #064e3b;
+
+  /* Neutrals & Surfaces */
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-variant: #f1f5f9;
+  --outline: #cbd5e1;
+  
+  /* Semantic */
+  --error: #dc2626;
+  --success: #16a34a;
+  --warning: #ea580c;
+  --info: #2563eb;
+
+  /* Spacing (Base 4px) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.02);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #1A5236;
-  font-weight: 500;
+/* Dark Mode Tokens */
+[data-theme="dark"] {
+  --background: #0f172a;
+  --surface: #1e293b;
+  --surface-variant: #334155;
+  --outline: #475569;
+  --primary: #10b981;
+  --primary-container: #064e3b;
+  --on-primary-container: #a7f3d0;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   GLOBAL RESET & BASE STYLES
+   ========================================================================== */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--background);
+  color: #1e293b;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] body {
+  color: #f1f5f9;
+}
+
+/* ==========================================================================
+   MATERIAL COMPONENT OVERRIDES (SOCLE)
+   ========================================================================== */
+
+/* Unified Card Style */
+.mat-mdc-card {
+  background-color: var(--surface) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border: 1px solid var(--outline) !important;
+  overflow: hidden;
+}
+
+.mat-mdc-card.variant-card {
+  background-color: var(--surface-variant) !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Unified Button Elevation */
+.mat-mdc-flat-button {
+  border-radius: var(--radius-full) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px !important;
+}
+
+/* Inputs */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: var(--surface) !important;
+}
+
+/* Utilities */
+.text-premium {
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
