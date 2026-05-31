@@ -36,7 +36,7 @@ export class ScannerComponent {
   errorMessage = signal<string | null>(null);
 
   // Date cible : aujourd'hui par défaut, ou date passée si ?date= fourni
-  private targetDate: string = new Date().toISOString().split('T')[0];
+  private targetDate: string = this.localDateStr(new Date());
 
   constructor() {
     this.scannerForm = this.fb.group({
@@ -79,6 +79,10 @@ export class ScannerComponent {
 
   removeImage(index: number) {
     this.capturedImages.update(imgs => imgs.filter((_, i) => i !== index));
+  }
+
+  private localDateStr(d: Date): string {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
 
   private dataUrlToBlob(dataUrl: string): Blob {
