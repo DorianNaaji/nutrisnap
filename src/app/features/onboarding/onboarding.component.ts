@@ -16,10 +16,9 @@ import { GeminiService } from '../../core/services/gemini.service';
 import { LegalFooterComponent } from '../../shared/components/legal-footer/legal-footer.component';
 import { Router } from '@angular/router';
 import { UserProfile, MetabolicStats } from '../../core/models/profile.model';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { NsCardComponent } from '../../shared/components/design-system/card.component';
-import { map, startWith, debounceTime } from 'rxjs/operators';
-import { Observable, combineLatest } from 'rxjs';
+import { startWith, debounceTime } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-onboarding',
@@ -59,14 +58,9 @@ export class OnboardingComponent {
   coachFeedback = signal<string | null>(null);
   showLegal = false;
 
-  stepperOrientation: Observable<'horizontal' | 'vertical'>;
   currentStats = signal<MetabolicStats | null>(null);
 
   constructor() {
-    this.stepperOrientation = inject(BreakpointObserver)
-      .observe('(max-width: 800px)')
-      .pipe(map(({ matches }) => (matches ? 'vertical' : 'horizontal')));
-
     this.metabolismForm = this.fb.group({
       gender: ['male', Validators.required],
       age: [30, [Validators.required, Validators.min(13), Validators.max(120)]],
