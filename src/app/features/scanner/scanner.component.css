@@ -38,6 +38,7 @@ video {
 .gallery-btn {
   /* Translucent white is intentional — always overlaid on the dark camera feed */
   background: rgba(255, 255, 255, 0.85);
+  color: #1e293b;
 }
 
 .gallery {
