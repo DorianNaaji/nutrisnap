@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -48,85 +48,63 @@ export class ProfileComponent implements OnInit {
   private exportService = inject(ExportService);
   private storage = inject(StorageService);
 
-  personalForm!: FormGroup;
-  advancedForm!: FormGroup;
+  profileForm!: FormGroup;
   showApiKey = signal(false);
   
   // Local signal for preview to avoid affecting global state before save
   previewProfile = signal<UserProfile | null>(null);
   
   previewStats = computed(() => {
+    const p = this.previewProfile();
+    if (!p) return null;
     return this.profileService.metabolicStats();
   });
 
-  constructor() {
-    effect(() => {
-      const p = this.profileService.profile();
-      if (p) {
-        this.updateForms(p);
-      }
-    });
-  }
-
   ngOnInit() {
-    this.initForms(); // Setup structure
+    this.initForm();
     
     // Set initial preview
     this.previewProfile.set(this.profileService.profile());
 
-    // Watch for form changes to update preview (only for personal/advanced)
-    this.personalForm.valueChanges.subscribe(value => this.updatePreview(value));
-    this.advancedForm.valueChanges.subscribe(value => this.updatePreview(value));
-  }
-
-  private updatePreview(value: any) {
-    const current = this.profileService.profile();
-    if (current) {
-      this.profileService.profile.set({ ...current, ...value });
-    }
-  }
-
-  private updateForms(p: UserProfile) {
-    this.personalForm.patchValue(p, { emitEvent: false });
-    this.advancedForm.patchValue(p, { emitEvent: false });
-  }
-
-  private initForms() {
-    // Only define structure here
-    this.personalForm = this.fb.group({
-      gender: ['male', Validators.required],
-      age: [30, [Validators.required, Validators.min(13), Validators.max(120)]],
-      weight: [70, [Validators.required, Validators.min(30), Validators.max(300)]],
-      height: [170, [Validators.required, Validators.min(100), Validators.max(250)]],
-      activityLevel: ['sedentary', Validators.required],
-      goal: ['maintain', Validators.required],
-    });
-
-    this.advancedForm = this.fb.group({
-      bodyFat: [null],
-      subcutaneousFat: [null],
-      visceralFat: [null],
-      muscleMass: [null],
-      measuredBmr: [null]
+    // Watch for form changes
+    this.profileForm.valueChanges.subscribe(value => {
+      if (this.profileForm.valid) {
+        const current = this.profileService.profile();
+        if (current) {
+          // We update the service signal for real-time preview across the app
+          this.profileService.profile.set({ ...current, ...value });
+        }
+      }
     });
   }
 
-  async savePersonal() {
-    if (this.personalForm.valid) {
-      await this.profileService.updateProfile(this.personalForm.value as Partial<UserProfile>);
-      this.snackBar.open('Informations mises à jour', 'OK', { duration: 3000 });
-    }
+  private initForm() {
+    const p = this.profileService.profile();
+    this.profileForm = this.fb.group({
+      gender: [p?.gender || 'male', Validators.required],
+      age: [p?.age || 30, [Validators.required, Validators.min(13), Validators.max(120)]],
+      weight: [p?.weight || 70, [Validators.required, Validators.min(30), Validators.max(300)]],
+      height: [p?.height || 170, [Validators.required, Validators.min(100), Validators.max(250)]],
+      activityLevel: [p?.activityLevel || 'sedentary', Validators.required],
+      goal: [p?.goal || 'maintain', Validators.required],
+      // Advanced
+      bodyFat: [p?.bodyFat],
+      subcutaneousFat: [p?.subcutaneousFat],
+      visceralFat: [p?.visceralFat],
+      muscleMass: [p?.muscleMass],
+      measuredBmr: [p?.measuredBmr]
+    });
   }
 
-  async saveAdvanced() {
-    if (this.advancedForm.valid) {
-      await this.profileService.updateProfile(this.advancedForm.value as Partial<UserProfile>);
-      this.snackBar.open('Données avancées mises à jour', 'OK', { duration: 3000 });
+  async saveProfile() {
+    if (this.profileForm.valid) {
+      await this.profileService.updateProfile(this.profileForm.value);
+      this.snackBar.open('Profil mis à jour avec succès', 'OK', { duration: 3000 });
     }
   }
 
   async saveApiKey(key: string) {
-    await this.profileService.updateProfile({ apiKey: key });
+    await this.profileService.updateProfile({ apiKey: key } as Partial<UserProfile>);
     this.snackBar.open('Clé API sauvegardée', 'OK', { duration: 3000 });
     this.showApiKey.set(false);
   }
@@ -142,7 +120,7 @@ export class ProfileComponent implements OnInit {
       const success = await this.exportService.importData(file);
       if (success) {
         await this.profileService.loadProfile();
-        // The effect will handle form update via initForms/updateForms
+        this.initForm();
         this.snackBar.open('Données importées avec succès', 'OK', { duration: 3000 });
       } else {
         this.snackBar.open('Échec de l\'importation', 'Erreur', { duration: 3000 });

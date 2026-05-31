@@ -33,11 +33,14 @@
   max-width: 600px;
   margin: 0 auto;
   padding: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6); /* Adds spacing between all top-level children */
 }
 
 /* PREVIEW CARD */
 .preview-card {
-  margin-bottom: var(--sp-10);
+  margin-bottom: 0 !important;
 }
 
 .stats-row {
@@ -199,4 +202,78 @@
 .api-status span {
   flex: 1;
   font-weight: 500;
+}
+
+.api-edit-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.api-input {
+  width: 100%;
+  padding: var(--sp-4);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background-color: var(--surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.key-icon {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 24px;
+}
+
+.api-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--surface-variant);
+  border-radius: var(--radius-md);
+  color: var(--md-sys-color-on-surface);
+}
+
+.api-status span {
+  flex: 1;
+  font-weight: 500;
+}
+
+.api-edit-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.key-icon {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 24px;
+}
+
+.api-input {
+  flex: 1;
+  padding: var(--sp-4);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background-color: var(--surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+.api-input:focus {
+  outline: 2px solid var(--primary);
+  border-color: transparent;
 }

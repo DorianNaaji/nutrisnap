@@ -9,6 +9,7 @@
   </header>
 
   <div class="profile-container">
+    <form [formGroup]="profileForm">
       
       <!-- RÉSUMÉ MÉTABOLIQUE (DYNAMIQUE) -->
       <ns-card title="Objectifs calculés" subtitle="Ajustement en temps réel" customClass="preview-card" variant="surface-variant">
@@ -31,7 +32,7 @@
           </div>
         </div>
         
-        <div class="safety-alert" [style.visibility]="profileService.metabolicStats()?.isSafetyFloorHit ? 'visible' : 'hidden'">
+        <div *ngIf="profileService.metabolicStats()?.isSafetyFloorHit" class="safety-alert">
           <mat-icon fontSet="material-symbols-rounded">security</mat-icon>
           <p><strong>Protection métabolique active :</strong> Objectif maintenu au BMR.</p>
         </div>
@@ -40,130 +41,122 @@
       <!-- INFORMATIONS DE BASE -->
       <section class="profile-section">
         <h2 class="section-title">Mes Informations</h2>
-        <form [formGroup]="personalForm">
-          <ns-card>
-            <div class="form-grid">
-              <mat-form-field appearance="outline">
-                <mat-label>Sexe</mat-label>
-                <mat-select formControlName="gender">
-                  <mat-option value="male">Homme</mat-option>
-                  <mat-option value="female">Femme</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Âge</mat-label>
-                <input matInput type="number" formControlName="age">
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Poids (kg)</mat-label>
-                <input matInput type="number" formControlName="weight">
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Taille (cm)</mat-label>
-                <input matInput type="number" formControlName="height">
-              </mat-form-field>
-            </div>
-
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Niveau d'activité</mat-label>
-              <mat-select formControlName="activityLevel">
-                <mat-option value="sedentary">Sédentaire (Bureau, peu de sport)</mat-option>
-                <mat-option value="light">Léger (1-2 fois / semaine)</mat-option>
-                <mat-option value="moderate">Modéré (3-5 fois / semaine)</mat-option>
-                <mat-option value="active">Actif (6-7 fois / semaine)</mat-option>
-                <mat-option value="very_active">Très Actif (Sport intense quotidien)</mat-option>
+        <ns-card>
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Sexe</mat-label>
+              <mat-select formControlName="gender">
+                <mat-option value="male">Homme</mat-option>
+                <mat-option value="female">Femme</mat-option>
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Mon Objectif</mat-label>
-              <mat-select formControlName="goal">
-                <mat-option value="lose_mild">Perte de poids douce (-300 kcal)</mat-option>
-                <mat-option value="lose_moderate">Perte de poids modérée (-500 kcal)</mat-option>
-                <mat-option value="lose_aggressive">Perte de poids agressive (-750 kcal)</mat-option>
-                <mat-option value="maintain">Maintenir mon poids</mat-option>
-                <mat-option value="gain">Prise de masse (+300 kcal)</mat-option>
-              </mat-select>
+            <mat-form-field appearance="outline">
+              <mat-label>Âge</mat-label>
+              <input matInput type="number" formControlName="age">
             </mat-form-field>
 
-            <div class="card-footer">
-              <button mat-flat-button color="primary" type="button" (click)="savePersonal()" [disabled]="personalForm.invalid">
-                <mat-icon>check</mat-icon> Enregistrer
-              </button>
-            </div>
-          </ns-card>
-        </form>
+            <mat-form-field appearance="outline">
+              <mat-label>Poids (kg)</mat-label>
+              <input matInput type="number" formControlName="weight">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Taille (cm)</mat-label>
+              <input matInput type="number" formControlName="height">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Niveau d'activité</mat-label>
+            <mat-select formControlName="activityLevel">
+              <mat-option value="sedentary">Sédentaire (Bureau, peu de sport)</mat-option>
+              <mat-option value="light">Léger (1-2 fois / semaine)</mat-option>
+              <mat-option value="moderate">Modéré (3-5 fois / semaine)</mat-option>
+              <mat-option value="active">Actif (6-7 fois / semaine)</mat-option>
+              <mat-option value="very_active">Très Actif (Sport intense quotidien)</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Mon Objectif</mat-label>
+            <mat-select formControlName="goal">
+              <mat-option value="lose_mild">Perte de poids douce (-300 kcal)</mat-option>
+              <mat-option value="lose_moderate">Perte de poids modérée (-500 kcal)</mat-option>
+              <mat-option value="lose_aggressive">Perte de poids agressive (-750 kcal)</mat-option>
+              <mat-option value="maintain">Maintenir mon poids</mat-option>
+              <mat-option value="gain">Prise de masse (+300 kcal)</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div card-footer class="card-footer">
+            <button mat-flat-button color="primary" type="button" (click)="saveProfile()" [disabled]="profileForm.invalid">
+              <mat-icon>check</mat-icon> Enregistrer
+            </button>
+          </div>
+        </ns-card>
       </section>
 
       <!-- DONNÉES AVANCÉES -->
       <section class="profile-section">
         <h2 class="section-title">Données Avancées</h2>
-        <form [formGroup]="advancedForm">
-          <mat-expansion-panel class="advanced-panel" #advancedPanel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Métriques corporelles</mat-panel-title>
-              <mat-panel-description>Balance connectée</mat-panel-description>
-            </mat-expansion-panel-header>
-            
-            <div class="advanced-grid">
-              <mat-form-field appearance="outline">
-                <mat-label>Masse grasse (%)</mat-label>
-                <input matInput type="number" formControlName="bodyFat">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Masse musculaire (kg)</mat-label>
-                <input matInput type="number" formControlName="muscleMass">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Graisse viscérale</mat-label>
-                <input matInput type="number" formControlName="visceralFat">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>BMR mesuré (kcal)</mat-label>
-                <input matInput type="number" formControlName="measuredBmr">
-              </mat-form-field>
-            </div>
-            <p class="hint">Le BMR mesuré remplace le calcul théorique.</p>
-            <mat-action-row>
-              <button mat-flat-button color="primary" type="button" (click)="saveAdvanced(); advancedPanel.close()" [disabled]="advancedForm.invalid">
-                Mettre à jour
-              </button>
-            </mat-action-row>
-          </mat-expansion-panel>
-        </form>
+        <mat-expansion-panel class="advanced-panel" #advancedPanel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Métriques corporelles</mat-panel-title>
+            <mat-panel-description>Balance connectée</mat-panel-description>
+          </mat-expansion-panel-header>
+          
+          <div class="advanced-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Masse grasse (%)</mat-label>
+              <input matInput type="number" formControlName="bodyFat">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Masse musculaire (kg)</mat-label>
+              <input matInput type="number" formControlName="muscleMass">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Graisse viscérale</mat-label>
+              <input matInput type="number" formControlName="visceralFat">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>BMR mesuré (kcal)</mat-label>
+              <input matInput type="number" formControlName="measuredBmr">
+            </mat-form-field>
+          </div>
+          <p class="hint">Le BMR mesuré remplace le calcul théorique.</p>
+          <mat-action-row>
+            <button mat-flat-button color="primary" type="button" (click)="saveProfile(); advancedPanel.close()" [disabled]="profileForm.invalid">
+              Mettre à jour
+            </button>
+          </mat-action-row>
+        </mat-expansion-panel>
       </section>
 
       <!-- API KEY -->
-      <section class="profile-section">
-        <h2 class="section-title">IA Gemini</h2>
-        <ns-card>
-          @if (profileService.profile()?.apiKey && !showApiKey()) {
-            <div class="api-status">
-              <mat-icon fontSet="material-symbols-rounded" color="primary">check_circle</mat-icon>
-              <span>Clé API déjà sauvegardée</span>
-              <button mat-button color="primary" (click)="showApiKey.set(true)">Modifier</button>
+      <ns-card title="IA Gemini">
+        @if (profileService.profile()?.apiKey && !showApiKey()) {
+          <div class="api-status">
+            <mat-icon fontSet="material-symbols-rounded" color="primary">check_circle</mat-icon>
+            <span>Clé API déjà sauvegardée</span>
+            <button mat-button color="primary" (click)="showApiKey.set(true)">Modifier</button>
+          </div>
+        } @else {
+          <div class="api-edit-container">
+            <div class="input-row">
+              <mat-icon fontSet="material-symbols-rounded" class="key-icon">vpn_key</mat-icon>
+              <input #apiKeyInput type="password" placeholder="Entrez la nouvelle clé..." class="api-input">
             </div>
-          } @else {
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Clé API Gemini</mat-label>
-              <input matInput #apiKeyInput [type]="'password'" [value]="profileService.profile()?.apiKey || ''">
-              <mat-icon matSuffix fontSet="material-symbols-rounded">vpn_key</mat-icon>
-              <mat-hint>Indispensable pour l'analyse visuelle.</mat-hint>
-            </mat-form-field>
+            <p class="hint">La nouvelle clé remplacera l'ancienne.</p>
             <div class="card-footer">
               <button mat-flat-button color="primary" type="button" (click)="saveApiKey(apiKeyInput.value)">
-                <mat-icon>save</mat-icon> Sauvegarder la clé
+                <mat-icon>save</mat-icon> Enregistrer
               </button>
-              @if (profileService.profile()?.apiKey) {
-                <button mat-button type="button" (click)="showApiKey.set(false)">Annuler</button>
-              }
+              <button mat-button type="button" (click)="showApiKey.set(false)">Annuler</button>
             </div>
-          }
-        </ns-card>
-      </section>
+          </div>
+        }
+      </ns-card>
 
       <!-- DATA MANAGEMENT -->
       <section class="profile-section">
@@ -187,6 +180,8 @@
           </div>
         </ns-card>
       </section>
+
+    </form>
     
     <app-legal-footer></app-legal-footer>
   </div>

@@ -25,7 +25,7 @@ import { MatCardModule } from '@angular/material/card';
   styles: [`
     :host { display: block; width: 100%; }
     mat-card-header { padding: 1.5rem 1.5rem 0.5rem 1.5rem; }
-    mat-card-title { font-size: 1.1rem; font-weight: 600; color: var(--md-sys-color-on-surface); }
+    mat-card-title { font-size: 1.1rem; font-weight: 600; color: var(--primary); }
     mat-card-subtitle { font-size: 0.85rem; color: var(--md-sys-color-on-surface-variant); }
   `]
 })
