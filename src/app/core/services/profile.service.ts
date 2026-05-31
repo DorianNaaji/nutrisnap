@@ -70,9 +70,13 @@ export class ProfileService {
     }
   }
 
-  async updateProfile(p: UserProfile) {
-    this.profile.set(p);
-    await this.storage.saveProfile(p);
+  async updateProfile(p: Partial<UserProfile>) {
+    const current = this.profile();
+    if (current) {
+      const updated = { ...current, ...p };
+      this.profile.set(updated);
+      await this.storage.saveProfile(updated);
+    }
   }
 
   isConfigured() {

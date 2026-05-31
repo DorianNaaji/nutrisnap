@@ -19,7 +19,7 @@ import { MatCardModule } from '@angular/material/card';
       <mat-card-content [style.padding]="padding">
         <ng-content></ng-content>
       </mat-card-content>
-      <ng-content select="[card-footer]"></ng-content>
+      <ng-content select=".card-footer"></ng-content>
     </mat-card>
   `,
   styles: [`

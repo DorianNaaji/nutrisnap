@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -48,75 +48,87 @@ export class ProfileComponent implements OnInit {
   private exportService = inject(ExportService);
   private storage = inject(StorageService);
 
-  profileForm!: FormGroup;
+  personalForm!: FormGroup;
+  advancedForm!: FormGroup;
+  showApiKey = signal(false);
   
   // Local signal for preview to avoid affecting global state before save
   previewProfile = signal<UserProfile | null>(null);
   
   previewStats = computed(() => {
-    const p = this.previewProfile();
-    if (!p) return null;
-
-    // We reuse the same logic as in ProfileService but locally for the preview
-    // Actually, we can't easily reuse the service's computed because it's bound to its signal.
-    // So let's just use the service's signal for now, as it's simpler and 
-    // the user might actually like seeing the dashboard updated in real-time.
-    // BUT, the service's computed only depends on the service's profile signal.
-    
-    // To avoid duplication, let's keep the real-time update of the service's signal
-    // but maybe we should revert it if the user cancels?
-    // The user can't "cancel" easily here as there's no cancel button, only "Back".
-    
     return this.profileService.metabolicStats();
   });
 
+  constructor() {
+    effect(() => {
+      const p = this.profileService.profile();
+      if (p) {
+        this.updateForms(p);
+      }
+    });
+  }
+
   ngOnInit() {
-    this.initForm();
+    this.initForms(); // Setup structure
     
     // Set initial preview
     this.previewProfile.set(this.profileService.profile());
 
-    // Watch for form changes
-    this.profileForm.valueChanges.subscribe(value => {
-      if (this.profileForm.valid) {
-        const current = this.profileService.profile();
-        if (current) {
-          // We update the service signal for real-time preview across the app
-          this.profileService.profile.set({ ...current, ...value });
-        }
-      }
-    });
+    // Watch for form changes to update preview (only for personal/advanced)
+    this.personalForm.valueChanges.subscribe(value => this.updatePreview(value));
+    this.advancedForm.valueChanges.subscribe(value => this.updatePreview(value));
   }
 
-  private initForm() {
-    const p = this.profileService.profile();
-    this.profileForm = this.fb.group({
-      gender: [p?.gender || 'male', Validators.required],
-      age: [p?.age || 30, [Validators.required, Validators.min(13), Validators.max(120)]],
-      weight: [p?.weight || 70, [Validators.required, Validators.min(30), Validators.max(300)]],
-      height: [p?.height || 170, [Validators.required, Validators.min(100), Validators.max(250)]],
-      activityLevel: [p?.activityLevel || 'sedentary', Validators.required],
-      goal: [p?.goal || 'maintain', Validators.required],
-      apiKey: [p?.apiKey || ''], // Removed Validators.required
-      // Advanced
-      bodyFat: [p?.bodyFat],
-      subcutaneousFat: [p?.subcutaneousFat],
-      visceralFat: [p?.visceralFat],
-      muscleMass: [p?.muscleMass],
-      measuredBmr: [p?.measuredBmr]
-    });
-  }
-
-  async saveProfile() {
-    if (this.profileForm.valid) {
-      const formValue = { ...this.profileForm.value };
-      // Only include apiKey if it's not empty, to avoid overwriting existing key
-      if (!formValue.apiKey) {
-        delete formValue.apiKey;
-      }
-      await this.profileService.updateProfile(formValue);
-      this.snackBar.open('Profil mis à jour avec succès', 'OK', { duration: 3000 });
+  private updatePreview(value: any) {
+    const current = this.profileService.profile();
+    if (current) {
+      this.profileService.profile.set({ ...current, ...value });
     }
+  }
+
+  private updateForms(p: UserProfile) {
+    this.personalForm.patchValue(p, { emitEvent: false });
+    this.advancedForm.patchValue(p, { emitEvent: false });
+  }
+
+  private initForms() {
+    // Only define structure here
+    this.personalForm = this.fb.group({
+      gender: ['male', Validators.required],
+      age: [30, [Validators.required, Validators.min(13), Validators.max(120)]],
+      weight: [70, [Validators.required, Validators.min(30), Validators.max(300)]],
+      height: [170, [Validators.required, Validators.min(100), Validators.max(250)]],
+      activityLevel: ['sedentary', Validators.required],
+      goal: ['maintain', Validators.required],
+    });
+
+    this.advancedForm = this.fb.group({
+      bodyFat: [null],
+      subcutaneousFat: [null],
+      visceralFat: [null],
+      muscleMass: [null],
+      measuredBmr: [null]
+    });
+  }
+
+  async savePersonal() {
+    if (this.personalForm.valid) {
+      await this.profileService.updateProfile(this.personalForm.value as Partial<UserProfile>);
+      this.snackBar.open('Informations mises à jour', 'OK', { duration: 3000 });
+    }
+  }
+
+  async saveAdvanced() {
+    if (this.advancedForm.valid) {
+      await this.profileService.updateProfile(this.advancedForm.value as Partial<UserProfile>);
+      this.snackBar.open('Données avancées mises à jour', 'OK', { duration: 3000 });
+    }
+  }
+
+  async saveApiKey(key: string) {
+    await this.profileService.updateProfile({ apiKey: key });
+    this.snackBar.open('Clé API sauvegardée', 'OK', { duration: 3000 });
+    this.showApiKey.set(false);
   }
 
   async exportData() {
@@ -130,7 +142,7 @@ export class ProfileComponent implements OnInit {
       const success = await this.exportService.importData(file);
       if (success) {
         await this.profileService.loadProfile();
-        this.initForm();
+        // The effect will handle form update via initForms/updateForms
         this.snackBar.open('Données importées avec succès', 'OK', { duration: 3000 });
       } else {
         this.snackBar.open('Échec de l\'importation', 'Erreur', { duration: 3000 });

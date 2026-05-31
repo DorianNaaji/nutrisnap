@@ -186,8 +186,17 @@
   margin-bottom: var(--sp-6);
 }
 
-.reset-zone {
-  margin-top: var(--sp-6);
+.api-status {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--surface-variant);
+  border-radius: var(--radius-md);
+  color: var(--md-sys-color-on-surface);
+}
+
+.api-status span {
+  flex: 1;
+  font-weight: 500;
 }
