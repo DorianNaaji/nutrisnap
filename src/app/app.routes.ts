@@ -24,5 +24,9 @@ export const routes: Routes = [
     loadComponent: () => import('./features/history/history.component').then(m => m.HistoryComponent),
     canActivate: [onboardingGuard]
   },
+  {
+    path: 'privacy',
+    loadComponent: () => import('./features/privacy/privacy.component').then(m => m.PrivacyComponent)
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];

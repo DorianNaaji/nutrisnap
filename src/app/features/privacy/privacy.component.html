@@ -1,0 +1,99 @@
+<div class="privacy-page">
+
+  <header class="privacy-header">
+    <button mat-icon-button routerLink="/dashboard" class="back-btn" aria-label="Retour">
+      <mat-icon fontSet="material-symbols-rounded">arrow_back</mat-icon>
+    </button>
+    <h1 class="header-title">Politique de confidentialité</h1>
+    <div class="header-spacer"></div>
+  </header>
+
+  <main class="privacy-content">
+
+    <p class="last-updated">Dernière mise à jour : {{ lastUpdated }}</p>
+
+    <!-- INTRO -->
+    <section class="privacy-section highlight">
+      <p>NutriSnap est une application <strong>privacy-first</strong> : aucun compte, aucun serveur, aucune télémétrie. Toutes vos données restent sur votre appareil. Ce document explique précisément ce qui se passe avec vos données.</p>
+    </section>
+
+    <!-- 1. RESPONSABLE -->
+    <section class="privacy-section">
+      <h2>1. Responsable de traitement</h2>
+      <p><strong>Dorian Naaji</strong><br>
+      Contact : <a href="mailto:dorian.naaji.pro@gmail.com">dorian.naaji.pro&#64;gmail.com</a></p>
+      <p>NutriSnap est une application personnelle, non commerciale, développée à titre de projet individuel.</p>
+    </section>
+
+    <!-- 2. DONNÉES COLLECTÉES -->
+    <section class="privacy-section">
+      <h2>2. Données traitées</h2>
+      <p>Les données suivantes sont traitées <strong>uniquement sur votre appareil</strong> (IndexedDB, navigateur local) :</p>
+      <ul>
+        <li><strong>Profil métabolique</strong> : sexe, âge, poids, taille, masse grasse, masse musculaire, niveau d'activité, objectif.</li>
+        <li><strong>Clé API Google Gemini</strong> : stockée localement, jamais transmise à NutriSnap.</li>
+        <li><strong>Historique alimentaire</strong> : repas scannés, calories, macronutriments, photos, analyses.</li>
+        <li><strong>Préférences</strong> : thème (clair/sombre/système), langue.</li>
+      </ul>
+      <p class="callout">
+        <mat-icon>lock</mat-icon>
+        Dorian Naaji n'a aucun accès technique à ces données. Elles ne quittent jamais votre appareil vers les serveurs de NutriSnap — il n'en existe pas.
+      </p>
+    </section>
+
+    <!-- 3. TRANSFERTS GOOGLE GEMINI -->
+    <section class="privacy-section">
+      <h2>3. Transferts vers Google Gemini (tiers)</h2>
+      <p>C'est le <strong>seul point de transfert de données vers un tiers</strong>. Lors de l'analyse d'un repas, les éléments suivants sont envoyés directement depuis votre navigateur à l'API Google Gemini :</p>
+      <ul>
+        <li>L'image ou les images du repas (format base64)</li>
+        <li>Le contexte nutritionnel du jour (calories consommées, objectif calorique)</li>
+        <li>La description textuelle éventuelle que vous saisissez</li>
+      </ul>
+      <p>Ce transfert est <strong>initié par vous</strong> lors du scan. NutriSnap ne conserve pas ces données — elles transitent uniquement au moment de l'analyse, via votre propre clé API.</p>
+      <p>La gestion, la sécurité et la conservation de ces flux relèvent exclusivement de Google. Consultez la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">politique de confidentialité de Google</a> et les <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">conditions d'utilisation de l'API Gemini</a>.</p>
+    </section>
+
+    <!-- 4. STOCKAGE LOCAL -->
+    <section class="privacy-section">
+      <h2>4. Stockage local & cookies</h2>
+      <p>NutriSnap n'utilise <strong>aucun cookie</strong> de tracking, publicité ou analyse. Le stockage repose sur <strong>IndexedDB</strong>, une API de stockage native au navigateur. Il s'agit d'un stockage first-party, nécessaire au fonctionnement de l'application.</p>
+      <p>Ce type de stockage ne relève pas de la directive ePrivacy sur les cookies — aucun consentement supplémentaire n'est requis. Vos données restent sur votre appareil indéfiniment, sous votre contrôle exclusif.</p>
+    </section>
+
+    <!-- 5. DROITS -->
+    <section class="privacy-section">
+      <h2>5. Vos droits (RGPD)</h2>
+      <p>Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous disposez des droits suivants :</p>
+      <ul>
+        <li><strong>Droit d'accès</strong> : vos données sont disponibles directement dans l'application (profil, historique).</li>
+        <li><strong>Droit de rectification</strong> : modifiez vos données à tout moment depuis votre profil.</li>
+        <li><strong>Droit à l'effacement</strong> : le bouton "Effacer toutes mes données" dans votre profil supprime l'intégralité des données locales.</li>
+        <li><strong>Droit à la portabilité</strong> : export JSON disponible depuis votre profil.</li>
+        <li><strong>Droit d'opposition</strong> : n'utilisez pas l'application — aucune donnée n'existe si vous n'en créez pas.</li>
+      </ul>
+      <p>Pour exercer un droit ou poser une question : <a href="mailto:dorian.naaji.pro@gmail.com">dorian.naaji.pro&#64;gmail.com</a></p>
+    </section>
+
+    <!-- 6. SÉCURITÉ -->
+    <section class="privacy-section">
+      <h2>6. Sécurité</h2>
+      <p>L'application est servie exclusivement en HTTPS. La clé API Gemini est stockée dans IndexedDB, accessible uniquement par l'application sur votre navigateur. NutriSnap ne la transmet à aucun serveur intermédiaire.</p>
+      <p>L'application est open source — son code est intégralement vérifiable pour confirmer l'absence de collecte cachée.</p>
+    </section>
+
+    <!-- 7. MODIFICATIONS -->
+    <section class="privacy-section">
+      <h2>7. Modifications de cette politique</h2>
+      <p>Cette politique peut être mise à jour. La date de dernière révision est indiquée en haut de ce document. En cas de modification substantielle affectant vos droits, une note sera ajoutée à l'onboarding lors de la prochaine ouverture.</p>
+    </section>
+
+    <div class="back-cta">
+      <button mat-stroked-button color="primary" routerLink="/dashboard" class="back-btn-bottom">
+        <mat-icon>arrow_back</mat-icon>
+        Retour à l'application
+      </button>
+    </div>
+
+  </main>
+</div>

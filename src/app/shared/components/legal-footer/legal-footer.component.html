@@ -16,14 +16,23 @@
     </section>
 
     <section>
-      <strong>2. Responsabilité de Traitement</strong>
-      <p>En intégrant votre propre clé API Google Gemini, vous engagez une relation technique directe avec Google. <strong>Le traitement, la sécurité et la confidentialité des données transmises via l'API relèvent de la responsabilité exclusive de Google.</strong> Le développeur n'agit pas en tant que responsable de traitement pour les flux de données transitant par l'API.</p>
+      <strong>2. Confidentialité "Zero-Backend"</strong>
+      <p>Aucune donnée n'est collectée sur un serveur tiers par le développeur. Toutes vos informations (profil, historiques) sont stockées <strong>uniquement sur votre appareil</strong> (IndexedDB). Dorian Naaji n'a aucun accès à vos données.</p>
     </section>
 
     <section>
-      <strong>3. Confidentialité "Zero-Backend"</strong>
-      <p>Aucune donnée n'est collectée sur un serveur tiers par le développeur. Toutes vos informations (profil, clés, historiques) sont stockées localement dans votre navigateur (IndexedDB). Dorian Naaji n'a aucun accès technique à vos données ou à l'usage que vous faites de votre clé API.</p>
+      <strong>3. Transferts vers Google Gemini</strong>
+      <p>Lorsque vous analysez un repas, l'image et votre contexte nutritionnel (calories du jour, objectif) sont <strong>transmis à l'API Google Gemini</strong> pour générer l'analyse. NutriSnap ne conserve pas ces données — elles transitent uniquement au moment de l'analyse. La gestion de ces flux relève de la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">politique de confidentialité de Google</a>.</p>
     </section>
+
+    <section>
+      <strong>4. Stockage local & cookies</strong>
+      <p>NutriSnap n'utilise <strong>aucun cookie</strong>. Le stockage IndexedDB est un stockage local first-party nécessaire au fonctionnement de l'application — il ne requiert pas de consentement au sens de la directive ePrivacy. Vos données restent sur votre appareil et peuvent être effacées à tout moment depuis votre profil.</p>
+    </section>
+
+    <a routerLink="/privacy" class="see-more-link">
+      <mat-icon>open_in_new</mat-icon> Politique de confidentialité complète
+    </a>
   </div>
 
   <!-- CONTENT: OPEN SOURCE -->
