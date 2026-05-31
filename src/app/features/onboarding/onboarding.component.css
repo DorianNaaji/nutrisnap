@@ -12,7 +12,16 @@
   max-width: 600px;
 }
 
-.onboarding-main-card {
+/* Force white background on the stepper to avoid tinting */
+.onboarding-main-card .mat-stepper-horizontal,
+.onboarding-main-card .mat-stepper-vertical {
+  --mat-stepper-container-color: #ffffff;
+  background-color: var(--mat-stepper-container-color);
+}
+
+.onboarding-container .onboarding-main-card.mat-mdc-card {
+  --mdc-card-container-color: #ffffff;
+  background-color: var(--mdc-card-container-color);
   overflow: hidden;
 }
 

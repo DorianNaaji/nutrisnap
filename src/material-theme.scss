@@ -19,15 +19,22 @@ $nutrisnap-theme: mat.define-theme((
 html {
   @include mat.all-component-themes($nutrisnap-theme);
   
-  /* Overriding with our specific Premium Emerald for precise brand matching */
+  /* Applying our Premium Emerald brand overrides */
   --md-sys-color-primary: #059669;
   --md-sys-color-on-primary: #ffffff;
   --md-sys-color-primary-container: #d1fae5;
   --md-sys-color-on-primary-container: #064e3b;
   
-  /* Secondary/Tertiary soft accents */
-  --md-sys-color-secondary-container: #ccfbf1;
-  --md-sys-color-on-secondary-container: #115e59;
+  /* FORCE PURE WHITE SURFACES (Anti-Tint Fix) */
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-surface-container: #ffffff;
+  --md-sys-color-surface-container-low: #ffffff;
+  --md-sys-color-surface-container-high: #ffffff;
+  --md-sys-color-surface-container-highest: #ffffff;
+  --md-sys-color-surface-variant: #ffffff; /* FORCE VARIANT TO WHITE TO AVOID TINT */
+  
+  /* Force Material app background to be neutral */
+  --mat-app-background-color: #f8fafc;
 }
 
 /* Dark mode support via Material */
@@ -44,4 +51,12 @@ html {
   --md-sys-color-primary: #10b981;
   --md-sys-color-primary-container: #064e3b;
   --md-sys-color-on-primary-container: #a7f3d0;
+  
+  /* Force dark surfaces (Deep Navy/Blue-Grey) */
+  --md-sys-color-surface: #1e293b;
+  --md-sys-color-surface-container: #1e293b;
+  --md-sys-color-surface-variant: #334155;
+  
+  /* Force dark app background */
+  --mat-app-background-color: #0f172a;
 }

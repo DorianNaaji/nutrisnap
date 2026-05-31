@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit {
       height: [p?.height || 170, [Validators.required, Validators.min(100), Validators.max(250)]],
       activityLevel: [p?.activityLevel || 'sedentary', Validators.required],
       goal: [p?.goal || 'maintain', Validators.required],
-      apiKey: [p?.apiKey || '', Validators.required],
+      apiKey: [p?.apiKey || ''], // Removed Validators.required
       // Advanced
       bodyFat: [p?.bodyFat],
       subcutaneousFat: [p?.subcutaneousFat],
@@ -109,7 +109,12 @@ export class ProfileComponent implements OnInit {
 
   async saveProfile() {
     if (this.profileForm.valid) {
-      await this.profileService.updateProfile(this.profileForm.value);
+      const formValue = { ...this.profileForm.value };
+      // Only include apiKey if it's not empty, to avoid overwriting existing key
+      if (!formValue.apiKey) {
+        delete formValue.apiKey;
+      }
+      await this.profileService.updateProfile(formValue);
       this.snackBar.open('Profil mis à jour avec succès', 'OK', { duration: 3000 });
     }
   }
