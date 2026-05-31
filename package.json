@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
-    "start:sync": "concurrently \"ng build --watch --configuration development\" \"node scripts/deploy.js\"",
+    "start:sync-prod": "concurrently \"ng build --watch --configuration production\" \"node scripts/deploy.js\"",
     "tunnel": "ssh -R 80:localhost:4200 localhost.run",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -22,6 +22,7 @@
     "@angular/material": "^21.2.13",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@angular/service-worker": "^21.2.15",
     "@google/generative-ai": "^0.24.1",
     "dexie": "^4.4.3",
     "rxjs": "~7.8.0",

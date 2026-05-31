@@ -109,8 +109,11 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 | M4 — Dashboard & Dark Mode | ✅ Complet (bugs "Tout voir" + clic repas à corriger en M6) |
 | M5 — PWA / Offline | ✅ Complet (installable HTTPS, testé sur mobile) |
 | Delivery — DevX / Deploy OVH | ✅ Complet (FTP sync, SPA routing, anti-indexation) |
-| M6 — Meal Detail + History & Calendar | 🔜 Prochaine session |
+| M6 — Meal Detail + History & Calendar | ✅ Complet |
+| SW Cache Busting | ✅ Complet (@angular/service-worker, SwUpdate snackbar, .htaccess no-cache) |
 | M7 — IA Coach (analyse progression) | ⏳ Planifié |
+| M8 — i18n | ⏳ Planifié |
+| M9 — Daily Coach Chat IA | ⏳ Planifié |
 
 ---
 
@@ -118,7 +121,7 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 
 Tout est dans `.ai/` :
 - `INITIAL_INSTRUCTIONS.md` — vision produit complète
-- `IMPLEMENTATION-MODULE-[1-7].md` — specs par module
+- `IMPLEMENTATION-MODULE-[1-9].md` — specs par module
 - `IMPLEMENTATION-DELIVERY-MODULE.md` — plan deploy OVH ✅ fait
 - `SESSION_REPORT-*.md` — rapports de session (lire les plus récents en premier)
 - `design-overhaul/IMPLEMENTATION-DESIGN-OVERHAUL-MODULE.md` — design system
