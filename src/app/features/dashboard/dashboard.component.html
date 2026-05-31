@@ -22,7 +22,9 @@
           <div class="hero-main">
             <div class="hero-col">
               <span class="hero-label">KCAL RESTANTES</span>
-              <span class="hero-value" [class.surplus]="isSurplus">{{ logService.dailyStats().remainingCalories | number:'1.0-0' }}</span>
+              <span class="hero-value" [class.surplus]="isSurplus" [appCountUp]="logService.dailyStats().remainingCalories">
+                {{ logService.dailyStats().remainingCalories | number:'1.0-0' }}
+              </span>
             </div>
             <div class="hero-col hero-secondary">
               <div class="secondary-stat">

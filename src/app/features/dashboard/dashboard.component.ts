@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../core/services/profile.service';
 import { LogService } from '../../core/services/log.service';
@@ -9,7 +9,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { NsCardComponent } from '../../shared/components/design-system/card.component';
-import { interval, Subscription } from 'rxjs';
+import { CountUpDirective } from '../../shared/directives/count-up.directive';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +22,8 @@ import { interval, Subscription } from 'rxjs';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     RouterModule,
-    NsCardComponent
+    NsCardComponent,
+    CountUpDirective
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -51,7 +52,7 @@ export class DashboardComponent {
     const consumed = type === 'proteins' ? stats.totalProteins : 
                      type === 'carbs' ? stats.totalCarbs : stats.totalFats;
     const target = targets[type];
-    
+
     return Math.min(100, (consumed / target) * 100);
   }
 }
