@@ -33,9 +33,12 @@ Transformer les données brutes en une interface "Google-like" propre, motivante
    - Détail des items détectés par l'IA.
    - Bouton d'édition manuelle (si l'IA s'est trompée).
 
-## Mode Sombre / Clair
-- Support natif du Dark Mode via les thèmes Angular Material 3.
-- Transition fluide entre les modes.
+## Mode Sombre / Clair ✅ Implémenté
+- `ThemeService` : signal-based, résout `system` via `MediaQueryList`, applique `[data-theme]` sur `<html>` via `effect()`.
+- Persistance dans NutriDB (`settings` table, clé `'app'`).
+- Configurable dans `/profile` → card "Apparence" avec `mat-button-toggle-group` (Système / Clair / Sombre).
+- `APP_INITIALIZER` charge le thème avant le premier rendu → pas de FOUC.
+- Tokens dark définis dans `styles.css` (`[data-theme="dark"]`) et `material-theme.scss`.
 
 
 ## 5. Intelligence Conversationnelle & Ludique (Gamification)

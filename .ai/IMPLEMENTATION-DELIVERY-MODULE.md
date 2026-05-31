@@ -22,8 +22,18 @@ Le script utilisera `basic-ftp` pour une gestion robuste des transferts et `chok
 
 ---
 
-## 🛠️ Actions Immédiates
+## 🛠️ Actions — Prochaine session DevX/Deploy
+
 - **[ ] Action 1** : Installer les dépendances `basic-ftp` et `dotenv`.
-- **[ ] Action 2** : Créer le script `scripts/deploy.js`.
-- **[ ] Action 3** : Configurer les nouveaux scripts dans `package.json`.
-- **[ ] Action 4** : Documenter la procédure de déploiement dans le `README.md`.
+- **[ ] Action 2** : Créer le script `scripts/deploy.js` (logging horodaté, delta sync, reconnexion auto).
+- **[ ] Action 3** : Configurer les scripts dans `package.json` (`start`, `start:sync`, `build:prod`).
+- **[ ] Action 4** : Créer `.env.example` et documenter la procédure dans `README.md`.
+- **[ ] Action 5** : Vérifier le build production (budget warnings) et configurer `angular.json` si nécessaire.
+
+## Variables d'environnement requises (.env)
+```
+FTP_HOST=
+FTP_USER=
+FTP_PASSWORD=
+FTP_REMOTE_DIR=
+```

@@ -1,0 +1,117 @@
+# NutriSnap — Agent Onboarding
+
+## Projet
+
+PWA de tracking nutritionnel **privacy-first**. Pas de compte, pas de serveur, pas de télémétrie. Toutes les données restent dans IndexedDB (Dexie.js) sur l'appareil. L'analyse IA utilise la clé Gemini personnelle de l'utilisateur (BYOK).
+
+**Stack** : Angular 17+ (standalone), Angular Material 3, Dexie.js (IndexedDB), Google Gemini 2.5 Flash.
+
+---
+
+## Structure du projet
+
+```
+src/
+  app/
+    core/
+      services/
+        storage.service.ts    ← NutriDB (Dexie) : profile, logs, settings
+        profile.service.ts    ← Signals, calcul métabolique (Mifflin-St Jeor / Katch-McArdle)
+        theme.service.ts      ← Dark/Light/System, APP_INITIALIZER, data-theme sur <html>
+        gemini.service.ts     ← Appels Gemini Vision
+        export.service.ts     ← Export/Import JSON
+      models/
+        profile.model.ts
+        meal.model.ts
+    features/
+      onboarding/             ← 5 étapes : Welcome → RGPD → Métabolisme → Objectif → API
+      dashboard/              ← Ring calories, macro cards, timeline
+      scanner/                ← Capture photo + analyse Gemini
+      profile/                ← Édition profil + card Apparence (thème)
+    shared/
+      components/
+        design-system/
+          card.component.ts   ← NsCardComponent (mat-card wrappé)
+        legal-footer/
+  styles.css                  ← Design tokens (:root light, [data-theme="dark"])
+  material-theme.scss         ← Material 3 theme (light + dark)
+```
+
+---
+
+## Design System
+
+Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
+
+**Tokens principaux** (définis dans `styles.css` `:root`) :
+- `--primary` / `--primary-container` / `--on-primary-container`
+- `--background` / `--surface` / `--surface-variant` / `--outline`
+- `--sp-1` à `--sp-12` (spacing, base 4px)
+- `--radius-sm/md/lg/xl/full` (8/12/16/28/9999px)
+- `--shadow-sm/md/lg`
+
+**Dark mode** : `[data-theme="dark"]` dans `styles.css` et `material-theme.scss`. Le `ThemeService` pose cet attribut sur `document.documentElement`.
+
+---
+
+## Règles CSS — à respecter absolument
+
+| Situation | Technique |
+|---|---|
+| Override Material (global) | `html .mat-class` — spécificité 0,1,1 > 0,1,0 de Material |
+| Override dans un composant | Styles du composant + encapsulation Angular (pas besoin de `html .`) |
+| Style atteignant un composant enfant | Impossible depuis le CSS parent. Toujours passer par `styles.css` |
+| `border-radius` d'un `mat-card` | Setter `--mat-card-elevated-container-shape`, pas `border-radius` directement |
+| `overflow: hidden` sur `mat-card` enfant | Dans `styles.css`, pas dans le composant parent |
+| Jamais | `!important`, `::ng-deep` — dette technique, 0 dans le projet |
+
+---
+
+## NutriDB (Dexie.js)
+
+**Base** : `NutriSnapDB` v1
+
+| Table | Clé | Modèle |
+|---|---|---|
+| `profile` | `id` (singleton 1) | `UserProfile` — données métaboliques + apiKey |
+| `logs` | `++id` indexé `date, timestamp` | `MealLog` — repas + imageBlob |
+| `settings` | `id` (singleton `'app'`) | `AppSettings { theme, language }` |
+
+**API StorageService** : `getProfile/saveProfile`, `addMealLog/getLogsByDate/deleteLog`, `getSettings/saveSettings`, `clearAllData`.
+
+---
+
+## Services clés
+
+**ProfileService** — signals : `profile()`, `metabolicStats()`. Méthodes : `loadProfile()`, `updateProfile(partial)`.
+
+**ThemeService** — signals : `currentTheme()` (`light|dark|system`), `resolvedTheme()` (`light|dark`). Méthode : `setTheme(theme)` → persiste + applique. Init via `APP_INITIALIZER`.
+
+**GeminiService** — `getCoachFeedback(key, profileData)`, `analyzeMeal(key, imageBase64, description?)`. Gestion d'erreurs : 401/403 → clé invalide, 503 → surcharge, autre → fallback.
+
+---
+
+## État d'avancement
+
+| Module | Statut |
+|---|---|
+| M1 — Onboarding 5 étapes | ✅ Complet |
+| M2 — Data Engine (Dexie) | ✅ Complet |
+| M2.5 — Profile page | ✅ Complet |
+| M3 — Scanner Gemini | ✅ Complet |
+| M4 — Dashboard & Dark Mode | ✅ Complet |
+| M5 — PWA / Offline | À vérifier |
+| Delivery — DevX / Deploy OVH | 🔜 Prochaine session |
+
+---
+
+## Documentation complète
+
+Tout est dans `.ai/` :
+- `INITIAL_INSTRUCTIONS.md` — vision produit complète
+- `IMPLEMENTATION-MODULE-[1-5].md` — specs par module
+- `IMPLEMENTATION-DELIVERY-MODULE.md` — plan deploy OVH (prochaine étape)
+- `SESSION_REPORT-*.md` — rapports de session (lire les plus récents en premier)
+- `design-overhaul/IMPLEMENTATION-DESIGN-OVERHAUL-MODULE.md` — design system
+
+**Lire en priorité avant de toucher au CSS** : `SESSION_REPORT-31-05-2026-FIXES.md` et `SESSION_REPORT-31-05-2026-DARK-THEME.md`.

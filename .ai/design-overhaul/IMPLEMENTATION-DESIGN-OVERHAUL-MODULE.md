@@ -15,32 +15,24 @@ Transition d'un design "pastel/artisanal" vers une interface type **Health OS (S
 ## 3. Plan d'exécution
 
 ### Phase 1 : Infrastructure & Tokens (Core)
-- [ ] **Styles Globaux (`styles.css`)** : Définition des Design Tokens (Couleurs M3, Spacing, Radius, Elevation).
-- [ ] **Thème Material (`material-theme.scss`)** : Migration complète vers une configuration Material 3 basée sur les nouveaux tokens.
-- [ ] **Typography** : Intégration de la police "Inter" et de la police d'icônes "Material Symbols Rounded".
+- [x] **Styles Globaux (`styles.css`)** : Design Tokens définis (Couleurs M3, Spacing, Radius, Elevation, State overlays).
+- [x] **Thème Material (`material-theme.scss`)** : Migration complète Material 3 — light + dark définis.
+- [x] **Typography** : Inter + Material Symbols Rounded intégrés.
 
 ### Phase 2 : Refonte des Composants Transverses
-- [ ] **Layout & App Root** : Gestion du mode Sombre/Clair via attribut `data-theme`.
-- [ ] **Boutons & Cartes** : Standardisation des styles `mat-card` et `mat-button` selon les mapping M3.
-- [ ] **Legal Footer** : Mise à jour esthétique pour plus de discrétion.
+- [x] **Layout & App Root** : Dark/Light/System via `[data-theme]` sur `<html>` — `ThemeService` + `APP_INITIALIZER`.
+- [x] **Boutons & Cartes** : `mat-card` et `mat-button` standardisés, `NsCardComponent` partagé.
+- [x] **Legal Footer** : Intégré discret sur Onboarding et Profile.
 
 ### Phase 3 : Refonte des Features
-- [ ] **Dashboard** : 
-    - [ ] Implémenter la nouvelle "Hero Card" en dégradé pour les calories restantes.
-    - [ ] Refondre les "Macro Cards" en `Surface Variant`.
-    - [ ] Redessiner l'état vide (Empty State) de l'historique.
-- [ ] **Profil** :
-    - [ ] Réorganiser les formulaires avec le nouveau système de grille.
-    - [ ] Harmoniser les boutons d'action (FAB vs Flat buttons).
-    - [ ] Refondre la section "Gestion des données" selon le nouveau standard.
-- [ ] **Onboarding** :
-    - [ ] Moderniser le stepper et les cartes d'accueil.
-    - [ ] Appliquer les nouveaux tokens de couleur.
+- [x] **Dashboard** : Hero Card calories, Macro Cards Surface Variant, Empty State, Timeline repas.
+- [x] **Profil** : Formulaires réorganisés, section Apparence (toggle thème), Données avancées en expansion panel, Gestion des données.
+- [x] **Onboarding** : Stepper modernisé, tokens appliqués, card arrondie (`--mat-card-elevated-container-shape`).
 
 ### Phase 4 : Validation & Polissage
-- [ ] **Dark Mode** : Vérification des contrastes et de l'accessibilité.
-- [ ] **Animations** : Ajout de transitions douces sur les changements d'état.
-- [ ] **Audit Final** : Cohérence globale sur tous les écrans.
+- [x] **Dark Mode** : ThemeService complet, persistance NutriDB, réactif aux préférences système en temps réel.
+- [ ] **Animations** : Transitions douces sur changements d'état (non encore travaillées).
+- [x] **Audit CSS** : 0 `!important`, 0 `::ng-deep` — dette technique éliminée (session 31/05/2026).
 
 ## 4. Mapping de Couleurs (M3)
 | Token | Valeur Light | Valeur Dark | Usage |
