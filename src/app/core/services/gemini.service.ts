@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ProfileService } from './profile.service';
 import { LogService } from './log.service';
+import { TranslateService } from './translate.service';
 import { MealLog } from '../models/meal.model';
 import { UserProfile, MetabolicStats } from '../models/profile.model';
 
@@ -11,8 +12,23 @@ import { UserProfile, MetabolicStats } from '../models/profile.model';
 export class GeminiService {
   private profileService = inject(ProfileService);
   private logService = inject(LogService);
+  private translate = inject(TranslateService);
   private genAI: GoogleGenerativeAI | null = null;
   private cachedKey: string | null = null;
+
+  private get langInstruction(): string {
+    return this.translate.currentLang() === 'fr'
+      ? 'Réponds en français.'
+      : 'Reply in English.';
+  }
+
+  private goalLabel(goal: UserProfile['goal']): string {
+    return this.translate.t(`profile.${goal}`);
+  }
+
+  private genderLabel(gender: string): string {
+    return this.translate.t(gender === 'male' ? 'profile.male' : 'profile.female');
+  }
 
   private getGenAI(): GoogleGenerativeAI {
     const key = this.profileService.profile()?.apiKey;
@@ -41,22 +57,23 @@ export class GeminiService {
     const history = this.logService.dailyStats();
     
     const prompt = `
-      Tu es un expert en nutrition. Analyse ce repas de type "${mealType}".
-      Contexte utilisateur :
-      - Objectif quotidien: ${stats?.dailyCalorieTarget} kcal
-      - Déjà consommé ce jour: ${history.totalCalories} kcal
+      You are a nutrition expert. Analyse this meal of type "${mealType}".
+      User context:
+      - Daily calorie goal: ${stats?.dailyCalorieTarget} kcal
+      - Already consumed today: ${history.totalCalories} kcal
+      - User note: ${userText || 'None'}
 
-      [Optionnel] Précisions utilisateur : ${userText || 'Aucune'}
-
-      Réponds UNIQUEMENT en JSON valide avec cette structure stricte (sans markdown ou autre texte):
+      ${this.langInstruction}
+      Reply ONLY with valid JSON (no markdown, no extra text):
       {
         "status": "success | error",
-        "food_name": "nom précis",
+        "food_name": "precise name",
         "calories": number,
         "macros": { "prot": number, "carb": number, "fat": number },
-        "analysis_summary": "courte description",
-        "coach_tip": "Conseil personnalisé basé sur la journée",
-        "error_message": "Si status=error, explique pourquoi l'analyse est impossible (ex: pas de nourriture, flou...)"
+        "analysis_summary": "short description",
+        "coach_tip": "personalised tip based on the day",
+        "confidence_score": "low | medium | high",
+        "error_message": "if status=error, explain why analysis is impossible"
       }
     `;
 
@@ -80,25 +97,27 @@ export class GeminiService {
 
   async getDailyRecap(profile: UserProfile, logs: MealLog[], stats: MetabolicStats): Promise<string> {
     const model = this.getTextModel();
-    const goal = { lose_mild:'perte de poids légère', lose_moderate:'perte de poids modérée', lose_aggressive:'perte de poids agressive', maintain:'maintien', gain:'prise de masse' }[profile.goal] ?? profile.goal;
+    const goal = this.goalLabel(profile.goal);
+    const gender = this.genderLabel(profile.gender);
     const totalCal = logs.reduce((s, l) => s + l.calories, 0);
     const totalProt = logs.reduce((s, l) => s + l.macros.proteins, 0);
     const totalCarb = logs.reduce((s, l) => s + l.macros.carbs, 0);
     const totalFat = logs.reduce((s, l) => s + l.macros.fats, 0);
-    const mealList = logs.map(l => `- ${l.foodName} (${l.calories} kcal, P:${l.macros.proteins}g G:${l.macros.carbs}g L:${l.macros.fats}g)`).join('\n');
+    const mealList = logs.map(l => `- ${l.foodName} (${l.calories} kcal, P:${l.macros.proteins}g C:${l.macros.carbs}g F:${l.macros.fats}g)`).join('\n');
 
-    const prompt = `Tu es un coach nutritionnel bienveillant. Voici le bilan de la journée de l'utilisateur.
+    const prompt = `You are a supportive nutrition coach. Here is the user's day summary.
 
-Profil : ${profile.gender === 'male' ? 'Homme' : 'Femme'}, ${profile.age} ans, ${profile.weight} kg, objectif : ${goal}
-Objectif calorique quotidien : ${stats.dailyCalorieTarget} kcal
-Cibles macros : P ${stats.targets.proteins}g / G ${stats.targets.carbs}g / L ${stats.targets.fats}g
+Profile: ${gender}, ${profile.age} years, ${profile.weight} kg, goal: ${goal}
+Daily calorie target: ${stats.dailyCalorieTarget} kcal
+Macro targets: P ${stats.targets.proteins}g / C ${stats.targets.carbs}g / F ${stats.targets.fats}g
 
-Repas du jour :
-${mealList || '- Aucun repas enregistré'}
+Today's meals:
+${mealList || '- No meals logged'}
 
-Totaux : ${totalCal} kcal | Protéines ${totalProt}g | Glucides ${totalCarb}g | Lipides ${totalFat}g
+Totals: ${totalCal} kcal | Proteins ${totalProt}g | Carbs ${totalCarb}g | Fats ${totalFat}g
 
-Fais un bilan coach court (4-5 phrases max) : ce qui est positif, ce qui peut être amélioré, et une suggestion concrète pour demain. Ton encourageant. Texte brut uniquement, pas de JSON, pas de markdown.`;
+Write a short coach recap (4-5 sentences max): positives, what could improve, one concrete suggestion for tomorrow. Encouraging tone. Plain text only, no JSON, no markdown.
+${this.langInstruction}`;
 
     const result = await model.generateContent(prompt);
     return result.response.text();
@@ -106,7 +125,8 @@ Fais un bilan coach court (4-5 phrases max) : ce qui est positif, ce qui peut ê
 
   async getWeeklyAnalysis(profile: UserProfile, logs: MealLog[], stats: MetabolicStats, periodLabel: string): Promise<string> {
     const model = this.getTextModel();
-    const goal = { lose_mild:'perte de poids légère', lose_moderate:'perte de poids modérée', lose_aggressive:'perte de poids agressive', maintain:'maintien', gain:'prise de masse' }[profile.goal] ?? profile.goal;
+    const goal = this.goalLabel(profile.goal);
+    const gender = this.genderLabel(profile.gender);
 
     // Agrégation par jour
     const byDay = new Map<string, { cal: number; prot: number; carb: number; fat: number; count: number }>();
@@ -123,20 +143,21 @@ Fais un bilan coach court (4-5 phrases max) : ce qui est positif, ce qui peut ê
     const avgFat = Math.round(days.reduce((s, [, d]) => s + d.fat, 0) / n);
     const dayLines = days.map(([date, d]) => `- ${date} : ${d.cal} kcal (${d.count} repas)`).join('\n');
 
-    const prompt = `Tu es un coach nutritionnel expert. Analyse la progression de l'utilisateur sur ${periodLabel}.
+    const prompt = `You are an expert nutrition coach. Analyse the user's progress over ${periodLabel}.
 
-Profil : ${profile.gender === 'male' ? 'Homme' : 'Femme'}, ${profile.age} ans, ${profile.weight} kg, objectif : ${goal}
-Objectif calorique quotidien : ${stats.dailyCalorieTarget} kcal
-Cibles macros : P ${stats.targets.proteins}g / G ${stats.targets.carbs}g / L ${stats.targets.fats}g
+Profile: ${gender}, ${profile.age} years, ${profile.weight} kg, goal: ${goal}
+Daily calorie target: ${stats.dailyCalorieTarget} kcal
+Macro targets: P ${stats.targets.proteins}g / C ${stats.targets.carbs}g / F ${stats.targets.fats}g
 
-Détail par jour :
-${dayLines || '- Aucune donnée'}
+Daily breakdown:
+${dayLines || '- No data'}
 
-Moyennes sur la période (${n} jours avec repas) :
-- Calories : ${avgCal} kcal/j (vs objectif ${stats.dailyCalorieTarget} kcal)
-- Protéines : ${avgProt}g/j | Glucides : ${avgCarb}g/j | Lipides : ${avgFat}g/j
+Averages over the period (${n} days with meals):
+- Calories: ${avgCal} kcal/day (vs target ${stats.dailyCalorieTarget} kcal)
+- Proteins: ${avgProt}g/day | Carbs: ${avgCarb}g/day | Fats: ${avgFat}g/day
 
-Fais une analyse de progression (6-8 phrases) : tendances, régularité, points forts, axes d'amélioration, ajustements suggérés. Ton professionnel mais encourageant. Texte brut uniquement, pas de JSON, pas de markdown.`;
+Write a progress analysis (6-8 sentences): trends, consistency, strengths, areas for improvement, suggested adjustments. Professional but encouraging tone. Plain text only, no JSON, no markdown.
+${this.langInstruction}`;
 
     const result = await model.generateContent(prompt);
     return result.response.text();
@@ -145,29 +166,31 @@ Fais une analyse de progression (6-8 phrases) : tendances, régularité, points 
   async getCoachFeedback(key: string, profile: any, stats: any): Promise<string> {
     const textModel = new GoogleGenerativeAI(key).getGenerativeModel({ model: 'gemini-2.5-flash' });
     
+    const langInstr = this.translate.currentLang() === 'fr' ? 'Réponds en français.' : 'Reply in English.';
     const prompt = `
-      Tu es un coach de vie et nutritionniste expert. Analyse les données métaboliques suivantes et donne un feedback motivant et constructif.
-      Données :
-      - Sexe: ${profile.gender}
-      - Âge: ${profile.age} ans
-      - Poids: ${profile.weight} kg
-      - Taille: ${profile.height} cm
-      - Activité: ${profile.activityLevel}
-      - Objectif: ${profile.goal}
-      - BMR (besoin vital au repos): ${stats.bmr} kcal
-      - TDEE (dépense totale estimée): ${stats.tdee} kcal
-      - Cible calorique calculée: ${stats.dailyCalorieTarget} kcal
-      ${stats.isSafetyFloorHit ? `(Note: La cible a été bloquée au niveau du BMR car l'objectif initial était trop bas et dangereux pour le métabolisme)` : ''}
-      ${profile.bodyFat ? `- Masse grasse: ${profile.bodyFat}%` : ''}
-      ${profile.muscleMass ? `- Masse musculaire: ${profile.muscleMass}kg` : ''}
+      You are an expert life coach and nutritionist. Analyse the following metabolic data and give motivating, constructive feedback.
+      Data:
+      - Gender: ${profile.gender}
+      - Age: ${profile.age} years
+      - Weight: ${profile.weight} kg
+      - Height: ${profile.height} cm
+      - Activity level: ${profile.activityLevel}
+      - Goal: ${profile.goal}
+      - BMR (rest metabolic rate): ${stats.bmr} kcal
+      - TDEE (total daily expenditure): ${stats.tdee} kcal
+      - Calculated calorie target: ${stats.dailyCalorieTarget} kcal
+      ${stats.isSafetyFloorHit ? '(Note: target was floored at BMR — the initial goal was too low and metabolically unsafe)' : ''}
+      ${profile.bodyFat ? `- Body fat: ${profile.bodyFat}%` : ''}
+      ${profile.muscleMass ? `- Muscle mass: ${profile.muscleMass}kg` : ''}
 
-      Ton feedback doit :
-      1. Être bienveillant et encourageant ("style coach").
-      2. Expliquer brièvement ce que signifient ces chiffres pour l'utilisateur.
-      3. Donner 2-3 conseils concrets (sport, alimentation, ou habitudes).
-      4. Rappeler l'importance de la régularité.
-      Gardes un ton court, impactant et formatté en paragraphes simples. 
-      IMPORTANT: Réponds UNIQUEMENT en texte brut. Ne mets PAS de balises JSON, pas de crochets [], pas d'accolades {}. Juste ton texte de coach.
+      Your feedback must:
+      1. Be warm and encouraging (coach style).
+      2. Briefly explain what these numbers mean for the user.
+      3. Give 2-3 concrete tips (exercise, nutrition, or habits).
+      4. Remind the importance of consistency.
+      Keep it short, impactful, in simple paragraphs.
+      IMPORTANT: Plain text only — no JSON, no brackets, no braces.
+      ${langInstr}
     `;
 
     const result = await textModel.generateContent(prompt);
