@@ -88,7 +88,7 @@
           </mat-form-field>
 
           <div class="card-footer">
-            <button mat-flat-button color="primary" type="button" (click)="savePersonal()" [disabled]="personalForm.invalid">
+            <button mat-flat-button color="primary" type="button" (click)="savePersonal()">
               <mat-icon>check</mat-icon> Enregistrer
             </button>
           </div>
@@ -124,7 +124,7 @@
             <p class="hint">Le BMR mesuré remplace le calcul théorique.</p>
           </mat-expansion-panel>
           <div class="card-footer">
-            <button mat-flat-button color="primary" type="button" (click)="saveAdvanced(); advancedPanel.close()" [disabled]="advancedForm.invalid">
+            <button mat-flat-button color="primary" type="button" (click)="saveAdvanced(); advancedPanel.close()">
               <mat-icon>check</mat-icon> Enregistrer
             </button>
           </div>
