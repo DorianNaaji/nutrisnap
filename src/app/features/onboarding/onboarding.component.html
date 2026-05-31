@@ -12,7 +12,7 @@
                 <mat-icon fontSet="material-symbols-rounded">eco</mat-icon>
               </div>
               <h1>NutriSnap</h1>
-              <p class="subtitle">Premium Health OS</p>
+              <p class="subtitle">Health OS</p>
             </div>
             
             <div class="values-grid">
@@ -129,17 +129,18 @@
                 <div class="preview-header">RÉSUMÉ CALCULÉ</div>
                 <div class="preview-main">
                   <div class="preview-item">
-                    <span class="p-val">{{ currentStats()!.dailyCalorieTarget | number:'1.0-0' }}</span>
-                    <span class="p-lab">kcal / jour</span>
+                    <span class="p-val">{{ currentStats()!.bmr | number:'1.0-0' }}</span>
+                    <span class="p-lab">BMR (Repos)</span>
                   </div>
                   <div class="preview-divider"></div>
                   <div class="preview-item">
-                    <span class="p-val">{{ currentStats()!.targets.proteins }}g</span>
-                    <span class="p-lab">Protéines</span>
+                    <span class="p-val">{{ currentStats()!.dailyCalorieTarget | number:'1.0-0' }}</span>
+                    <span class="p-lab">Objectif (kcal)</span>
                   </div>
                 </div>
+                <div class="preview-hint">Votre TDEE (Dépense totale) est de {{ currentStats()!.tdee | number:'1.0-0' }} kcal.</div>
                 <div *ngIf="currentStats()!.isSafetyFloorHit" class="safety-tag">
-                  <mat-icon>security</mat-icon> Protection métabolique activée
+                  <mat-icon fontSet="material-symbols-rounded">security</mat-icon> Protection métabolique activée
                 </div>
               </div>
 

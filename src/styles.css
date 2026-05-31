@@ -110,6 +110,33 @@ html, body {
 
 .mat-mdc-text-field-wrapper {
   background-color: var(--surface) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px var(--primary-container) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: var(--primary) !important;
+}
+
+/* Stepper fun accents */
+.mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-edit {
+  background-color: var(--primary) !important;
+}
+
+.mat-step-header .mat-step-label.mat-step-label-selected {
+  color: var(--primary) !important;
+  font-weight: 700 !important;
+}
+
+/* Checkbox/Radio (Future use) */
+.mat-mdc-checkbox.mat-primary .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
 }
 
 /* Utilities */
