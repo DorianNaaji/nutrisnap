@@ -309,3 +309,32 @@
 .day-scan-cta button {
   border-radius: var(--radius-full);
 }
+
+/* ANALYSE IA */
+.analysis-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5) var(--sp-4);
+  border-top: 1px solid var(--outline);
+  margin-top: var(--sp-2);
+}
+
+.period-toggle {
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.analysis-btn {
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.btn-spinner {
+  display: inline-flex;
+}

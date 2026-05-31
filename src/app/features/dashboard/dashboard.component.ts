@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../core/services/profile.service';
 import { LogService } from '../../core/services/log.service';
@@ -7,18 +7,23 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterModule } from '@angular/router';
 import { NsCardComponent } from '../../shared/components/design-system/card.component';
 import { CountUpDirective } from '../../shared/directives/count-up.directive';
+import { GeminiService } from '../../core/services/gemini.service';
+import { StorageService } from '../../core/services/storage.service';
+import { RecapSheetComponent } from '../../shared/components/recap-sheet/recap-sheet.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatCardModule, 
-    MatButtonModule, 
-    MatIconModule, 
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
     RouterModule,
@@ -28,12 +33,60 @@ import { CountUpDirective } from '../../shared/directives/count-up.directive';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   profileService = inject(ProfileService);
   logService = inject(LogService);
   private router = inject(Router);
+  private gemini = inject(GeminiService);
+  private storage = inject(StorageService);
+  private bottomSheet = inject(MatBottomSheet);
+  private snackBar = inject(MatSnackBar);
 
   today = new Date();
+  isRecapLoading = signal(false);
+  hasRecapToday = signal(false);
+
+  private localDateStr(d: Date): string {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  async ngOnInit() {
+    const todayStr = this.localDateStr(new Date());
+    const existing = await this.storage.getRecapByDate(todayStr);
+    this.hasRecapToday.set(!!existing);
+  }
+
+  async openDailyRecap() {
+    if (this.isRecapLoading()) return;
+    const profile = this.profileService.profile();
+    const stats = this.profileService.metabolicStats();
+    if (!profile?.apiKey) {
+      this.snackBar.open('Configurez votre clé API Gemini dans le profil.', 'Fermer', { duration: 4000 });
+      return;
+    }
+    const todayStr = this.localDateStr(new Date());
+    const existing = await this.storage.getRecapByDate(todayStr);
+    if (existing) {
+      this.bottomSheet.open(RecapSheetComponent, {
+        data: { title: 'Bilan IA du jour', subtitle: 'Généré par Gemini · Mis en cache', text: existing.summary }
+      });
+      return;
+    }
+    this.isRecapLoading.set(true);
+    try {
+      const logs = await this.storage.getLogsByDate(todayStr);
+      const text = await this.gemini.getDailyRecap(profile, logs, stats!);
+      await this.storage.saveRecap({ date: todayStr, summary: text, generatedAt: Date.now() });
+      this.hasRecapToday.set(true);
+      this.bottomSheet.open(RecapSheetComponent, {
+        data: { title: 'Bilan IA du jour', text }
+      });
+    } catch {
+      this.snackBar.open("Impossible de générer le bilan. Vérifie ta clé API.", 'Fermer', { duration: 4000 });
+    } finally {
+      this.isRecapLoading.set(false);
+    }
+  }
 
   goToMeal(id: number) {
     this.router.navigate(['/meal', id]);

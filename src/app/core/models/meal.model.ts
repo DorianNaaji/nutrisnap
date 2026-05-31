@@ -29,3 +29,10 @@ export interface DailyStats {
   totalFats: number;
   remainingCalories: number;
 }
+
+export interface DailyRecap {
+  id?: number;
+  date: string;        // YYYY-MM-DD
+  summary: string;     // Texte coach Gemini
+  generatedAt: number; // timestamp
+}

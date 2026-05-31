@@ -4,9 +4,14 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageService } from '../../core/services/storage.service';
 import { ProfileService } from '../../core/services/profile.service';
+import { GeminiService } from '../../core/services/gemini.service';
 import { MealLog } from '../../core/models/meal.model';
+import { RecapSheetComponent } from '../../shared/components/recap-sheet/recap-sheet.component';
 
 interface CalendarDay {
   date: Date;
@@ -24,7 +29,7 @@ interface CalendarDay {
   standalone: true,
   imports: [
     CommonModule, RouterModule, MatButtonModule, MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule, MatButtonToggleModule
   ],
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css']
@@ -32,10 +37,15 @@ interface CalendarDay {
 export class HistoryComponent implements OnInit {
   private storage = inject(StorageService);
   private profileService = inject(ProfileService);
+  private gemini = inject(GeminiService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private bottomSheet = inject(MatBottomSheet);
+  private snackBar = inject(MatSnackBar);
 
   isLoading = signal(true);
+  isAnalysisLoading = signal(false);
+  analysisPeriod = signal<'7days' | '30days'>('7days');
   currentYear = signal(new Date().getFullYear());
   currentMonth = signal(new Date().getMonth()); // 0-indexed
   monthLogs = signal<MealLog[]>([]);
@@ -194,6 +204,42 @@ export class HistoryComponent implements OnInit {
     this.router.navigate(['/scanner'], {
       queryParams: { date: this.selectedDateStr() }
     });
+  }
+
+  async openAnalysis() {
+    if (this.isAnalysisLoading()) return;
+    const profile = this.profileService.profile();
+    const stats = this.profileService.metabolicStats();
+    if (!profile?.apiKey) {
+      this.snackBar.open('Configurez votre clé API Gemini dans le profil.', 'Fermer', { duration: 4000 });
+      return;
+    }
+    this.isAnalysisLoading.set(true);
+    try {
+      const period = this.analysisPeriod();
+      const days = period === '7days' ? 7 : 30;
+      const periodLabel = period === '7days' ? '7 derniers jours' : '30 derniers jours';
+
+      // Collecte les logs sur la période
+      const logs: MealLog[] = [];
+      const today = new Date();
+      for (let i = 0; i < days; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        const dateStr = this.toDateStr(d);
+        const dayLogs = await this.storage.getLogsByDate(dateStr);
+        logs.push(...dayLogs);
+      }
+
+      const text = await this.gemini.getWeeklyAnalysis(profile, logs, stats!, periodLabel);
+      this.bottomSheet.open(RecapSheetComponent, {
+        data: { title: 'Analyse IA', subtitle: periodLabel, text }
+      });
+    } catch {
+      this.snackBar.open("Impossible de générer l'analyse. Vérifie ta clé API.", 'Fermer', { duration: 4000 });
+    } finally {
+      this.isAnalysisLoading.set(false);
+    }
   }
 
   get selectedDateFormatted(): string {

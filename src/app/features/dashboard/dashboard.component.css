@@ -318,3 +318,12 @@
   background-color: var(--primary);
   color: var(--md-sys-color-on-primary);
 }
+
+.fab-coach {
+  position: fixed;
+  bottom: 2rem;
+  left: 1.5rem;
+  z-index: 100;
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-container);
+}

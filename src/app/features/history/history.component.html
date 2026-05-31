@@ -65,6 +65,24 @@
         <span class="legend-item"><span class="dot-red legend-dot"></span> &lt; 50% objectif</span>
       </div>
 
+      <!-- ANALYSE IA -->
+      <div class="analysis-block">
+        <mat-button-toggle-group
+          [value]="analysisPeriod()"
+          (change)="analysisPeriod.set($event.value)"
+          class="period-toggle"
+          aria-label="Période d'analyse"
+        >
+          <mat-button-toggle value="7days">7 jours</mat-button-toggle>
+          <mat-button-toggle value="30days">30 jours</mat-button-toggle>
+        </mat-button-toggle-group>
+        <button mat-flat-button class="analysis-btn" (click)="openAnalysis()" [disabled]="isAnalysisLoading()">
+          <mat-spinner *ngIf="isAnalysisLoading()" diameter="18" class="btn-spinner"></mat-spinner>
+          <mat-icon *ngIf="!isAnalysisLoading()" fontSet="material-symbols-rounded">auto_awesome</mat-icon>
+          {{ isAnalysisLoading() ? 'Analyse en cours…' : 'Analyse IA' }}
+        </button>
+      </div>
+
       <!-- SELECTED DAY PANEL -->
       <div class="day-panel" *ngIf="selectedDateStr()">
         <div class="day-panel-header">

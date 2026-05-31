@@ -123,6 +123,12 @@
 
   </main>
 
+  <!-- FAB COACH -->
+  <button mat-mini-fab class="fab-coach" (click)="openDailyRecap()" [disabled]="isRecapLoading()" aria-label="Bilan IA du jour">
+    <mat-spinner *ngIf="isRecapLoading()" diameter="20"></mat-spinner>
+    <mat-icon *ngIf="!isRecapLoading()" fontSet="material-symbols-rounded">auto_awesome</mat-icon>
+  </button>
+
   <!-- FAB SCAN -->
   <button mat-mini-fab color="primary" class="fab-scan" routerLink="/scanner">
     <mat-icon fontSet="material-symbols-rounded">photo_camera</mat-icon>
