@@ -63,7 +63,7 @@ export class ProfileService {
     this.loadProfile();
   }
 
-  private async loadProfile() {
+  async loadProfile() {
     const p = await this.storage.getProfile();
     if (p) {
       this.profile.set(p);

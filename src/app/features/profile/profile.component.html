@@ -1,0 +1,205 @@
+<div class="profile-container">
+  <header class="header">
+    <button mat-icon-button routerLink="/dashboard" aria-label="Retour au dashboard">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="mat-headline-medium">Mon Profil</h1>
+  </header>
+
+  <form [formGroup]="profileForm" (ngSubmit)="save()" class="profile-form">
+    
+    <!-- Metabolic Data -->
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">person</mat-icon>
+        <mat-card-title>Métabolisme</mat-card-title>
+        <mat-card-subtitle>Calcul de vos besoins de base</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Genre</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option value="male">Homme</mat-option>
+              <mat-option value="female">Femme</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Âge</mat-label>
+            <input matInput type="number" formControlName="age" placeholder="Ex: 30">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Poids (kg)</mat-label>
+            <input matInput type="number" formControlName="weight" placeholder="Ex: 75">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Taille (cm)</mat-label>
+            <input matInput type="number" formControlName="height" placeholder="Ex: 180">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Niveau d'activité</mat-label>
+            <mat-select formControlName="activityLevel">
+              <mat-option value="sedentary">Sédentaire (Bureau, pas de sport)</mat-option>
+              <mat-option value="light">Léger (1-2 fois/semaine)</mat-option>
+              <mat-option value="moderate">Modéré (3-4 fois/semaine)</mat-option>
+              <mat-option value="active">Actif (5+ fois/semaine)</mat-option>
+              <mat-option value="very_active">Intense (Sport quotidien, métier physique)</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Objectif</mat-label>
+            <mat-select formControlName="goal">
+              <mat-option value="lose_aggressive">Perte de poids (Agressif)</mat-option>
+              <mat-option value="lose_moderate">Perte de poids (Modéré)</mat-option>
+              <mat-option value="lose_mild">Perte de poids (Doux)</mat-option>
+              <mat-option value="maintain">Maintenir mon poids</mat-option>
+              <mat-option value="gain">Prise de masse musculaire</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-expansion-panel class="advanced-panel" [expanded]="showAdvanced()" (opened)="showAdvanced.set(true)" (closed)="showAdvanced.set(false)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Données avancées</mat-panel-title>
+            <mat-panel-description>Body fat, BMR mesuré...</mat-panel-description>
+          </mat-expansion-panel-header>
+          
+          <div class="form-grid pt-16">
+            <mat-form-field appearance="outline">
+              <mat-label>Masse grasse (%)</mat-label>
+              <input matInput type="number" formControlName="bodyFat">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Masse musculaire (kg)</mat-label>
+              <input matInput type="number" formControlName="muscleMass">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Graisse viscérale</mat-label>
+              <input matInput type="number" formControlName="visceralFat">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>BMR mesuré (Labo)</mat-label>
+              <input matInput type="number" formControlName="measuredBmr">
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" type="submit" [disabled]="profileForm.invalid">
+          <mat-icon>save</mat-icon>
+          Enregistrer les modifications
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- AI Coaching / Stats Recap -->
+    @if (stats()) {
+      <mat-card class="stats-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="accent">insights</mat-icon>
+          <mat-card-title>Analyse Métabolique</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span class="value">{{ stats()?.dailyCalorieTarget }}</span>
+              <span class="label">Calories / Jour</span>
+            </div>
+            <div class="stat-box">
+              <span class="value">{{ stats()?.tdee | number:'1.0-0' }}</span>
+              <span class="label">Dépense (TDEE)</span>
+            </div>
+            <div class="stat-box">
+              <span class="value">{{ stats()?.bmr | number:'1.0-0' }}</span>
+              <span class="label">BMR (Repos)</span>
+            </div>
+          </div>
+
+          @if (stats()?.isSafetyFloorHit) {
+            <div class="safety-warning">
+              <mat-icon>warning</mat-icon>
+              <span>Objectif ajusté : Vos calories ne descendront jamais sous votre métabolisme de base (BMR) pour préserver votre santé.</span>
+            </div>
+          }
+
+          <mat-divider class="my-16"></mat-divider>
+
+          <div class="macros-recap">
+            <div class="macro-item protein">
+              <span class="dot"></span> <strong>{{ stats()?.targets?.proteins }}g</strong> Protéines
+            </div>
+            <div class="macro-item carb">
+              <span class="dot"></span> <strong>{{ stats()?.targets?.carbs }}g</strong> Glucides
+            </div>
+            <div class="macro-item fat">
+              <span class="dot"></span> <strong>{{ stats()?.targets?.fats }}g</strong> Lipides
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- API Key Management -->
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>key</mat-icon>
+        <mat-card-title>Clé API Gemini</mat-card-title>
+        <mat-card-subtitle>Traitement IA local (BYOK)</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="full-width mt-16">
+          <mat-label>Clé API Google</mat-label>
+          <input matInput formControlName="apiKey" type="password" placeholder="AIza...">
+          <mat-hint>Utilisée uniquement pour vos analyses sur cet appareil.</mat-hint>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Data Privacy Management -->
+    <mat-card class="section-card privacy-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="warn">shield_person</mat-icon>
+        <mat-card-title>Vie Privée & Données</mat-card-title>
+        <mat-card-subtitle>Tout est stocké dans votre navigateur</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="mat-body-medium">
+          Vos données ne sont jamais envoyées sur nos serveurs. Vous avez le plein contrôle.
+        </p>
+        <div class="data-buttons mt-16">
+          <button mat-stroked-button type="button" (click)="exportData()">
+            <mat-icon>download</mat-icon>
+            Exporter (JSON)
+          </button>
+          
+          <button mat-stroked-button type="button" (click)="fileInput.click()">
+            <mat-icon>upload</mat-icon>
+            Importer
+          </button>
+          <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept=".json">
+
+          <button mat-stroked-button color="warn" type="button" (click)="clearData()">
+            <mat-icon>delete_forever</mat-icon>
+            Réinitialiser l'app
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </form>
+
+  <footer class="legal-footer">
+    <mat-icon>info</mat-icon>
+    <span>
+      NutriSnap est un projet expérimental. Les données médicales sont indicatives. 
+      Le développeur, Dorian Naaji, décline toute responsabilité juridique.
+    </span>
+  </footer>
+</div>

@@ -9,5 +9,10 @@ export const routes: Routes = [
   { path: 'onboarding', component: OnboardingComponent, canActivate: [profileExistsGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [onboardingGuard] },
   { path: 'scanner', component: ScannerComponent, canActivate: [onboardingGuard] },
+  { 
+    path: 'profile', 
+    loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent),
+    canActivate: [onboardingGuard] 
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
