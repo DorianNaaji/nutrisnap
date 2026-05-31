@@ -42,6 +42,10 @@ export class ScannerComponent {
     this.startCamera();
   }
 
+  goBack() {
+    this.router.navigate(['/dashboard']);
+  }
+
   async startCamera() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });

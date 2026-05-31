@@ -31,7 +31,8 @@ video {
 }
 
 .capture-btn {
-  /* Keep existing styles */
+  background-color: var(--primary) !important;
+  color: var(--md-sys-color-on-primary) !important;
 }
 
 .gallery-btn {

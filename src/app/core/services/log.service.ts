@@ -16,7 +16,10 @@ export class LogService {
   // Daily stats reactive calculation
   dailyStats = computed<DailyStats>(() => {
     const logs = this.dailyLogs();
-    const target = this.profileService.metabolicStats()?.dailyCalorieTarget || 2000;
+    const metabolicStats = this.profileService.metabolicStats();
+    
+    // Fallback to 0 if target not yet calculated, avoid hardcoding 2000
+    const target = metabolicStats?.dailyCalorieTarget || 0;
 
     const totals = logs.reduce((acc, log) => ({
       calories: acc.calories + log.calories,
@@ -30,7 +33,7 @@ export class LogService {
       totalProteins: totals.proteins,
       totalCarbs: totals.carbs,
       totalFats: totals.fats,
-      remainingCalories: Math.max(0, target - totals.calories)
+      remainingCalories: target - totals.calories
     };
   });
 

@@ -91,6 +91,10 @@
   margin-top: 0.25rem;
 }
 
+.hero-value.surplus {
+  color: var(--md-sys-color-error);
+}
+
 .hero-secondary {
   text-align: right;
   gap: 1rem;
@@ -311,4 +315,6 @@
   bottom: 2rem;
   right: 1.5rem;
   z-index: 100;
+  background-color: var(--primary) !important;
+  color: var(--md-sys-color-on-primary) !important;
 }

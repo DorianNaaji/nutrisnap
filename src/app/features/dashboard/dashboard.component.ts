@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../core/services/profile.service';
 import { LogService } from '../../core/services/log.service';
@@ -9,6 +9,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { NsCardComponent } from '../../shared/components/design-system/card.component';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,6 +37,10 @@ export class DashboardComponent {
     const target = this.profileService.metabolicStats()?.dailyCalorieTarget || 2000;
     const consumed = this.logService.dailyStats().totalCalories;
     return Math.min(100, (consumed / target) * 100);
+  }
+
+  get isSurplus(): boolean {
+    return this.logService.dailyStats().remainingCalories < 0;
   }
 
   getMacroProgress(type: 'proteins' | 'carbs' | 'fats'): number {

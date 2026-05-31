@@ -1,4 +1,13 @@
 <div class="scanner-container">
+  <header class="app-header">
+    <div class="header-content">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon fontSet="material-symbols-rounded">arrow_back</mat-icon>
+      </button>
+      <h1>Scanner un repas</h1>
+    </div>
+  </header>
+
   <div class="camera-preview">
     <video #video autoplay playsinline></video>
     <div class="scanner-controls">
