@@ -13,7 +13,7 @@
   </header>
 
   <main class="dashboard-content">
-    
+
     <!-- HERO STATS: KCAL REMAINING -->
     <ns-card customClass="hero-card" padding="0">
       <div class="hero-inner">
@@ -21,18 +21,18 @@
         <div class="hero-data">
           <div class="hero-main">
             <div class="hero-col">
-              <span class="hero-label">KCAL RESTANTES</span>
+              <span class="hero-label">{{ 'dashboard.remaining_kcal' | t }}</span>
               <span class="hero-value" [class.surplus]="isSurplus" [appCountUp]="logService.dailyStats().remainingCalories">
                 {{ logService.dailyStats().remainingCalories | number:'1.0-0' }}
               </span>
             </div>
             <div class="hero-col hero-secondary">
               <div class="secondary-stat">
-                <span class="sec-label">Objectif</span>
+                <span class="sec-label">{{ 'dashboard.goal' | t }}</span>
                 <span class="sec-value">{{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }}</span>
               </div>
               <div class="secondary-stat">
-                <span class="sec-label">Consommé</span>
+                <span class="sec-label">{{ 'dashboard.consumed' | t }}</span>
                 <span class="sec-value">{{ logService.dailyStats().totalCalories }}</span>
               </div>
             </div>
@@ -51,7 +51,7 @@
       <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
         <div class="macro-header">
           <span class="macro-value">{{ logService.dailyStats().totalProteins }}g</span>
-          <span class="macro-label">Protéines</span>
+          <span class="macro-label">{{ 'dashboard.proteins' | t }}</span>
         </div>
         <div class="macro-footer">
           <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.proteins }}g</span>
@@ -64,7 +64,7 @@
       <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
         <div class="macro-header">
           <span class="macro-value">{{ logService.dailyStats().totalCarbs }}g</span>
-          <span class="macro-label">Glucides</span>
+          <span class="macro-label">{{ 'dashboard.carbs' | t }}</span>
         </div>
         <div class="macro-footer">
           <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.carbs }}g</span>
@@ -77,7 +77,7 @@
       <ns-card variant="surface-variant" customClass="macro-card" padding="1rem">
         <div class="macro-header">
           <span class="macro-value">{{ logService.dailyStats().totalFats }}g</span>
-          <span class="macro-label">Lipides</span>
+          <span class="macro-label">{{ 'dashboard.fats' | t }}</span>
         </div>
         <div class="macro-footer">
           <span class="macro-target">sur {{ profileService.metabolicStats()?.targets?.fats }}g</span>
@@ -91,18 +91,18 @@
     <!-- RECENT LOGS SECTION -->
     <section class="logs-section">
       <div class="section-header">
-        <h2>Historique du jour</h2>
-        <button mat-button color="primary" routerLink="/history">Tout voir</button>
+        <h2>{{ 'dashboard.today_logs' | t }}</h2>
+        <button mat-button color="primary" routerLink="/history">{{ 'dashboard.see_all' | t }}</button>
       </div>
 
       <!-- EMPTY STATE -->
       <div *ngIf="logService.dailyLogs().length === 0" class="empty-state-card">
         <mat-icon class="empty-icon">restaurant</mat-icon>
-        <h3>Aucun repas enregistré aujourd'hui</h3>
-        <p>Commencez à suivre votre alimentation pour voir vos statistiques.</p>
+        <h3>{{ 'dashboard.no_meals_title' | t }}</h3>
+        <p>{{ 'dashboard.no_meals_sub' | t }}</p>
         <button mat-flat-button color="primary" routerLink="/scanner" class="add-meal-btn">
           <mat-icon>add</mat-icon>
-          Ajouter un repas
+          {{ 'dashboard.add_meal' | t }}
         </button>
       </div>
 
@@ -124,7 +124,7 @@
   </main>
 
   <!-- FAB COACH -->
-  <button mat-mini-fab class="fab-coach" (click)="openDailyRecap()" [disabled]="isRecapLoading()" aria-label="Bilan IA du jour">
+  <button mat-mini-fab class="fab-coach" (click)="openDailyRecap()" [disabled]="isRecapLoading()" [attr.aria-label]="'dashboard.coach_fab_label' | t">
     <mat-spinner *ngIf="isRecapLoading()" diameter="20"></mat-spinner>
     <mat-icon *ngIf="!isRecapLoading()" fontSet="material-symbols-rounded">auto_awesome</mat-icon>
   </button>

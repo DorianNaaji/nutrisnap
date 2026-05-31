@@ -11,6 +11,8 @@ import { StorageService } from '../../core/services/storage.service';
 import { LogService } from '../../core/services/log.service';
 import { MealLog } from '../../core/models/meal.model';
 import { DeleteConfirmDialogComponent } from './delete-confirm-dialog.component';
+import { TranslateService } from '../../core/services/translate.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-meal-detail',
@@ -18,7 +20,7 @@ import { DeleteConfirmDialogComponent } from './delete-confirm-dialog.component'
   imports: [
     CommonModule, RouterModule, MatButtonModule, MatIconModule,
     MatProgressSpinnerModule, MatDialogModule, MatSnackBarModule,
-    NsCardComponent
+    NsCardComponent, TranslatePipe
   ],
   templateUrl: './meal-detail.component.html',
   styleUrls: ['./meal-detail.component.css']
@@ -30,6 +32,7 @@ export class MealDetailComponent implements OnInit {
   private logService = inject(LogService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private translate = inject(TranslateService);
 
   meal = signal<MealLog | null>(null);
   imageUrl = signal<string | null>(null);
@@ -62,7 +65,7 @@ export class MealDetailComponent implements OnInit {
   }
 
   confidenceLabel(c: string): string {
-    return c === 'high' ? 'Haute' : c === 'medium' ? 'Moyenne' : 'Faible';
+    return this.translate.t(`meal_detail.confidence_${c}`);
   }
 
   openDeleteDialog() {
@@ -73,7 +76,7 @@ export class MealDetailComponent implements OnInit {
     ref.afterClosed().subscribe(async (confirmed) => {
       if (confirmed) {
         await this.logService.deleteLog(this.meal()!.id!);
-        this.snackBar.open('Repas supprimé', 'OK', { duration: 2500 });
+        this.snackBar.open(this.translate.t('meal_detail.deleted_snack'), this.translate.t('common.ok'), { duration: 2500 });
         this.router.navigate(['/dashboard']);
       }
     });

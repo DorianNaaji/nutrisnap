@@ -4,7 +4,7 @@
       <button mat-icon-button (click)="goBack()">
         <mat-icon fontSet="material-symbols-rounded">arrow_back</mat-icon>
       </button>
-      <h1>Scanner un repas</h1>
+      <h1>{{ 'scanner.title' | t }}</h1>
     </div>
   </header>
 
@@ -30,17 +30,17 @@
 
   <form [formGroup]="scannerForm" class="scanner-form">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Type de repas</mat-label>
+      <mat-label>{{ 'scanner.meal_type' | t }}</mat-label>
       <mat-select formControlName="mealType">
-        <mat-option value="petit-déjeuner">Petit-déjeuner</mat-option>
-        <mat-option value="déjeuner">Déjeuner</mat-option>
-        <mat-option value="dîner">Dîner</mat-option>
-        <mat-option value="collation">Collation</mat-option>
+        <mat-option value="petit-déjeuner">{{ 'scanner.breakfast' | t }}</mat-option>
+        <mat-option value="déjeuner">{{ 'scanner.lunch' | t }}</mat-option>
+        <mat-option value="dîner">{{ 'scanner.dinner' | t }}</mat-option>
+        <mat-option value="collation">{{ 'scanner.snack' | t }}</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Description (optionnel)</mat-label>
+      <mat-label>{{ 'scanner.description' | t }}</mat-label>
       <textarea matInput formControlName="description" rows="3"></textarea>
     </mat-form-field>
 
@@ -50,7 +50,7 @@
 
     <button mat-flat-button color="primary" class="submit-btn" (click)="submit()" [disabled]="isLoading()">
       <mat-spinner diameter="20" *ngIf="isLoading()"></mat-spinner>
-      <span *ngIf="!isLoading()">Analyser le repas</span>
+      <span *ngIf="!isLoading()">{{ 'scanner.analyze_btn' | t }}</span>
     </button>
   </form>
 </div>

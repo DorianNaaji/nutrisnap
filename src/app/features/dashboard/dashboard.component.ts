@@ -15,6 +15,8 @@ import { CountUpDirective } from '../../shared/directives/count-up.directive';
 import { GeminiService } from '../../core/services/gemini.service';
 import { StorageService } from '../../core/services/storage.service';
 import { RecapSheetComponent } from '../../shared/components/recap-sheet/recap-sheet.component';
+import { TranslateService } from '../../core/services/translate.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +30,8 @@ import { RecapSheetComponent } from '../../shared/components/recap-sheet/recap-s
     MatProgressSpinnerModule,
     RouterModule,
     NsCardComponent,
-    CountUpDirective
+    CountUpDirective,
+    TranslatePipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -41,6 +44,7 @@ export class DashboardComponent implements OnInit {
   private storage = inject(StorageService);
   private bottomSheet = inject(MatBottomSheet);
   private snackBar = inject(MatSnackBar);
+  private translate = inject(TranslateService);
 
   today = new Date();
   isRecapLoading = signal(false);
@@ -61,14 +65,14 @@ export class DashboardComponent implements OnInit {
     const profile = this.profileService.profile();
     const stats = this.profileService.metabolicStats();
     if (!profile?.apiKey) {
-      this.snackBar.open('Configurez votre clé API Gemini dans le profil.', 'Fermer', { duration: 4000 });
+      this.snackBar.open(this.translate.t('dashboard.recap_no_api'), this.translate.t('common.close'), { duration: 4000 });
       return;
     }
     const todayStr = this.localDateStr(new Date());
     const existing = await this.storage.getRecapByDate(todayStr);
     if (existing) {
       this.bottomSheet.open(RecapSheetComponent, {
-        data: { title: 'Bilan IA du jour', subtitle: 'Généré par Gemini · Mis en cache', text: existing.summary }
+        data: { title: this.translate.t('dashboard.recap_title'), subtitle: this.translate.t('dashboard.recap_cached'), text: existing.summary }
       });
       return;
     }
@@ -79,10 +83,10 @@ export class DashboardComponent implements OnInit {
       await this.storage.saveRecap({ date: todayStr, summary: text, generatedAt: Date.now() });
       this.hasRecapToday.set(true);
       this.bottomSheet.open(RecapSheetComponent, {
-        data: { title: 'Bilan IA du jour', text }
+        data: { title: this.translate.t('dashboard.recap_title'), text }
       });
     } catch {
-      this.snackBar.open("Impossible de générer le bilan. Vérifie ta clé API.", 'Fermer', { duration: 4000 });
+      this.snackBar.open(this.translate.t('dashboard.recap_error'), this.translate.t('common.close'), { duration: 4000 });
     } finally {
       this.isRecapLoading.set(false);
     }

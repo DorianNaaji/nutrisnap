@@ -17,6 +17,7 @@ import { LegalFooterComponent } from '../../shared/components/legal-footer/legal
 import { Router } from '@angular/router';
 import { UserProfile, MetabolicStats } from '../../core/models/profile.model';
 import { NsCardComponent } from '../../shared/components/design-system/card.component';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { startWith, debounceTime } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 
@@ -36,7 +37,8 @@ import { combineLatest } from 'rxjs';
     MatProgressSpinnerModule,
     MatExpansionModule,
     LegalFooterComponent,
-    NsCardComponent
+    NsCardComponent,
+    TranslatePipe
   ],
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.css']

@@ -12,6 +12,8 @@ import { ProfileService } from '../../core/services/profile.service';
 import { GeminiService } from '../../core/services/gemini.service';
 import { MealLog } from '../../core/models/meal.model';
 import { RecapSheetComponent } from '../../shared/components/recap-sheet/recap-sheet.component';
+import { TranslateService } from '../../core/services/translate.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 interface CalendarDay {
   date: Date;
@@ -29,7 +31,7 @@ interface CalendarDay {
   standalone: true,
   imports: [
     CommonModule, RouterModule, MatButtonModule, MatIconModule,
-    MatProgressSpinnerModule, MatButtonToggleModule
+    MatProgressSpinnerModule, MatButtonToggleModule, TranslatePipe
   ],
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css']
@@ -42,6 +44,7 @@ export class HistoryComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private bottomSheet = inject(MatBottomSheet);
   private snackBar = inject(MatSnackBar);
+  private translate = inject(TranslateService);
 
   isLoading = signal(true);
   isAnalysisLoading = signal(false);
@@ -52,11 +55,8 @@ export class HistoryComponent implements OnInit {
   selectedDateStr = signal<string | null>(null);
   selectedDateLogs = signal<MealLog[]>([]);
 
-  readonly WEEKDAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-  readonly MONTHS = [
-    'Janvier','Février','Mars','Avril','Mai','Juin',
-    'Juillet','Août','Septembre','Octobre','Novembre','Décembre'
-  ];
+  readonly WEEKDAYS = computed(() => this.translate.arr('history.weekdays'));
+  readonly MONTHS = computed(() => this.translate.arr('history.months'));
 
   calendarDays = computed<CalendarDay[]>(() => {
     const year = this.currentYear();
@@ -211,7 +211,7 @@ export class HistoryComponent implements OnInit {
     const profile = this.profileService.profile();
     const stats = this.profileService.metabolicStats();
     if (!profile?.apiKey) {
-      this.snackBar.open('Configurez votre clé API Gemini dans le profil.', 'Fermer', { duration: 4000 });
+      this.snackBar.open(this.translate.t('history.analysis_no_api'), this.translate.t('common.close'), { duration: 4000 });
       return;
     }
     this.isAnalysisLoading.set(true);
@@ -233,10 +233,10 @@ export class HistoryComponent implements OnInit {
 
       const text = await this.gemini.getWeeklyAnalysis(profile, logs, stats!, periodLabel);
       this.bottomSheet.open(RecapSheetComponent, {
-        data: { title: 'Analyse IA', subtitle: periodLabel, text }
+        data: { title: this.translate.t('history.analysis_title'), subtitle: periodLabel, text }
       });
     } catch {
-      this.snackBar.open("Impossible de générer l'analyse. Vérifie ta clé API.", 'Fermer', { duration: 4000 });
+      this.snackBar.open(this.translate.t('history.analysis_error'), this.translate.t('common.close'), { duration: 4000 });
     } finally {
       this.isAnalysisLoading.set(false);
     }

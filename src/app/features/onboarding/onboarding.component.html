@@ -5,42 +5,42 @@
 
         <!-- ÉTAPE 1 : BIENVENUE -->
         <mat-step>
-          <ng-template matStepLabel>Hello</ng-template>
+          <ng-template matStepLabel>{{ 'onboarding.step1_label' | t }}</ng-template>
           <div class="step-content welcome-step">
             <div class="welcome-header">
               <div class="icon-circle">
                 <mat-icon fontSet="material-symbols-rounded">eco</mat-icon>
               </div>
               <h1>NutriSnap</h1>
-              <p class="subtitle">Health OS</p>
+              <p class="subtitle">{{ 'onboarding.tagline' | t }}</p>
             </div>
 
             <div class="values-grid">
               <div class="value-item">
                 <mat-icon color="primary">security</mat-icon>
                 <div class="value-text">
-                  <strong>Privacy-First</strong>
-                  <span>Données locales uniquement</span>
+                  <strong>{{ 'onboarding.privacy_first' | t }}</strong>
+                  <span>{{ 'onboarding.privacy_first_sub' | t }}</span>
                 </div>
               </div>
               <div class="value-item">
                 <mat-icon color="primary">bolt</mat-icon>
                 <div class="value-text">
-                  <strong>Instant Tracking</strong>
-                  <span>IA Gemini 2.5 Flash</span>
+                  <strong>{{ 'onboarding.instant' | t }}</strong>
+                  <span>{{ 'onboarding.instant_sub' | t }}</span>
                 </div>
               </div>
               <div class="value-item">
                 <mat-icon color="primary">favorite</mat-icon>
                 <div class="value-text">
-                  <strong>Sans compte</strong>
-                  <span>Pas de tracking publicitaire</span>
+                  <strong>{{ 'onboarding.no_account' | t }}</strong>
+                  <span>{{ 'onboarding.no_account_sub' | t }}</span>
                 </div>
               </div>
             </div>
 
             <div class="stepper-actions">
-              <button mat-flat-button color="primary" matStepperNext class="wide-btn">Commencer l'aventure</button>
+              <button mat-flat-button color="primary" matStepperNext class="wide-btn">{{ 'onboarding.start_btn' | t }}</button>
             </div>
           </div>
         </mat-step>
@@ -48,60 +48,57 @@
         <!-- ÉTAPE 2 : PROFIL -->
         <mat-step [stepControl]="metabolismForm">
           <form [formGroup]="metabolismForm">
-            <ng-template matStepLabel>Profil</ng-template>
+            <ng-template matStepLabel>{{ 'onboarding.step2_label' | t }}</ng-template>
             <div class="step-content">
-              <h3>Parlons de vous</h3>
+              <h3>{{ 'onboarding.step2_title' | t }}</h3>
               <div class="form-grid">
                 <mat-form-field appearance="outline">
-                  <mat-label>Sexe</mat-label>
+                  <mat-label>{{ 'profile.gender' | t }}</mat-label>
                   <mat-select formControlName="gender">
-                    <mat-option value="male">Homme</mat-option>
-                    <mat-option value="female">Femme</mat-option>
+                    <mat-option value="male">{{ 'profile.male' | t }}</mat-option>
+                    <mat-option value="female">{{ 'profile.female' | t }}</mat-option>
                   </mat-select>
                 </mat-form-field>
-
                 <mat-form-field appearance="outline">
-                  <mat-label>Âge</mat-label>
+                  <mat-label>{{ 'profile.age' | t }}</mat-label>
                   <input matInput type="number" formControlName="age">
                 </mat-form-field>
-
                 <mat-form-field appearance="outline">
-                  <mat-label>Poids (kg)</mat-label>
+                  <mat-label>{{ 'profile.weight' | t }}</mat-label>
                   <input matInput type="number" formControlName="weight">
                 </mat-form-field>
-
                 <mat-form-field appearance="outline">
-                  <mat-label>Taille (cm)</mat-label>
+                  <mat-label>{{ 'profile.height' | t }}</mat-label>
                   <input matInput type="number" formControlName="height">
                 </mat-form-field>
               </div>
 
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Niveau d'activité</mat-label>
+                <mat-label>{{ 'profile.activity_level' | t }}</mat-label>
                 <mat-select formControlName="activityLevel">
-                  <mat-option value="sedentary">Sédentaire (Bureau, peu de sport)</mat-option>
-                  <mat-option value="light">Léger (1-2 fois / semaine)</mat-option>
-                  <mat-option value="moderate">Modéré (3-5 fois / semaine)</mat-option>
-                  <mat-option value="active">Actif (6-7 fois / semaine)</mat-option>
-                  <mat-option value="very_active">Très Actif (Sport intense quotidien)</mat-option>
+                  <mat-option value="sedentary">{{ 'profile.sedentary' | t }}</mat-option>
+                  <mat-option value="light">{{ 'profile.light' | t }}</mat-option>
+                  <mat-option value="moderate">{{ 'profile.moderate' | t }}</mat-option>
+                  <mat-option value="active">{{ 'profile.active' | t }}</mat-option>
+                  <mat-option value="very_active">{{ 'profile.very_active' | t }}</mat-option>
                 </mat-select>
               </mat-form-field>
 
               <mat-expansion-panel class="advanced-panel">
                 <mat-expansion-panel-header>
-                  <mat-panel-title>Métriques corporelles (opt.)</mat-panel-title>
+                  <mat-panel-title>{{ 'onboarding.advanced_metrics' | t }}</mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="advanced-grid">
-                  <mat-form-field appearance="outline"><mat-label>Masse grasse (%)</mat-label><input matInput type="number" formControlName="bodyFat"></mat-form-field>
-                  <mat-form-field appearance="outline"><mat-label>Masse musculaire (kg)</mat-label><input matInput type="number" formControlName="muscleMass"></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>BMR mesuré (kcal)</mat-label><input matInput type="number" formControlName="measuredBmr"></mat-form-field>
+                  <mat-form-field appearance="outline"><mat-label>{{ 'profile.body_fat' | t }}</mat-label><input matInput type="number" formControlName="bodyFat"></mat-form-field>
+                  <mat-form-field appearance="outline"><mat-label>{{ 'profile.muscle_mass' | t }}</mat-label><input matInput type="number" formControlName="muscleMass"></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'profile.measured_bmr' | t }}</mat-label><input matInput type="number" formControlName="measuredBmr"></mat-form-field>
                 </div>
-                <div class="advanced-hint">Le BMR mesuré remplace le calcul théorique.</div>
+                <div class="advanced-hint">{{ 'onboarding.bmr_hint' | t }}</div>
               </mat-expansion-panel>
 
               <div class="stepper-actions">
-                <button mat-button matStepperPrevious>Retour</button>
-                <button mat-flat-button color="primary" matStepperNext>Suivant</button>
+                <button mat-button matStepperPrevious>{{ 'common.previous' | t }}</button>
+                <button mat-flat-button color="primary" matStepperNext>{{ 'common.next' | t }}</button>
               </div>
             </div>
           </form>
@@ -110,42 +107,42 @@
         <!-- ÉTAPE 3 : OBJECTIF -->
         <mat-step [stepControl]="goalForm">
           <form [formGroup]="goalForm">
-            <ng-template matStepLabel>Objectif</ng-template>
+            <ng-template matStepLabel>{{ 'onboarding.step3_label' | t }}</ng-template>
             <div class="step-content">
-              <h3>Votre but nutritionnel</h3>
+              <h3>{{ 'onboarding.step3_title' | t }}</h3>
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Objectif</mat-label>
+                <mat-label>{{ 'profile.goal_label' | t }}</mat-label>
                 <mat-select formControlName="goal">
-                  <mat-option value="lose_mild">Perte de poids douce (-300 kcal)</mat-option>
-                  <mat-option value="lose_moderate">Perte de poids modérée (-500 kcal)</mat-option>
-                  <mat-option value="lose_aggressive">Perte de poids agressive (-750 kcal)</mat-option>
-                  <mat-option value="maintain">Maintenir mon poids</mat-option>
-                  <mat-option value="gain">Prise de masse (+300 kcal)</mat-option>
+                  <mat-option value="lose_mild">{{ 'profile.lose_mild' | t }}</mat-option>
+                  <mat-option value="lose_moderate">{{ 'profile.lose_moderate' | t }}</mat-option>
+                  <mat-option value="lose_aggressive">{{ 'profile.lose_aggressive' | t }}</mat-option>
+                  <mat-option value="maintain">{{ 'profile.maintain' | t }}</mat-option>
+                  <mat-option value="gain">{{ 'profile.gain' | t }}</mat-option>
                 </mat-select>
               </mat-form-field>
 
               <div *ngIf="currentStats()" class="metabolic-preview">
-                <div class="preview-header">RÉSUMÉ CALCULÉ</div>
+                <div class="preview-header">{{ 'onboarding.calculated_summary' | t }}</div>
                 <div class="preview-main">
                   <div class="preview-item">
                     <span class="p-val">{{ currentStats()!.bmr | number:'1.0-0' }}</span>
-                    <span class="p-lab">BMR (Repos)</span>
+                    <span class="p-lab">{{ 'onboarding.bmr_rest' | t }}</span>
                   </div>
                   <div class="preview-divider"></div>
                   <div class="preview-item">
                     <span class="p-val">{{ currentStats()!.dailyCalorieTarget | number:'1.0-0' }}</span>
-                    <span class="p-lab">Objectif (kcal)</span>
+                    <span class="p-lab">{{ 'onboarding.goal_kcal' | t }}</span>
                   </div>
                 </div>
-                <div class="preview-hint">Votre TDEE (Dépense totale) est de {{ currentStats()!.tdee | number:'1.0-0' }} kcal.</div>
+                <div class="preview-hint">{{ 'onboarding.tdee_hint' | t : { tdee: (currentStats()!.tdee | number:'1.0-0') ?? '' } }}</div>
                 <div *ngIf="currentStats()!.isSafetyFloorHit" class="safety-tag">
-                  <mat-icon fontSet="material-symbols-rounded">security</mat-icon> Protection métabolique activée
+                  <mat-icon fontSet="material-symbols-rounded">security</mat-icon> {{ 'onboarding.metabolic_protection' | t }}
                 </div>
               </div>
 
               <div class="stepper-actions">
-                <button mat-button matStepperPrevious>Retour</button>
-                <button mat-flat-button color="primary" matStepperNext>Suivant</button>
+                <button mat-button matStepperPrevious>{{ 'common.previous' | t }}</button>
+                <button mat-flat-button color="primary" matStepperNext>{{ 'common.next' | t }}</button>
               </div>
             </div>
           </form>
@@ -154,15 +151,15 @@
         <!-- ÉTAPE 4 : CONFIG API -->
         <mat-step [stepControl]="apiForm">
           <form [formGroup]="apiForm">
-            <ng-template matStepLabel>IA</ng-template>
+            <ng-template matStepLabel>{{ 'onboarding.step4_label' | t }}</ng-template>
             <div class="step-content">
-              <h3>Intelligence Artificielle</h3>
-              <p class="api-intro">NutriSnap utilise Google Gemini pour analyser vos repas. C'est gratuit et sécurisé.</p>
+              <h3>{{ 'onboarding.step4_title' | t }}</h3>
+              <p class="api-intro">{{ 'onboarding.step4_intro' | t }}</p>
 
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Clé API Gemini</mat-label>
-                <input matInput formControlName="apiKey" placeholder="Entrez votre clé API..." type="password">
-                <mat-hint>Obtenez-la sur <a href="https://aistudio.google.com/welcome" target="_blank">AI Studio</a></mat-hint>
+                <mat-label>{{ 'profile.api_card' | t }}</mat-label>
+                <input matInput formControlName="apiKey" [placeholder]="'onboarding.api_key_placeholder' | t" type="password">
+                <mat-hint>{{ 'onboarding.api_key_hint' | t }} <a href="https://aistudio.google.com/welcome" target="_blank">AI Studio</a></mat-hint>
               </mat-form-field>
 
               <div *ngIf="apiKeyError" class="error-box">
@@ -170,10 +167,10 @@
               </div>
 
               <div class="stepper-actions">
-                <button mat-button matStepperPrevious [disabled]="isValidatingKey">Retour</button>
+                <button mat-button matStepperPrevious [disabled]="isValidatingKey">{{ 'common.previous' | t }}</button>
                 <button mat-flat-button color="primary" (click)="validateAndSave(stepper)" [disabled]="isValidatingKey">
                   <mat-spinner diameter="20" *ngIf="isValidatingKey"></mat-spinner>
-                  <span>{{ isValidatingKey ? 'Validation & Analyse...' : 'Valider & Continuer' }}</span>
+                  <span>{{ isValidatingKey ? ('onboarding.validating' | t) : ('onboarding.validate_btn' | t) }}</span>
                 </button>
               </div>
             </div>
@@ -182,9 +179,9 @@
 
         <!-- ÉTAPE 5 : COACH IA -->
         <mat-step>
-          <ng-template matStepLabel>Coach</ng-template>
+          <ng-template matStepLabel>{{ 'onboarding.step5_label' | t }}</ng-template>
           <div class="step-content coach-step">
-            <h3>Analyse du Coach</h3>
+            <h3>{{ 'onboarding.step5_title' | t }}</h3>
 
             <div *ngIf="coachFeedback()" class="feedback-container">
               <div class="feedback-content" [innerHTML]="formatFeedback(coachFeedback()!)"></div>
@@ -192,11 +189,11 @@
 
             <div *ngIf="!coachFeedback()" class="error-box">
               <mat-icon>error_outline</mat-icon>
-              L'analyse n'a pas pu être générée, mais vos données sont bien enregistrées.
+              {{ 'onboarding.no_feedback' | t }}
             </div>
 
             <div class="stepper-actions">
-              <button mat-flat-button color="primary" (click)="finish()" class="wide-btn">Terminer la configuration</button>
+              <button mat-flat-button color="primary" (click)="finish()" class="wide-btn">{{ 'onboarding.finish_btn' | t }}</button>
             </div>
           </div>
         </mat-step>

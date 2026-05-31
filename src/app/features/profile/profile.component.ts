@@ -19,6 +19,8 @@ import { StorageService } from '../../core/services/storage.service';
 import { UserProfile } from '../../core/models/profile.model';
 import { LegalFooterComponent } from '../../shared/components/legal-footer/legal-footer.component';
 import { NsCardComponent } from '../../shared/components/design-system/card.component';
+import { TranslateService, Lang } from '../../core/services/translate.service';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-profile',
@@ -38,7 +40,8 @@ import { NsCardComponent } from '../../shared/components/design-system/card.comp
     MatDividerModule,
     MatButtonToggleModule,
     LegalFooterComponent,
-    NsCardComponent
+    NsCardComponent,
+    TranslatePipe
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -51,6 +54,7 @@ export class ProfileComponent implements OnInit {
   protected themeService = inject(ThemeService);
   private exportService = inject(ExportService);
   private storage = inject(StorageService);
+  protected translateService = inject(TranslateService);
 
   personalForm!: FormGroup;
   advancedForm!: FormGroup;
@@ -117,26 +121,26 @@ export class ProfileComponent implements OnInit {
   async savePersonal() {
     if (this.personalForm.valid) {
       await this.profileService.updateProfile(this.personalForm.value as Partial<UserProfile>);
-      this.snackBar.open('Informations mises à jour', 'OK', { duration: 3000 });
+      this.snackBar.open(this.translateService.t('profile.saved_snack'), this.translateService.t('common.ok'), { duration: 3000 });
     }
   }
 
   async saveAdvanced() {
     if (this.advancedForm.valid) {
       await this.profileService.updateProfile(this.advancedForm.value as Partial<UserProfile>);
-      this.snackBar.open('Données avancées mises à jour', 'OK', { duration: 3000 });
+      this.snackBar.open(this.translateService.t('profile.advanced_saved'), this.translateService.t('common.ok'), { duration: 3000 });
     }
   }
 
   async saveApiKey(key: string) {
     await this.profileService.updateProfile({ apiKey: key } as Partial<UserProfile>);
-    this.snackBar.open('Clé API sauvegardée', 'OK', { duration: 3000 });
+    this.snackBar.open(this.translateService.t('profile.api_saved_snack'), this.translateService.t('common.ok'), { duration: 3000 });
     this.showApiKey.set(false);
   }
 
   async exportData() {
     await this.exportService.exportData();
-    this.snackBar.open('Données exportées', 'OK', { duration: 2000 });
+    this.snackBar.open(this.translateService.t('profile.exported_snack'), this.translateService.t('common.ok'), { duration: 2000 });
   }
 
   async importData(event: any) {
@@ -145,19 +149,22 @@ export class ProfileComponent implements OnInit {
       const success = await this.exportService.importData(file);
       if (success) {
         await this.profileService.loadProfile();
-        // The effect will handle form update via initForms/updateForms
-        this.snackBar.open('Données importées avec succès', 'OK', { duration: 3000 });
+        this.snackBar.open(this.translateService.t('profile.imported_snack'), this.translateService.t('common.ok'), { duration: 3000 });
       } else {
-        this.snackBar.open('Échec de l\'importation', 'Erreur', { duration: 3000 });
+        this.snackBar.open(this.translateService.t('profile.import_error'), this.translateService.t('common.error'), { duration: 3000 });
       }
     }
   }
 
   async resetApp() {
-    if (confirm('Êtes-vous sûr de vouloir supprimer TOUTES vos données ? Cette action est irréversible.')) {
+    if (confirm(this.translateService.t('profile.reset_confirm'))) {
       await this.storage.clearAllData();
       window.location.reload();
     }
+  }
+
+  async onLangChange(lang: Lang) {
+    await this.translateService.setLang(lang);
   }
 
   onThemeChange(event: MatButtonToggleChange) {

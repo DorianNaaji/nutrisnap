@@ -2,10 +2,10 @@
 
   <!-- HEADER -->
   <header class="history-header">
-    <button mat-icon-button routerLink="/dashboard" class="back-btn" aria-label="Retour">
+    <button mat-icon-button routerLink="/dashboard" class="back-btn" aria-label="Back">
       <mat-icon fontSet="material-symbols-rounded">arrow_back</mat-icon>
     </button>
-    <h1 class="header-title">Historique</h1>
+    <h1 class="header-title">{{ 'history.title' | t }}</h1>
     <div class="header-spacer"></div>
   </header>
 
@@ -13,11 +13,11 @@
 
     <!-- MONTH NAVIGATOR -->
     <div class="month-nav">
-      <button mat-icon-button (click)="prevMonth()" aria-label="Mois précédent">
+      <button mat-icon-button (click)="prevMonth()" aria-label="Previous month">
         <mat-icon>chevron_left</mat-icon>
       </button>
-      <span class="month-label">{{ MONTHS[currentMonth()] }} {{ currentYear() }}</span>
-      <button mat-icon-button (click)="nextMonth()" [disabled]="isNextMonthDisabled()" aria-label="Mois suivant">
+      <span class="month-label">{{ MONTHS()[currentMonth()] }} {{ currentYear() }}</span>
+      <button mat-icon-button (click)="nextMonth()" [disabled]="isNextMonthDisabled()" aria-label="Next month">
         <mat-icon>chevron_right</mat-icon>
       </button>
     </div>
@@ -33,7 +33,7 @@
       <div class="calendar">
 
         <!-- WEEKDAY HEADERS -->
-        <div class="weekday-header" *ngFor="let wd of WEEKDAYS">{{ wd }}</div>
+        <div class="weekday-header" *ngFor="let wd of WEEKDAYS()">{{ wd }}</div>
 
         <!-- DAY CELLS -->
         <div
@@ -60,9 +60,9 @@
 
       <!-- LEGEND -->
       <div class="legend">
-        <span class="legend-item"><span class="dot-green legend-dot"></span> 80–105% objectif</span>
-        <span class="legend-item"><span class="dot-orange legend-dot"></span> Partiel ou surplus</span>
-        <span class="legend-item"><span class="dot-red legend-dot"></span> &lt; 50% objectif</span>
+        <span class="legend-item"><span class="dot-green legend-dot"></span> {{ 'history.legend_perfect' | t }}</span>
+        <span class="legend-item"><span class="dot-orange legend-dot"></span> {{ 'history.legend_partial' | t }}</span>
+        <span class="legend-item"><span class="dot-red legend-dot"></span> {{ 'history.legend_low' | t }}</span>
       </div>
 
       <!-- ANALYSE IA -->
@@ -71,15 +71,15 @@
           [value]="analysisPeriod()"
           (change)="analysisPeriod.set($event.value)"
           class="period-toggle"
-          aria-label="Période d'analyse"
+          aria-label="Analysis period"
         >
-          <mat-button-toggle value="7days">7 jours</mat-button-toggle>
-          <mat-button-toggle value="30days">30 jours</mat-button-toggle>
+          <mat-button-toggle value="7days">{{ 'history.days_7' | t }}</mat-button-toggle>
+          <mat-button-toggle value="30days">{{ 'history.days_30' | t }}</mat-button-toggle>
         </mat-button-toggle-group>
         <button mat-flat-button class="analysis-btn" (click)="openAnalysis()" [disabled]="isAnalysisLoading()">
           <mat-spinner *ngIf="isAnalysisLoading()" diameter="18" class="btn-spinner"></mat-spinner>
           <mat-icon *ngIf="!isAnalysisLoading()" fontSet="material-symbols-rounded">auto_awesome</mat-icon>
-          {{ isAnalysisLoading() ? 'Analyse en cours…' : 'Analyse IA' }}
+          {{ isAnalysisLoading() ? ('history.analysis_loading' | t) : ('history.analysis_btn' | t) }}
         </button>
       </div>
 
@@ -93,10 +93,10 @@
         <!-- Empty day -->
         <div *ngIf="selectedDateLogs().length === 0" class="day-empty">
           <mat-icon>restaurant</mat-icon>
-          <p>Aucun repas enregistré ce jour-là.</p>
+          <p>{{ 'history.no_meal' | t }}</p>
           <button mat-flat-button color="primary" class="add-btn" (click)="goToScanner()">
             <mat-icon>add</mat-icon>
-            Ajouter un repas
+            {{ 'history.add_meal' | t }}
           </button>
         </div>
 
@@ -118,11 +118,11 @@
           </div>
         </div>
 
-        <!-- Ajouter un repas (tous les jours, pas seulement aujourd'hui) -->
+        <!-- Ajouter un repas -->
         <div class="day-scan-cta" *ngIf="selectedDateLogs().length > 0">
           <button mat-stroked-button color="primary" (click)="goToScanner()">
             <mat-icon>add</mat-icon>
-            Ajouter un repas
+            {{ 'history.add_meal' | t }}
           </button>
         </div>
       </div>

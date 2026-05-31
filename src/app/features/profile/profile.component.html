@@ -4,197 +4,200 @@
       <button mat-icon-button (click)="goBack()">
         <mat-icon fontSet="material-symbols-rounded">arrow_back</mat-icon>
       </button>
-      <h1>Mon Profil</h1>
+      <h1>{{ 'profile.title' | t }}</h1>
     </div>
   </header>
 
   <div class="profile-container">
-      
-      <!-- RÉSUMÉ MÉTABOLIQUE -->
-      <ns-card title="Objectifs calculés" customClass="preview-card" variant="surface-variant">
-        <div class="stats-row">
-          <div class="stat-box">
-            <span class="stat-value">{{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }}</span>
-            <span class="stat-label">kcal / jour</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-value">{{ profileService.metabolicStats()?.targets?.proteins }}g</span>
-            <span class="stat-label">Protéines</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-value">{{ profileService.metabolicStats()?.targets?.carbs }}g</span>
-            <span class="stat-label">Glucides</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-value">{{ profileService.metabolicStats()?.targets?.fats }}g</span>
-            <span class="stat-label">Lipides</span>
-          </div>
+
+    <!-- RÉSUMÉ MÉTABOLIQUE -->
+    <ns-card [title]="'profile.metabolic_card' | t" customClass="preview-card" variant="surface-variant">
+      <div class="stats-row">
+        <div class="stat-box">
+          <span class="stat-value">{{ profileService.metabolicStats()?.dailyCalorieTarget | number:'1.0-0' }}</span>
+          <span class="stat-label">{{ 'profile.kcal_day' | t }}</span>
         </div>
-        
-        <div class="safety-alert" [style.visibility]="profileService.metabolicStats()?.isSafetyFloorHit ? 'visible' : 'hidden'">
-          <mat-icon fontSet="material-symbols-rounded">security</mat-icon>
-          <p><strong>Protection métabolique active :</strong> Objectif maintenu au BMR.</p>
+        <div class="stat-box">
+          <span class="stat-value">{{ profileService.metabolicStats()?.targets?.proteins }}g</span>
+          <span class="stat-label">{{ 'profile.proteins' | t }}</span>
         </div>
-      </ns-card>
+        <div class="stat-box">
+          <span class="stat-value">{{ profileService.metabolicStats()?.targets?.carbs }}g</span>
+          <span class="stat-label">{{ 'profile.carbs' | t }}</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-value">{{ profileService.metabolicStats()?.targets?.fats }}g</span>
+          <span class="stat-label">{{ 'profile.fats' | t }}</span>
+        </div>
+      </div>
+      <div class="safety-alert" [style.visibility]="profileService.metabolicStats()?.isSafetyFloorHit ? 'visible' : 'hidden'">
+        <mat-icon fontSet="material-symbols-rounded">security</mat-icon>
+        <p><strong>{{ 'profile.metabolic_protection' | t }}</strong></p>
+      </div>
+    </ns-card>
 
-      <!-- INFORMATIONS DE BASE -->
-      <form [formGroup]="personalForm">
-        <ns-card title="Mes Informations">
-          <div class="form-grid">
-            <mat-form-field appearance="outline">
-              <mat-label>Sexe</mat-label>
-              <mat-select formControlName="gender">
-                <mat-option value="male">Homme</mat-option>
-                <mat-option value="female">Femme</mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Âge</mat-label>
-              <input matInput type="number" formControlName="age">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Poids (kg)</mat-label>
-              <input matInput type="number" formControlName="weight">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Taille (cm)</mat-label>
-              <input matInput type="number" formControlName="height">
-            </mat-form-field>
-          </div>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Niveau d'activité</mat-label>
-            <mat-select formControlName="activityLevel">
-              <mat-option value="sedentary">Sédentaire (Bureau, peu de sport)</mat-option>
-              <mat-option value="light">Léger (1-2 fois / semaine)</mat-option>
-              <mat-option value="moderate">Modéré (3-5 fois / semaine)</mat-option>
-              <mat-option value="active">Actif (6-7 fois / semaine)</mat-option>
-              <mat-option value="very_active">Très Actif (Sport intense quotidien)</mat-option>
+    <!-- INFORMATIONS DE BASE -->
+    <form [formGroup]="personalForm">
+      <ns-card [title]="'profile.personal_card' | t">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.gender' | t }}</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option value="male">{{ 'profile.male' | t }}</mat-option>
+              <mat-option value="female">{{ 'profile.female' | t }}</mat-option>
             </mat-select>
           </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Mon Objectif</mat-label>
-            <mat-select formControlName="goal">
-              <mat-option value="lose_mild">Perte de poids douce (-300 kcal)</mat-option>
-              <mat-option value="lose_moderate">Perte de poids modérée (-500 kcal)</mat-option>
-              <mat-option value="lose_aggressive">Perte de poids agressive (-750 kcal)</mat-option>
-              <mat-option value="maintain">Maintenir mon poids</mat-option>
-              <mat-option value="gain">Prise de masse (+300 kcal)</mat-option>
-            </mat-select>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.age' | t }}</mat-label>
+            <input matInput type="number" formControlName="age">
           </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.weight' | t }}</mat-label>
+            <input matInput type="number" formControlName="weight">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.height' | t }}</mat-label>
+            <input matInput type="number" formControlName="height">
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'profile.activity_level' | t }}</mat-label>
+          <mat-select formControlName="activityLevel">
+            <mat-option value="sedentary">{{ 'profile.sedentary' | t }}</mat-option>
+            <mat-option value="light">{{ 'profile.light' | t }}</mat-option>
+            <mat-option value="moderate">{{ 'profile.moderate' | t }}</mat-option>
+            <mat-option value="active">{{ 'profile.active' | t }}</mat-option>
+            <mat-option value="very_active">{{ 'profile.very_active' | t }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'profile.goal_label' | t }}</mat-label>
+          <mat-select formControlName="goal">
+            <mat-option value="lose_mild">{{ 'profile.lose_mild' | t }}</mat-option>
+            <mat-option value="lose_moderate">{{ 'profile.lose_moderate' | t }}</mat-option>
+            <mat-option value="lose_aggressive">{{ 'profile.lose_aggressive' | t }}</mat-option>
+            <mat-option value="maintain">{{ 'profile.maintain' | t }}</mat-option>
+            <mat-option value="gain">{{ 'profile.gain' | t }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="card-footer">
+          <button mat-flat-button color="primary" type="button" (click)="savePersonal()">
+            <mat-icon>check</mat-icon> {{ 'profile.save_btn' | t }}
+          </button>
+        </div>
+      </ns-card>
+    </form>
 
+    <!-- DONNÉES AVANCÉES -->
+    <form [formGroup]="advancedForm">
+      <ns-card [title]="'profile.advanced_card' | t" [subtitle]="'profile.advanced_subtitle' | t">
+        <mat-expansion-panel class="advanced-panel" #advancedPanel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ 'profile.body_metrics' | t }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="advanced-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'profile.body_fat' | t }}</mat-label>
+              <input matInput type="number" step="0.1" formControlName="bodyFat">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'profile.muscle_mass' | t }}</mat-label>
+              <input matInput type="number" step="0.1" formControlName="muscleMass">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'profile.measured_bmr' | t }}</mat-label>
+              <input matInput type="number" formControlName="measuredBmr">
+            </mat-form-field>
+          </div>
+          <p class="hint">{{ 'profile.bmr_hint' | t }}</p>
+        </mat-expansion-panel>
+        <div class="card-footer">
+          <button mat-flat-button color="primary" type="button" (click)="saveAdvanced(); advancedPanel.close()">
+            <mat-icon>check</mat-icon> {{ 'profile.save_btn' | t }}
+          </button>
+        </div>
+      </ns-card>
+    </form>
+
+    <!-- API KEY -->
+    <ns-card [title]="'profile.api_card' | t">
+      @if (profileService.profile()?.apiKey && !showApiKey()) {
+        <div class="api-status">
+          <mat-icon fontSet="material-symbols-rounded" color="primary">check_circle</mat-icon>
+          <span>{{ 'profile.api_key_saved' | t }}</span>
+          <button mat-button color="primary" (click)="showApiKey.set(true)">{{ 'profile.modify' | t }}</button>
+        </div>
+      } @else {
+        <div class="api-edit-container">
+          <div class="input-row">
+            <mat-icon fontSet="material-symbols-rounded" class="key-icon">vpn_key</mat-icon>
+            <input #apiKeyInput type="password" [placeholder]="'profile.new_key_placeholder' | t" class="api-input">
+          </div>
+          <p class="hint">{{ 'profile.new_key_hint' | t }}</p>
           <div class="card-footer">
-            <button mat-flat-button color="primary" type="button" (click)="savePersonal()">
-              <mat-icon>check</mat-icon> Enregistrer
+            <button mat-flat-button color="primary" type="button" (click)="saveApiKey(apiKeyInput.value)">
+              <mat-icon>check</mat-icon> {{ 'profile.save_btn' | t }}
             </button>
+            <button mat-button type="button" (click)="showApiKey.set(false)">{{ 'common.cancel' | t }}</button>
           </div>
-        </ns-card>
-      </form>
-
-      <!-- DONNÉES AVANCÉES -->
-      <form [formGroup]="advancedForm">
-        <ns-card title="Données Avancées" subtitle="Balance connectée">
-          <mat-expansion-panel class="advanced-panel" #advancedPanel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Métriques corporelles</mat-panel-title>
-            </mat-expansion-panel-header>
-            
-            <div class="advanced-grid">
-              <mat-form-field appearance="outline">
-                <mat-label>Masse grasse (%)</mat-label>
-                <input matInput type="number" step="0.1" formControlName="bodyFat">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Masse musculaire (kg)</mat-label>
-                <input matInput type="number" step="0.1" formControlName="muscleMass">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>BMR mesuré (kcal)</mat-label>
-                <input matInput type="number" formControlName="measuredBmr">
-              </mat-form-field>
-            </div>
-            <p class="hint">Le BMR mesuré remplace le calcul théorique.</p>
-          </mat-expansion-panel>
-          <div class="card-footer">
-            <button mat-flat-button color="primary" type="button" (click)="saveAdvanced(); advancedPanel.close()">
-              <mat-icon>check</mat-icon> Enregistrer
-            </button>
-          </div>
-        </ns-card>
-      </form>
-
-      <!-- API KEY -->
-      <ns-card title="IA Gemini">
-        @if (profileService.profile()?.apiKey && !showApiKey()) {
-          <div class="api-status">
-            <mat-icon fontSet="material-symbols-rounded" color="primary">check_circle</mat-icon>
-            <span>Clé API déjà sauvegardée</span>
-            <button mat-button color="primary" (click)="showApiKey.set(true)">Modifier</button>
-          </div>
-        } @else {
-          <div class="api-edit-container">
-            <div class="input-row">
-              <mat-icon fontSet="material-symbols-rounded" class="key-icon">vpn_key</mat-icon>
-              <input #apiKeyInput type="password" placeholder="Entrez la nouvelle clé..." class="api-input">
-            </div>
-            <p class="hint">La nouvelle clé remplacera l'ancienne.</p>
-            <div class="card-footer">
-              <button mat-flat-button color="primary" type="button" (click)="saveApiKey(apiKeyInput.value)">
-                <mat-icon>check</mat-icon> Enregistrer
-              </button>
-              <button mat-button type="button" (click)="showApiKey.set(false)">Annuler</button>
-            </div>
-          </div>
-        }
-      </ns-card>
-
-      <!-- APPARENCE -->
-      <ns-card title="Apparence">
-        <div class="theme-toggle-wrapper">
-          <mat-button-toggle-group
-            [value]="themeService.currentTheme()"
-            (change)="onThemeChange($event)"
-            class="theme-toggle-group">
-            <mat-button-toggle value="system">
-              <mat-icon fontSet="material-symbols-rounded">settings_suggest</mat-icon>
-              Système
-            </mat-button-toggle>
-            <mat-button-toggle value="light">
-              <mat-icon fontSet="material-symbols-rounded">light_mode</mat-icon>
-              Clair
-            </mat-button-toggle>
-            <mat-button-toggle value="dark">
-              <mat-icon fontSet="material-symbols-rounded">dark_mode</mat-icon>
-              Sombre
-            </mat-button-toggle>
-          </mat-button-toggle-group>
         </div>
-      </ns-card>
+      }
+    </ns-card>
 
-      <!-- DATA MANAGEMENT -->
-      <ns-card title="Espace de stockage" customClass="storage-card">
-        <p class="storage-info">Vos données sont stockées <strong>exclusivement</strong> en local sur ce navigateur.</p>
-        <div class="data-actions">
-          <button mat-button color="primary" type="button" (click)="exportData()">
-            <mat-icon>download</mat-icon> Exporter mes données
-          </button>
-          <button mat-button color="primary" type="button" (click)="fileInput.click()">
-            <mat-icon>upload</mat-icon> Importer un fichier
-          </button>
-          <input type="file" #fileInput (change)="importData($event)" hidden accept=".json">
-        </div>
-        <mat-divider></mat-divider>
-        <div class="reset-zone">
-          <button mat-button color="warn" type="button" (click)="resetApp()">
-            <mat-icon>delete_forever</mat-icon> Réinitialiser l'application
-          </button>
-        </div>
-      </ns-card>
-    
+    <!-- APPARENCE -->
+    <ns-card [title]="'profile.appearance_card' | t">
+      <div class="theme-toggle-wrapper">
+        <mat-button-toggle-group
+          [value]="themeService.currentTheme()"
+          (change)="onThemeChange($event)"
+          class="theme-toggle-group">
+          <mat-button-toggle value="system">
+            <mat-icon fontSet="material-symbols-rounded">settings_suggest</mat-icon>
+            {{ 'profile.theme_system' | t }}
+          </mat-button-toggle>
+          <mat-button-toggle value="light">
+            <mat-icon fontSet="material-symbols-rounded">light_mode</mat-icon>
+            {{ 'profile.theme_light' | t }}
+          </mat-button-toggle>
+          <mat-button-toggle value="dark">
+            <mat-icon fontSet="material-symbols-rounded">dark_mode</mat-icon>
+            {{ 'profile.theme_dark' | t }}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <div class="lang-toggle-wrapper">
+        <span class="lang-label">{{ 'profile.language_label' | t }}</span>
+        <mat-button-toggle-group
+          [value]="translateService.currentLang()"
+          (change)="onLangChange($event.value)"
+          class="lang-toggle-group">
+          <mat-button-toggle value="fr">🇫🇷 Français</mat-button-toggle>
+          <mat-button-toggle value="en">🇬🇧 English</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </ns-card>
+
+    <!-- DATA MANAGEMENT -->
+    <ns-card [title]="'profile.storage_card' | t" customClass="storage-card">
+      <p class="storage-info">{{ 'profile.storage_info' | t }}</p>
+      <div class="data-actions">
+        <button mat-button color="primary" type="button" (click)="exportData()">
+          <mat-icon>download</mat-icon> {{ 'profile.export_btn' | t }}
+        </button>
+        <button mat-button color="primary" type="button" (click)="fileInput.click()">
+          <mat-icon>upload</mat-icon> {{ 'profile.import_btn' | t }}
+        </button>
+        <input type="file" #fileInput (change)="importData($event)" hidden accept=".json">
+      </div>
+      <mat-divider></mat-divider>
+      <div class="reset-zone">
+        <button mat-button color="warn" type="button" (click)="resetApp()">
+          <mat-icon>delete_forever</mat-icon> {{ 'profile.reset_btn' | t }}
+        </button>
+      </div>
+    </ns-card>
+
     <app-legal-footer></app-legal-footer>
   </div>
 </div>

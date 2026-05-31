@@ -8,6 +8,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { isDevMode } from '@angular/core';
 import { ThemeService } from './core/services/theme.service';
 import { UpdateService } from './core/services/update.service';
+import { TranslateService } from './core/services/translate.service';
 
 import { routes } from './app.routes';
 
@@ -34,6 +35,12 @@ export const appConfig: ApplicationConfig = {
       provide: APP_INITIALIZER,
       useFactory: (update: UpdateService) => () => update.init(),
       deps: [UpdateService],
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (translate: TranslateService) => () => translate.init(),
+      deps: [TranslateService],
       multi: true
     }
   ]

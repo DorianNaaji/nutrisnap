@@ -1,50 +1,154 @@
-# NutriSnap - PWA Nutritionnelle Privacy-First
+# NutriSnap — Take back control of your plate.
 
-NutriSnap est une application mobile-first permettant de suivre sa nutrition quotidienne grâce à l'intelligence artificielle Gemini 2.5 Flash.
+> *We only get one body. And 80% of the work of losing weight, building muscle, or simply feeling better happens at the table — not at the gym.*
 
-## 🚀 Vision
-- **Privacy-First** : Aucune donnée ne quitte le téléphone (sauf vers l'API Gemini).
-- **Zéro Backend** : Pas de base de données centrale, pas de compte utilisateur.
-- **Bring Your Own Key** : L'utilisateur utilise sa propre clé API Google Gemini.
-- **Expérience Premium** : Interface Material Design 3 ultra-fluide.
+Most nutrition apps ask you to create an account, hand over your data, and trust that a remote server keeps your most intimate health information safe. NutriSnap takes the opposite approach: **your data never leaves your device.**
 
-## 🛠 Stack Technique
-- **Framework** : Angular 17+ (Signals, Standalone Components)
-- **UI** : Angular Material 3
-- **Stockage** : Dexie.js (IndexedDB)
-- **IA** : Google Gemini 2.5 Flash API
+---
 
-## 🎨 Architecture CSS
-Les styles suivent une hiérarchie de spécificité stricte — **aucun `!important` ni `::ng-deep`** dans le codebase :
-- **Design Tokens** dans `src/styles.css` (`:root`) — couleurs, espacements, rayons, élévations.
-- **Overrides Material** via préfixe `html .class` (spécificité 0,1,1 > 0,1,0 de Material).
-- **Styles composants** via l'encapsulation émulée Angular (`[_ngcontent-xxx]` implicite).
-- **Overrides Stepper** centralisés dans `src/styles.css` (section "STEPPER OVERRIDES").
+## What it does
 
-## 📖 Instructions de Développement
-Toutes les spécifications détaillées par module se trouvent dans le dossier `.ai/`.
-Si vous êtes un agent IA, veuillez lire ces fichiers dans l'ordre (1 à 5) pour comprendre le plan de développement.
+Snap a photo of your meal. In seconds, Gemini AI identifies the food, estimates calories, and breaks down macronutrients — proteins, carbs, fats. Your daily targets are calculated from your actual metabolic profile (Mifflin-St Jeor or Katch-McArdle, depending on your data). No generic 2000 kcal default.
 
-1. `.ai/IMPLEMENTATION-MODULE-1.md` : Onboarding & Profil
-2. `.ai/IMPLEMENTATION-MODULE-2.md` : Data Engine & Persistence
-3. `.ai/IMPLEMENTATION-MODULE-3.md` : Scanner & Gemini Vision
-4. `.ai/IMPLEMENTATION-MODULE-4.md` : UI/UX & Dashboard
-5. `.ai/IMPLEMENTATION-MODULE-5.md` : PWA & Offline
+<p align="center">
+  <img src="docs/onboarding.png" alt="Onboarding — personalized metabolic setup" width="320" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="docs/dashboard.png" alt="Dashboard — daily overview" width="320" />
+</p>
 
-## 🚢 Déploiement & DevX (OVH)
+---
 
-L'application est conçue pour être déployée sur un hébergement mutualisé (ex: OVH) via FTP.
+## Features
 
-### Mode Développement Synchronisé
-Pour voir vos changements en temps réel sur votre serveur de production (nécessaire pour tester la caméra en HTTPS sur mobile) :
+| Feature | Detail |
+|---|---|
+| **AI meal scanning** | Photo → Gemini 2.5 Flash → calories + macros in seconds |
+| **Metabolic engine** | BMR, TDEE, macro targets calculated from your actual profile |
+| **Daily AI recap** | Coach summary of your day, cached locally — no repeat calls |
+| **Multi-day analysis** | 7-day or 30-day trend analysis with AI coaching |
+| **Meal history** | Monthly calendar with color-coded daily intake |
+| **Meal detail** | Photo, macros, AI summary and coach tip per meal |
+| **Privacy-first** | Zero server, zero telemetry, zero account — IndexedDB only |
+| **PWA** | Installable on iOS & Android, works offline |
+| **Dark / Light / System** | Theme persisted per device |
+| **FR / EN** | Language switch in profile settings |
+| **BYOK** | Bring your own Gemini API key — free tier available |
 
-1. **Configuration** : Copiez le fichier `.env.example` vers `.env` et remplissez vos accès :
-   ```bash
-   cp .env.example .env
-   ```
+---
 
-2. **Lancer la synchronisation** :
-   ```bash
-   npm run start:sync
-   ```
-   Ce script lance `ng build --watch` et synchronise chaque modification via FTP automatiquement avec un logging détaillé.
+## Privacy model
+
+NutriSnap has no backend. There is no server to breach, no database to leak, no account to compromise.
+
+- **All data** (profile, meals, photos, settings) lives in IndexedDB on your browser.
+- **The only external call** is to the Google Gemini API — initiated by you, using your own key, at the moment of each meal scan.
+- **No cookies**, no analytics, no third-party SDKs beyond the Gemini client library.
+
+The full privacy policy is available in-app at `/privacy`.
+
+---
+
+## Getting started
+
+### Prerequisites
+- Node.js 18+
+- A [Google Gemini API key](https://aistudio.google.com/welcome) (free tier available)
+
+### Local development
+
+```bash
+git clone https://github.com/your-username/nutrisnap.git
+cd nutrisnap
+npm install
+npm run start        # ng serve — dev mode, no service worker
+```
+
+### Deploy to a static host (OVH, Netlify, etc.)
+
+```bash
+npm run build        # production build → dist/nutrisnap/browser/
+```
+
+The build output is a static SPA. Drop it on any HTTPS host. The included `.htaccess` handles SPA routing and PWA cache-busting headers for Apache.
+
+**Auto-deploy to OVH via FTP** (requires a `.env` file with FTP credentials):
+```bash
+cp .env.example .env   # fill in your FTP credentials
+npm run start:sync-prod
+```
+
+This watches for file changes, rebuilds in production mode, and syncs to FTP automatically.
+
+---
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Angular 21 (standalone components, signals) |
+| UI | Angular Material 3 |
+| Storage | Dexie.js (IndexedDB) |
+| AI | Google Gemini 2.5 Flash (`@google/generative-ai`) |
+| PWA | `@angular/service-worker` (auto-update snackbar) |
+| Deploy | Static SPA — any HTTPS host |
+
+---
+
+## Project structure
+
+```
+src/app/
+  core/
+    services/     translate, theme, gemini, log, storage, update
+    models/       profile.model, meal.model
+  features/
+    onboarding/   5-step setup: profile → goal → API key → AI coach
+    dashboard/    daily stats ring, macro cards, meal timeline
+    scanner/      camera + gallery + Gemini analysis
+    history/      monthly calendar + day panel + AI trend analysis
+    meal-detail/  photo, macros, coach tip, delete
+    profile/      edit profile, theme, language, data export/import
+    privacy/      full GDPR policy page
+  shared/
+    components/   NsCardComponent, RecapSheetComponent, LegalFooterComponent
+    pipes/        TranslatePipe
+public/
+  assets/i18n/    fr.json, en.json
+```
+
+---
+
+## AI architecture
+
+**BYOK (Bring Your Own Key):** the Gemini API key is stored in IndexedDB on your device. It is passed directly from your browser to Google's API — NutriSnap never sees it, and it never touches any intermediate server.
+
+**Prompts used:**
+- `analyzeMeal` — image(s) + daily context → JSON (food name, calories, macros, coach tip, confidence score)
+- `getDailyRecap` — today's logs + profile → plain-text coach summary (cached in DB to avoid repeat calls)
+- `getWeeklyAnalysis` — aggregated n-day logs → plain-text trend analysis
+- `getCoachFeedback` — metabolic profile → onboarding coach message
+
+---
+
+## Modules
+
+| Module | Status |
+|---|---|
+| M1 — Onboarding (5 steps) | ✅ |
+| M2 — Data engine (Dexie v2) | ✅ |
+| M3 — Gemini meal scanner | ✅ |
+| M4 — Dashboard & dark mode | ✅ |
+| M5 — PWA / Offline | ✅ |
+| M6 — Meal detail + History calendar | ✅ |
+| M7 — AI Coach (daily recap + trend analysis) | ✅ |
+| M8 — i18n FR/EN | ✅ |
+
+---
+
+## License
+
+MIT — do whatever you want with it.
+
+---
+
+*Built with [Claude Code](https://claude.ai/claude-code) by Dorian Naaji.*

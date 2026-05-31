@@ -10,13 +10,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GeminiService } from '../../core/services/gemini.service';
 import { LogService } from '../../core/services/log.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-scanner',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule, 
-    MatSelectModule, MatInputModule, MatCardModule, MatProgressSpinnerModule
+    CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule,
+    MatSelectModule, MatInputModule, MatCardModule, MatProgressSpinnerModule,
+    TranslatePipe
   ],
   templateUrl: './scanner.component.html',
   styleUrls: ['./scanner.component.css']
