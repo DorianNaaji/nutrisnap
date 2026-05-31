@@ -105,7 +105,6 @@ export class ProfileComponent implements OnInit {
     this.advancedForm = this.fb.group({
       bodyFat: [null],
       subcutaneousFat: [null],
-      visceralFat: [null],
       muscleMass: [null],
       measuredBmr: [null]
     });

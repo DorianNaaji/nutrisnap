@@ -10,7 +10,6 @@ export interface UserProfile {
   // Optional advanced metrics
   bodyFat?: number;
   subcutaneousFat?: number;
-  visceralFat?: number;
   muscleMass?: number;
   measuredBmr?: number;
 }

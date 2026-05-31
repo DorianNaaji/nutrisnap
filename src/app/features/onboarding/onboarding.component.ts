@@ -76,7 +76,6 @@ export class OnboardingComponent {
       activityLevel: ['moderate', Validators.required],
       bodyFat: [null],
       subcutaneousFat: [null],
-      visceralFat: [null],
       muscleMass: [null],
       measuredBmr: [null]
     });
