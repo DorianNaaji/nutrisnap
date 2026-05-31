@@ -1,4 +1,4 @@
-import { Component, inject, signal, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject, signal, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
   templateUrl: './scanner.component.html',
   styleUrls: ['./scanner.component.css']
 })
-export class ScannerComponent {
+export class ScannerComponent implements OnDestroy {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   
   private geminiService = inject(GeminiService);
@@ -31,11 +31,13 @@ export class ScannerComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  private cameraStream: MediaStream | null = null;
 
   scannerForm: FormGroup;
   capturedImages = signal<string[]>([]);
   isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
+  errorDetail = signal<{ message: string; raw: string } | null>(null);
+  errorExpanded = signal(false);
 
   // Date cible : aujourd'hui par défaut, ou date passée si ?date= fourni
   private targetDate: string = this.localDateStr(new Date());
@@ -51,6 +53,7 @@ export class ScannerComponent {
   }
 
   goBack() {
+    this.stopCamera();
     const dateParam = this.route.snapshot.queryParamMap.get('date');
     if (dateParam) {
       this.router.navigate(['/history'], { queryParams: { date: dateParam } });
@@ -59,9 +62,19 @@ export class ScannerComponent {
     }
   }
 
+  ngOnDestroy() {
+    this.stopCamera();
+  }
+
+  private stopCamera() {
+    this.cameraStream?.getTracks().forEach(t => t.stop());
+    this.cameraStream = null;
+  }
+
   async startCamera() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      this.cameraStream = stream;
       this.video.nativeElement.srcObject = stream;
     } catch (err) {
       console.error('Camera access failed', err);
@@ -107,14 +120,22 @@ export class ScannerComponent {
     }
   }
 
+  private setError(message: string, raw: unknown) {
+    this.errorDetail.set({
+      message,
+      raw: JSON.stringify(raw, null, 2)
+    });
+    this.errorExpanded.set(false);
+  }
+
   async submit() {
     if (this.isLoading()) return;
     this.isLoading.set(true);
-    this.errorMessage.set(null);
+    this.errorDetail.set(null);
 
     try {
       const response = await this.geminiService.analyzeMeal(
-        this.capturedImages(), 
+        this.capturedImages(),
         this.scannerForm.value.description,
         this.scannerForm.value.mealType
       );
@@ -137,8 +158,9 @@ export class ScannerComponent {
           confidence: response.confidence_score ?? 'medium',
           imageBlob: firstImage ? this.dataUrlToBlob(firstImage) : undefined
         };
-        
+
         await this.logService.addLog(mealLog);
+        this.stopCamera();
         const dateParam = this.route.snapshot.queryParamMap.get('date');
         if (dateParam) {
           this.router.navigate(['/history'], { queryParams: { date: dateParam } });
@@ -146,10 +168,16 @@ export class ScannerComponent {
           this.router.navigate(['/dashboard']);
         }
       } else {
-        this.errorMessage.set(response.error_message || 'Une erreur est survenue.');
+        this.setError(response.error_message || 'Gemini returned status: error', response);
       }
-    } catch (e) {
-      this.errorMessage.set("Erreur de communication avec l'IA.");
+    } catch (e: any) {
+      const raw = {
+        type: e?.constructor?.name ?? 'Error',
+        message: e?.message ?? String(e),
+        status: e?.status ?? e?.statusCode ?? null,
+        body: (() => { try { return JSON.parse(e?.body ?? e?.errorDetails ?? '{}'); } catch { return e?.body ?? null; } })()
+      };
+      this.setError(raw.message, raw);
     } finally {
       this.isLoading.set(false);
     }

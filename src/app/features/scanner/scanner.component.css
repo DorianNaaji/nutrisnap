@@ -77,10 +77,50 @@ video {
 
 .error-banner {
   color: var(--error);
-  padding: var(--sp-2);
   border: 1px solid var(--error);
   border-radius: var(--radius-sm);
   font-size: 14px;
+  overflow: hidden;
+}
+
+.error-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+}
+
+.error-icon {
+  flex-shrink: 0;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.error-message {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.error-expand-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  color: var(--error);
+}
+
+.error-raw {
+  margin: 0;
+  padding: var(--sp-3);
+  background: var(--surface-variant);
+  border-top: 1px solid var(--error);
+  font-size: 0.72rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
+  color: var(--md-sys-color-on-surface);
 }
 
 .submit-btn {

@@ -44,8 +44,15 @@
       <textarea matInput formControlName="description" rows="3"></textarea>
     </mat-form-field>
 
-    <div *ngIf="errorMessage()" class="error-banner">
-      {{ errorMessage() }}
+    <div *ngIf="errorDetail()" class="error-banner">
+      <div class="error-summary">
+        <mat-icon class="error-icon">error_outline</mat-icon>
+        <span class="error-message">{{ errorDetail()!.message }}</span>
+        <button mat-icon-button class="error-expand-btn" (click)="errorExpanded.set(!errorExpanded())" [attr.aria-label]="errorExpanded() ? 'Collapse' : 'Expand'">
+          <mat-icon>{{ errorExpanded() ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+      </div>
+      <pre *ngIf="errorExpanded()" class="error-raw">{{ errorDetail()!.raw }}</pre>
     </div>
 
     <button mat-flat-button color="primary" class="submit-btn" (click)="submit()" [disabled]="isLoading()">
