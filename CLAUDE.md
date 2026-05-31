@@ -15,27 +15,30 @@ src/
   app/
     core/
       services/
-        storage.service.ts    ← NutriDB (Dexie) : profile, logs, settings, (v2: recaps)
+        storage.service.ts    ← NutriDB (Dexie) v2 : profile, logs, settings, recaps
         profile.service.ts    ← Signals, calcul métabolique (Mifflin-St Jeor / Katch-McArdle)
         theme.service.ts      ← Dark/Light/System, APP_INITIALIZER, data-theme sur <html>
-        gemini.service.ts     ← analyzeMeal, getCoachFeedback, (v2: getDailyRecap, getWeeklyAnalysis)
+        update.service.ts     ← SwUpdate polling 5min, snackbar "Mettre à jour"
+        gemini.service.ts     ← analyzeMeal, getCoachFeedback, getDailyRecap, getWeeklyAnalysis
         log.service.ts        ← dailyLogs signal, dailyStats computed, addLog/deleteLog
         export.service.ts     ← Export/Import JSON
       models/
         profile.model.ts
-        meal.model.ts         ← MealLog (macros: proteins/carbs/fats), DailyStats
+        meal.model.ts         ← MealLog (macros: proteins/carbs/fats), DailyStats, DailyRecap
     features/
       onboarding/             ← 5 étapes : Welcome → RGPD → Métabolisme → Objectif → API
-      dashboard/              ← Ring calories, macro cards, timeline, FAB scanner
+      dashboard/              ← Ring calories, macro cards, timeline, FAB scanner + FAB coach
       scanner/                ← Capture photo + galerie + analyse Gemini
       profile/                ← Édition profil + card Apparence (thème)
       meal-detail/            ← (M6) Détail d'un repas : photo, macros, ingrédients, suppression
-      history/                ← (M6) Calendrier mensuel + vue journée + navigation
+      history/                ← (M6) Calendrier mensuel + vue journée + Analyse IA multi-jours
+      privacy/                ← Page RGPD complète (route publique /privacy)
     shared/
       components/
         design-system/
           card.component.ts   ← NsCardComponent (mat-card wrappé)
         legal-footer/
+        recap-sheet/          ← RecapSheetComponent — bottom sheet partagé pour les textes IA
   styles.css                  ← Design tokens (:root light, [data-theme="dark"])
   material-theme.scss         ← Material 3 theme (light + dark)
 ```
@@ -72,17 +75,16 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 
 ## NutriDB (Dexie.js)
 
-**Base** : `NutriSnapDB` v1 (v2 prévu en M7 pour la table `recaps`)
+**Base** : `NutriSnapDB` v2
 
 | Table | Clé | Modèle |
 |---|---|---|
 | `profile` | `id` (singleton 1) | `UserProfile` — données métaboliques + apiKey |
 | `logs` | `++id` indexé `date, timestamp` | `MealLog` — repas + imageBlob |
 | `settings` | `id` (singleton `'app'`) | `AppSettings { theme, language }` |
-| `recaps` *(v2)* | `++id` indexé `date` | `DailyRecap` — résumé IA journalier |
+| `recaps` | `++id` indexé `date` | `DailyRecap` — résumé IA journalier (M7) |
 
-**API StorageService** : `getProfile/saveProfile`, `addMealLog/getLogsByDate/deleteLog`, `getSettings/saveSettings`, `clearAllData`.
-**À ajouter en M6** : `getLogsByMonth(year, month)` → Map des calories par jour pour le calendrier.
+**API StorageService** : `getProfile/saveProfile`, `addMealLog/getLogsByDate/getLogsByMonth/getLogById/deleteLog`, `getSettings/saveSettings`, `getRecapByDate/saveRecap`, `clearAllData`.
 
 **⚠️ Mapping critique** : `MealLog.macros` utilise les clés `proteins / carbs / fats`. Le prompt Gemini retourne `prot / carb / fat` → remapping obligatoire dans `scanner.component.ts` avant de persister.
 
@@ -94,7 +96,7 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 
 **ThemeService** — signals : `currentTheme()` (`light|dark|system`), `resolvedTheme()` (`light|dark`). Méthode : `setTheme(theme)` → persiste + applique. Init via `APP_INITIALIZER`.
 
-**GeminiService** — `getCoachFeedback(key, profileData)`, `analyzeMeal(key, imageBase64, description?)`. Gestion d'erreurs : 401/403 → clé invalide, 503 → surcharge, autre → fallback.
+**GeminiService** — `analyzeMeal`, `getCoachFeedback`, `getDailyRecap`, `getWeeklyAnalysis`. Instance `GoogleGenerativeAI` invalidée automatiquement si la clé API change (cache par `cachedKey`). Modèle : `gemini-2.5-flash`.
 
 ---
 
@@ -111,7 +113,7 @@ Tout est tokenisé. Jamais de valeur hardcodée dans les composants.
 | Delivery — DevX / Deploy OVH | ✅ Complet (FTP sync, SPA routing, anti-indexation) |
 | M6 — Meal Detail + History & Calendar | ✅ Complet |
 | SW Cache Busting | ✅ Complet (@angular/service-worker, SwUpdate snackbar, .htaccess no-cache) |
-| M7 — IA Coach (analyse progression) | ⏳ Planifié |
+| M7 — IA Coach (recap journalier + analyse multi-jours) | ✅ Complet |
 | M8 — i18n | ⏳ Planifié |
 | M9 — Daily Coach Chat IA | ⏳ Planifié |
 
@@ -127,3 +129,4 @@ Tout est dans `.ai/` :
 - `design-overhaul/IMPLEMENTATION-DESIGN-OVERHAUL-MODULE.md` — design system
 
 **Lire en priorité avant de toucher au CSS** : `SESSION_REPORT-31-05-2026-FIXES.md` et `SESSION_REPORT-31-05-2026-DARK-THEME.md`.
+**Session la plus récente** : `SESSION_REPORT-01-06-2026.md` (SW cache busting, M7 IA Coach, fixes).
