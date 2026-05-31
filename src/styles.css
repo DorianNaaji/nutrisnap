@@ -149,6 +149,11 @@ html, body {
   box-shadow: var(--shadow-lg) !important;
 }
 
+/* Update expansion panel hover state */
+.mat-expansion-panel-header:hover {
+  background-color: rgba(5, 150, 105, 0.05) !important;
+}
+
 /* Fix for highlighted option appearing grey */
 .mat-mdc-option:hover:not(.mdc-list-item--disabled),
 .mat-mdc-option.mat-mdc-option-active {
