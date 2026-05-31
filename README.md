@@ -1,6 +1,6 @@
 # NutriSnap - PWA Nutritionnelle Privacy-First
 
-NutriSnap est une application mobile-first permettant de suivre sa nutrition quotidienne grâce à l'intelligence artificielle Gemini 1.5 Flash. 
+NutriSnap est une application mobile-first permettant de suivre sa nutrition quotidienne grâce à l'intelligence artificielle Gemini 2.5 Flash.
 
 ## 🚀 Vision
 - **Privacy-First** : Aucune donnée ne quitte le téléphone (sauf vers l'API Gemini).
@@ -13,6 +13,13 @@ NutriSnap est une application mobile-first permettant de suivre sa nutrition quo
 - **UI** : Angular Material 3
 - **Stockage** : Dexie.js (IndexedDB)
 - **IA** : Google Gemini 2.5 Flash API
+
+## 🎨 Architecture CSS
+Les styles suivent une hiérarchie de spécificité stricte — **aucun `!important` ni `::ng-deep`** dans le codebase :
+- **Design Tokens** dans `src/styles.css` (`:root`) — couleurs, espacements, rayons, élévations.
+- **Overrides Material** via préfixe `html .class` (spécificité 0,1,1 > 0,1,0 de Material).
+- **Styles composants** via l'encapsulation émulée Angular (`[_ngcontent-xxx]` implicite).
+- **Overrides Stepper** centralisés dans `src/styles.css` (section "STEPPER OVERRIDES").
 
 ## 📖 Instructions de Développement
 Toutes les spécifications détaillées par module se trouvent dans le dossier `.ai/`.
