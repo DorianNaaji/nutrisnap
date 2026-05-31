@@ -190,8 +190,8 @@
   border-radius: var(--radius-full);
 }
 
-.mini-fill.protein { background-color: var(--md-sys-color-secondary); }
-.mini-fill.carbs { background-color: var(--md-sys-color-tertiary); }
+.mini-fill.protein { background-color: #3b82f6; }
+.mini-fill.carbs { background-color: #a855f7; }
 .mini-fill.fats { background-color: var(--warning); }
 
 /* LOGS SECTION */
