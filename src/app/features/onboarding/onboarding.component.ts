@@ -116,9 +116,7 @@ export class OnboardingComponent {
       ...this.metabolismForm.value,
       ...this.goalForm.value
     };
-    console.log('DEBUG: Saving partial profile:', partialProfile);
     await this.storage.saveProfile(partialProfile);
-    console.log('DEBUG: Save complete');
   }
 
 
