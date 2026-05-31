@@ -175,7 +175,7 @@
                 <button mat-button matStepperPrevious [disabled]="isValidatingKey">Retour</button>
                 <button mat-flat-button color="primary" (click)="validateAndSave(stepper)" [disabled]="isValidatingKey">
                   <mat-spinner diameter="20" *ngIf="isValidatingKey"></mat-spinner>
-                  <span *ngIf="!isValidatingKey">Valider & Continuer</span>
+                  <span>{{ isValidatingKey ? 'Validation & Analyse...' : 'Valider & Continuer' }}</span>
                 </button>
               </div>
             </div>
@@ -187,14 +187,14 @@
           <ng-template matStepLabel>Coach</ng-template>
           <div class="step-content coach-step">
             <h3>Analyse du Coach</h3>
-            
-            <div *ngIf="isLoadingFeedback()" class="loading-coach">
-              <mat-spinner diameter="40"></mat-spinner>
-              <p>Analyse de votre profil métabolique...</p>
+
+            <div *ngIf="coachFeedback()" class="feedback-container">
+              <div class="feedback-content" [innerHTML]="formatFeedback(coachFeedback()!)"></div>
             </div>
 
-            <div *ngIf="!isLoadingFeedback() && coachFeedback()" class="feedback-container">
-              <div class="feedback-content" [innerHTML]="formatFeedback(coachFeedback()!)"></div>
+            <div *ngIf="!coachFeedback()" class="error-box">
+              <mat-icon>error_outline</mat-icon>
+              L'analyse n'a pas pu être générée, mais vos données sont bien enregistrées.
             </div>
 
             <div class="stepper-actions">

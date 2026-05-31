@@ -55,9 +55,8 @@ export class OnboardingComponent {
   
   isValidatingKey = false;
   apiKeyError = '';
-  
+
   coachFeedback = signal<string | null>(null);
-  isLoadingFeedback = signal(false);
   showLegal = false;
 
   stepperOrientation: Observable<'horizontal' | 'vertical'>;
@@ -166,37 +165,30 @@ export class OnboardingComponent {
 
     this.isValidatingKey = true;
     this.apiKeyError = '';
-    
+
     const key = this.apiForm.value.apiKey;
-    const result = await this.geminiService.validateApiKey(key);
+    const profile = { ...this.metabolismForm.value, ...this.goalForm.value };
+    const stats = this.currentStats();
 
-    if (result.success) {
-      const profile: UserProfile = {
-        ...this.metabolismForm.value,
-        ...this.goalForm.value,
-        apiKey: key
-      };
-      await this.profileService.updateProfile(profile);
-      this.isValidatingKey = false;
-      stepper.next();
-      this.generateCoachFeedback();
-    } else {
-      this.apiKeyError = result.error || 'Erreur inconnue.';
-      this.isValidatingKey = false;
-    }
-  }
-
-  async generateCoachFeedback() {
-    this.isLoadingFeedback.set(true);
     try {
-      const profile = { ...this.metabolismForm.value, ...this.goalForm.value };
-      const stats = this.profileService.metabolicStats();
-      const feedback = await this.geminiService.getCoachFeedback(profile, stats);
+      const feedback = await this.geminiService.getCoachFeedback(key, profile, stats);
+      await this.profileService.updateProfile({ ...profile, apiKey: key });
       this.coachFeedback.set(feedback);
-    } catch (e) {
-      this.coachFeedback.set("Désolé, je n'ai pas pu générer votre analyse pour le moment, mais vos données sont bien enregistrées !");
+      stepper.next();
+    } catch (e: any) {
+      const msg: string = e?.message ?? '';
+      if (msg.includes('401') || msg.includes('403') || msg.toLowerCase().includes('api_key') || msg.toLowerCase().includes('invalid')) {
+        this.apiKeyError = 'Clé API invalide. Vérifiez-la sur AI Studio.';
+      } else if (msg.includes('503') || msg.toLowerCase().includes('overloaded')) {
+        this.apiKeyError = 'Le service est surchargé. Veuillez réessayer dans quelques instants.';
+      } else {
+        // Erreur réseau ou autre : la clé est peut-être valide, on enregistre et on continue.
+        await this.profileService.updateProfile({ ...profile, apiKey: key }).catch(() => {});
+        this.coachFeedback.set(null);
+        stepper.next();
+      }
     } finally {
-      this.isLoadingFeedback.set(false);
+      this.isValidatingKey = false;
     }
   }
 

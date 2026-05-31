@@ -71,12 +71,9 @@ export class ProfileService {
   }
 
   async updateProfile(p: Partial<UserProfile>) {
-    const current = this.profile();
-    if (current) {
-      const updated = { ...current, ...p };
-      this.profile.set(updated);
-      await this.storage.saveProfile(updated);
-    }
+    const updated = { ...(this.profile() ?? {}), ...p } as UserProfile;
+    this.profile.set(updated);
+    await this.storage.saveProfile(updated);
   }
 
   isConfigured() {

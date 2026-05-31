@@ -11,22 +11,6 @@ export class GeminiService {
   private logService = inject(LogService);
   private genAI: GoogleGenerativeAI | null = null;
 
-  async validateApiKey(key: string): Promise<{ success: boolean; error?: string }> {
-    try {
-      const tempAI = new GoogleGenerativeAI(key);
-      const model = tempAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-      await model.generateContent('Hello');
-      return { success: true };
-    } catch (e: any) {
-      let message = 'Une erreur est survenue.';
-      if (e.message?.includes('503')) {
-        message = 'Le modèle est surchargé. Veuillez réessayer dans quelques instants.';
-      } else if (e.message?.includes('403') || e.message?.includes('401')) {
-        message = 'Clé API invalide.';
-      }
-      return { success: false, error: message };
-    }
-  }
 
 
   private getModel() {
@@ -86,12 +70,7 @@ export class GeminiService {
     return JSON.parse(text);
   }
 
-  async getCoachFeedback(profile: any, stats: any): Promise<string> {
-    // For feedback, we don't want JSON, just plain text.
-    // We create a dedicated model instance WITHOUT JSON mimeType config to avoid confusion.
-    const key = this.profileService.profile()?.apiKey;
-    if (!key) throw new Error('API Key not configured');
-    
+  async getCoachFeedback(key: string, profile: any, stats: any): Promise<string> {
     const textModel = new GoogleGenerativeAI(key).getGenerativeModel({ model: 'gemini-2.5-flash' });
     
     const prompt = `
