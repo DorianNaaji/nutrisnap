@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -33,6 +33,7 @@ export class HistoryComponent implements OnInit {
   private storage = inject(StorageService);
   private profileService = inject(ProfileService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   isLoading = signal(true);
   currentYear = signal(new Date().getFullYear());
@@ -125,6 +126,12 @@ export class HistoryComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadMonth();
+    // Auto-ouvre le panel si on revient depuis /meal/:id avec ?date=
+    const dateParam = this.route.snapshot.queryParamMap.get('date');
+    if (dateParam) {
+      const day = this.calendarDays().find(d => d.dateStr === dateParam);
+      if (day) await this.selectDay(day);
+    }
   }
 
   async loadMonth() {
@@ -178,7 +185,15 @@ export class HistoryComponent implements OnInit {
   }
 
   goToMeal(id: number) {
-    this.router.navigate(['/meal', id]);
+    this.router.navigate(['/meal', id], {
+      queryParams: { date: this.selectedDateStr() }
+    });
+  }
+
+  goToScanner() {
+    this.router.navigate(['/scanner'], {
+      queryParams: { date: this.selectedDateStr() }
+    });
   }
 
   get selectedDateFormatted(): string {

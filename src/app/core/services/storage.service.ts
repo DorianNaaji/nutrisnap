@@ -43,19 +43,31 @@ export class StorageService extends Dexie {
     return await this.logs.add(log);
   }
 
+  // Normalise les macros des anciens logs (format Gemini prot/carb/fat → proteins/carbs/fats)
+  private normalizeMealLog(log: any): MealLog {
+    const m = log.macros ?? {};
+    if (m.proteins === undefined && m.prot !== undefined) {
+      log.macros = { proteins: m.prot ?? 0, carbs: m.carb ?? 0, fats: m.fat ?? 0 };
+    }
+    return log as MealLog;
+  }
+
   async getLogById(id: number): Promise<MealLog | undefined> {
-    return await this.logs.get(id);
+    const log = await this.logs.get(id);
+    return log ? this.normalizeMealLog(log) : undefined;
   }
 
   async getLogsByDate(date: string): Promise<MealLog[]> {
-    return await this.logs.where('date').equals(date).sortBy('timestamp');
+    const logs = await this.logs.where('date').equals(date).sortBy('timestamp');
+    return logs.map(l => this.normalizeMealLog(l));
   }
 
   async getLogsByMonth(year: number, month: number): Promise<MealLog[]> {
     const pad = (n: number) => String(n).padStart(2, '0');
     const from = `${year}-${pad(month)}-01`;
     const to = `${year}-${pad(month)}-31`;
-    return await this.logs.where('date').between(from, to, true, true).toArray();
+    const logs = await this.logs.where('date').between(from, to, true, true).toArray();
+    return logs.map(l => this.normalizeMealLog(l));
   }
 
   async deleteLog(id: number): Promise<void> {

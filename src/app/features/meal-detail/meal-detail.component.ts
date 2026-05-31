@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +26,6 @@ import { DeleteConfirmDialogComponent } from './delete-confirm-dialog.component'
 export class MealDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private location = inject(Location);
   private storage = inject(StorageService);
   private logService = inject(LogService);
   private dialog = inject(MatDialog);
@@ -54,7 +53,12 @@ export class MealDetailComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    const fromDate = this.route.snapshot.queryParamMap.get('date');
+    if (fromDate) {
+      this.router.navigate(['/history'], { queryParams: { date: fromDate } });
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   confidenceLabel(c: string): string {

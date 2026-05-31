@@ -76,12 +76,7 @@
         <div *ngIf="selectedDateLogs().length === 0" class="day-empty">
           <mat-icon>restaurant</mat-icon>
           <p>Aucun repas enregistré ce jour-là.</p>
-          <button
-            *ngIf="isToday(selectedDateStr()!)"
-            mat-flat-button color="primary"
-            routerLink="/scanner"
-            class="add-btn"
-          >
+          <button mat-flat-button color="primary" class="add-btn" (click)="goToScanner()">
             <mat-icon>add</mat-icon>
             Ajouter un repas
           </button>
@@ -105,9 +100,9 @@
           </div>
         </div>
 
-        <!-- Scan today button -->
-        <div class="day-scan-cta" *ngIf="isToday(selectedDateStr()!) && selectedDateLogs().length > 0">
-          <button mat-stroked-button color="primary" routerLink="/scanner">
+        <!-- Ajouter un repas (tous les jours, pas seulement aujourd'hui) -->
+        <div class="day-scan-cta" *ngIf="selectedDateLogs().length > 0">
+          <button mat-stroked-button color="primary" (click)="goToScanner()">
             <mat-icon>add</mat-icon>
             Ajouter un repas
           </button>

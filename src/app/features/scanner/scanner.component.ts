@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GeminiService } from '../../core/services/gemini.service';
 import { LogService } from '../../core/services/log.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-scanner',
@@ -27,6 +27,7 @@ export class ScannerComponent {
   private geminiService = inject(GeminiService);
   private logService = inject(LogService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
 
   scannerForm: FormGroup;
@@ -34,16 +35,26 @@ export class ScannerComponent {
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
 
+  // Date cible : aujourd'hui par défaut, ou date passée si ?date= fourni
+  private targetDate: string = new Date().toISOString().split('T')[0];
+
   constructor() {
     this.scannerForm = this.fb.group({
       mealType: ['déjeuner', Validators.required],
       description: ['']
     });
+    const dateParam = this.route.snapshot.queryParamMap.get('date');
+    if (dateParam) this.targetDate = dateParam;
     this.startCamera();
   }
 
   goBack() {
-    this.router.navigate(['/dashboard']);
+    const dateParam = this.route.snapshot.queryParamMap.get('date');
+    if (dateParam) {
+      this.router.navigate(['/history'], { queryParams: { date: dateParam } });
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   async startCamera() {
@@ -96,7 +107,7 @@ export class ScannerComponent {
       if (response.status === 'success') {
         const mealLog = {
           timestamp: Date.now(),
-          date: new Date().toISOString().split('T')[0],
+          date: this.targetDate,
           foodName: response.food_name,
           calories: response.calories,
           macros: {
@@ -111,7 +122,12 @@ export class ScannerComponent {
         };
         
         await this.logService.addLog(mealLog);
-        this.router.navigate(['/dashboard']);
+        const dateParam = this.route.snapshot.queryParamMap.get('date');
+        if (dateParam) {
+          this.router.navigate(['/history'], { queryParams: { date: dateParam } });
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
       } else {
         this.errorMessage.set(response.error_message || 'Une erreur est survenue.');
       }
