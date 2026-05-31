@@ -18,7 +18,7 @@ export class StorageService extends Dexie {
   settings!: Table<AppSettings, string>;
 
   constructor() {
-    super('NutriSnapDB_v2');
+    super('NutriSnapDB');
     this.version(1).stores({
       profile: 'id',
       logs: '++id, date, timestamp',
