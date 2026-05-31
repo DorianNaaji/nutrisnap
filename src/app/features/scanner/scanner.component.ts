@@ -81,6 +81,15 @@ export class ScannerComponent {
     this.capturedImages.update(imgs => imgs.filter((_, i) => i !== index));
   }
 
+  private dataUrlToBlob(dataUrl: string): Blob {
+    const [header, data] = dataUrl.split(',');
+    const mimeType = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg';
+    const binary = atob(data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new Blob([bytes], { type: mimeType });
+  }
+
   onFileSelected(event: any) {
     const files = event.target.files;
     if (files) {
@@ -105,6 +114,7 @@ export class ScannerComponent {
       );
 
       if (response.status === 'success') {
+        const firstImage = this.capturedImages()[0] ?? null;
         const mealLog = {
           timestamp: Date.now(),
           date: this.targetDate,
@@ -118,7 +128,8 @@ export class ScannerComponent {
           ingredients: [],
           analysisSummary: response.analysis_summary,
           coachTip: response.coach_tip ?? null,
-          confidence: response.confidence_score ?? 'medium'
+          confidence: response.confidence_score ?? 'medium',
+          imageBlob: firstImage ? this.dataUrlToBlob(firstImage) : undefined
         };
         
         await this.logService.addLog(mealLog);
