@@ -12,15 +12,15 @@
   max-width: 600px;
 }
 
-/* Force white background on the stepper to avoid tinting */
+/* Use surface token so dark mode inherits automatically */
 .onboarding-main-card .mat-stepper-horizontal,
 .onboarding-main-card .mat-stepper-vertical {
-  --mat-stepper-container-color: #ffffff;
+  --mat-stepper-container-color: var(--surface);
   background-color: var(--mat-stepper-container-color);
 }
 
 .onboarding-container .onboarding-main-card.mat-mdc-card {
-  --mdc-card-container-color: #ffffff;
+  --mdc-card-container-color: var(--surface);
   background-color: var(--mdc-card-container-color);
   overflow: hidden;
 }

@@ -5,6 +5,7 @@
 :root {
   /* Core Brand Colors (Emerald Premium) */
   --primary: #059669;
+  --primary-dark: #047857;       /* Gradient secondary stop, darker shade */
   --primary-hover: #047857;
   --primary-container: #d1fae5;
   --on-primary-container: #064e3b;
@@ -43,6 +44,16 @@
   --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
   --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
   --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.02);
+
+  /* Interactive state overlays — uses primary color with opacity.
+     Defined as tokens so dark mode can increase opacity for visibility. */
+  --state-hover-primary:    rgba(5, 150, 105, 0.05);
+  --state-active-primary:   rgba(5, 150, 105, 0.08);
+  --state-selected-primary: rgba(5, 150, 105, 0.15);
+
+  /* Dim overlay for progress tracks / subtle backgrounds.
+     Light: dark tint on white. Dark: light tint on dark surface. */
+  --surface-dim: rgba(0, 0, 0, 0.06);
 }
 
 /* Dark Mode Tokens */
@@ -52,12 +63,20 @@
   --surface-variant: #334155;
   --outline: #475569;
   --primary: #10b981;
+  --primary-dark: #059669;
   --primary-container: #064e3b;
   --on-primary-container: #a7f3d0;
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+
+  /* In dark mode, colored overlays need slightly higher opacity to be visible. */
+  --state-hover-primary:    rgba(16, 185, 129, 0.08);
+  --state-active-primary:   rgba(16, 185, 129, 0.12);
+  --state-selected-primary: rgba(16, 185, 129, 0.20);
+
+  --surface-dim: rgba(255, 255, 255, 0.08);
 }
 
 /* ==========================================================================
@@ -71,12 +90,11 @@ html, body {
   background-color: var(--background);
   color: #1e293b;
   transition: background-color 0.3s ease;
-  --mat-app-background-color: #ffffff;
+  --mat-app-background-color: var(--background);
 }
 
 [data-theme="dark"] body {
   color: #f1f5f9;
-  --mat-app-background-color: #0f172a;
 }
 
 /* ==========================================================================
@@ -84,49 +102,50 @@ html, body {
    ========================================================================== */
 
 /*
-  Override Angular Material 3's automatic tonal palette generation which introduces
-  unwanted tints. Using :root (specificity 0,1,0) which beats material-theme.scss's
-  html (specificity 0,0,1), so no !important needed.
+  Override Angular Material 3's automatic tonal palette generation.
+  Using var(--surface) instead of hardcoded #ffffff so these tokens
+  adapt automatically to dark mode without extra overrides.
+  :root specificity (0,1,0) beats material-theme.scss's html (0,0,1).
 */
 :root {
-  --mat-card-elevated-container-color: #ffffff;
-  --mat-card-filled-container-color: #ffffff;
-  --mat-card-outlined-container-color: #ffffff;
-  --mat-expansion-container-background-color: #ffffff;
-  --mat-stepper-container-color: #ffffff;
-  --mat-dialog-container-color: #ffffff;
+  --mat-card-elevated-container-color: var(--surface);
+  --mat-card-filled-container-color: var(--surface);
+  --mat-card-outlined-container-color: var(--surface);
+  --mat-expansion-container-background-color: var(--surface);
+  --mat-stepper-container-color: var(--surface);
+  --mat-dialog-container-color: var(--surface);
 
   /* Field focus states */
   --mdc-outlined-text-field-focus-outline-color: var(--primary);
   --mdc-outlined-text-field-focus-label-text-color: var(--primary);
   --mdc-outlined-text-field-caret-color: var(--primary);
 
-  /* Select / Dropdown Panel Fixes */
+  /* Select / Dropdown Panel */
   --mat-select-panel-background-color: var(--surface);
   --mat-option-selected-state-label-text-color: var(--primary);
   --mat-option-label-text-color: var(--md-sys-color-on-surface);
 
-  /* Dropdown hover/focus states - Premium soft emerald */
-  --mat-option-hover-state-layer-color: rgba(5, 150, 105, 0.08);
-  --mat-option-focus-state-layer-color: rgba(5, 150, 105, 0.12);
-  --mat-option-selected-state-layer-color: rgba(5, 150, 105, 0.15);
+  /* Dropdown hover/focus — reference tokens so dark mode inherits automatically */
+  --mat-option-hover-state-layer-color: var(--state-active-primary);
+  --mat-option-focus-state-layer-color: var(--state-active-primary);
+  --mat-option-selected-state-layer-color: var(--state-selected-primary);
 }
 
 /*
-  Class-level overrides use `html .class` (specificity 0,1,1) to beat Material's
-  `.class` (specificity 0,1,0) without needing !important.
+  Element-level overrides use `html .class` (specificity 0,1,1) to beat
+  Material's `.class` (0,1,0). All colors reference tokens — no hardcoded values.
 */
 html .mat-mdc-card,
 html .mat-expansion-panel,
 html .mat-expansion-panel-content,
 html .mat-stepper-horizontal,
 html .mat-stepper-vertical {
-  background-color: #ffffff;
+  background-color: var(--surface);
 }
 
 html .mat-mdc-card.variant-card,
 html .mat-expansion-panel.variant-card {
-  background-color: #f8fafc;
+  background-color: var(--background);
   box-shadow: none;
   border: none;
 }
@@ -152,33 +171,31 @@ html .mat-mdc-select-panel {
 }
 
 html .mat-expansion-panel-header:hover {
-  background-color: rgba(5, 150, 105, 0.05);
+  background-color: var(--state-hover-primary);
 }
 
 html .mat-mdc-option:hover:not(.mdc-list-item--disabled),
 html .mat-mdc-option.mat-mdc-option-active {
-  background-color: rgba(5, 150, 105, 0.08);
+  background-color: var(--state-active-primary);
 }
 
 html .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
-  background-color: rgba(5, 150, 105, 0.15);
+  background-color: var(--state-selected-primary);
 }
 
 /* ==========================================================================
    STEPPER OVERRIDES
-   Moved from onboarding.component.css (was using ::ng-deep).
-   Horizontal and vertical variants are handled with separate selectors
-   to avoid specificity conflicts — no !important needed.
+   Migrated from onboarding.component.css (was using ::ng-deep).
+   Horizontal and vertical variants use separate selectors — no !important.
+   All colors via tokens for automatic dark mode support.
    ========================================================================== */
 
-/* Common label properties shared by both orientations */
 html .mat-step-label {
   white-space: normal;
   line-height: 1.3;
   display: block;
 }
 
-/* Horizontal stepper layout */
 html .mat-stepper-horizontal .mat-step-header {
   flex-direction: column;
   align-items: center;
@@ -215,7 +232,6 @@ html .mat-stepper-horizontal .mat-stepper-horizontal-line {
   opacity: 0.3;
 }
 
-/* Vertical stepper layout (mobile) */
 html .mat-stepper-vertical .mat-step-header {
   flex-direction: row;
   justify-content: flex-start;
@@ -234,7 +250,6 @@ html .mat-stepper-vertical .mat-stepper-vertical-line {
   right: 8px;
 }
 
-/* Stepper interactive states */
 html .mat-step-header:hover {
   background-color: var(--surface-variant);
 }
@@ -243,7 +258,6 @@ html .mat-step-header:active {
   background-color: var(--outline);
 }
 
-/* Stepper accent colors */
 html .mat-step-header .mat-step-icon-selected,
 html .mat-step-header .mat-step-icon-state-edit {
   background-color: var(--primary);

@@ -41,7 +41,7 @@
 
 /* HERO CARD */
 .hero-card {
-  background: linear-gradient(135deg, var(--primary) 0%, #065f46 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
   position: relative;
   overflow: hidden;
@@ -180,7 +180,7 @@
 
 .mini-progress {
   height: 4px;
-  background: rgba(0,0,0,0.05);
+  background: var(--surface-dim);
   border-radius: var(--radius-full);
   overflow: hidden;
 }

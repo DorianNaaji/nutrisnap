@@ -24,7 +24,7 @@ import { MatCardModule } from '@angular/material/card';
   `,
   styles: [`
     :host { display: block; width: 100%; }
-    mat-card-header { padding: 1.5rem 1.5rem 0.5rem 1.5rem; }
+    mat-card-header { padding: var(--sp-6) var(--sp-6) var(--sp-2) var(--sp-6); }
     mat-card-title { font-size: 1.1rem; font-weight: 600; color: var(--primary); }
     mat-card-subtitle { font-size: 0.85rem; color: var(--md-sys-color-on-surface-variant); }
   `]
@@ -33,6 +33,6 @@ export class NsCardComponent {
   @Input() title?: string;
   @Input() subtitle?: string;
   @Input() variant: 'surface' | 'surface-variant' = 'surface';
-  @Input() padding: string = '1.5rem';
+  @Input() padding: string = 'var(--sp-6)';
   @Input() customClass: string = '';
 }

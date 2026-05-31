@@ -1,5 +1,5 @@
 .scanner-container {
-  padding: 16px;
+  padding: var(--sp-4);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -9,9 +9,9 @@
   width: 100%;
   height: 300px;
   background: #000;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: var(--sp-4);
 }
 
 video {
@@ -22,12 +22,12 @@ video {
 
 .scanner-controls {
   position: absolute;
-  bottom: 16px;
+  bottom: var(--sp-4);
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: var(--sp-4);
 }
 
 .capture-btn {
@@ -36,14 +36,15 @@ video {
 }
 
 .gallery-btn {
-  background: rgba(255, 255, 255, 0.8);
+  /* Translucent white is intentional — always overlaid on the dark camera feed */
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .gallery {
   display: flex;
-  gap: 8px;
+  gap: var(--sp-2);
   overflow-x: auto;
-  margin-bottom: 16px;
+  margin-bottom: var(--sp-4);
 }
 
 .thumb {
@@ -57,31 +58,31 @@ video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .thumb button {
   position: absolute;
   top: -8px;
   right: -8px;
-  background: white;
+  background: var(--surface);
 }
 
 .scanner-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sp-4);
 }
 
 .error-banner {
-  color: #b3261e;
-  padding: 8px;
-  border: 1px solid #b3261e;
-  border-radius: 8px;
+  color: var(--error);
+  padding: var(--sp-2);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-sm);
   font-size: 14px;
 }
 
 .submit-btn {
   height: 50px;
-  font-size: 16px;
+  font-size: 1rem;
 }
