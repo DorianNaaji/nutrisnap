@@ -91,6 +91,11 @@ html, body {
   --mat-select-panel-background-color: var(--surface);
   --mat-option-selected-state-label-text-color: var(--primary);
   --mat-option-label-text-color: var(--md-sys-color-on-surface);
+
+  /* Dropdown hover/focus states - Premium soft emerald */
+  --mat-option-hover-state-layer-color: rgba(5, 150, 105, 0.08);
+  --mat-option-focus-state-layer-color: rgba(5, 150, 105, 0.12);
+  --mat-option-selected-state-layer-color: rgba(5, 150, 105, 0.15);
 }
 
 /* Unified Card Style */
@@ -122,7 +127,11 @@ html, body {
 
 .mat-mdc-text-field-wrapper {
   background-color: var(--surface) !important;
-  /* Clean up previous double-border hack */
+  transition: background-color 0.2s ease !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  background-color: #f0fdf4 !important; /* Very soft emerald tint on focus */
 }
 
 /* Fix for Select Panel background appearing grey */
@@ -130,6 +139,16 @@ html, body {
   background-color: var(--surface) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: var(--shadow-lg) !important;
+}
+
+/* Fix for highlighted option appearing grey */
+.mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.mat-mdc-option.mat-mdc-option-active {
+  background-color: rgba(5, 150, 105, 0.08) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background-color: rgba(5, 150, 105, 0.15) !important;
 }
 
 /* Stepper fun accents */

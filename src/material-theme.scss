@@ -7,8 +7,8 @@
 $nutrisnap-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$azure-palette,
+    primary: mat.$green-palette,
+    tertiary: mat.$blue-palette,
   ),
   typography: (
     brand-family: 'Inter',
@@ -19,11 +19,15 @@ $nutrisnap-theme: mat.define-theme((
 html {
   @include mat.all-component-themes($nutrisnap-theme);
   
-  /* Applying our Premium Emerald via CSS Variables (The "Socle") */
+  /* Overriding with our specific Premium Emerald for precise brand matching */
   --md-sys-color-primary: #059669;
   --md-sys-color-on-primary: #ffffff;
   --md-sys-color-primary-container: #d1fae5;
   --md-sys-color-on-primary-container: #064e3b;
+  
+  /* Secondary/Tertiary soft accents */
+  --md-sys-color-secondary-container: #ccfbf1;
+  --md-sys-color-on-secondary-container: #115e59;
 }
 
 /* Dark mode support via Material */
@@ -31,8 +35,8 @@ html {
   $dark-theme: mat.define-theme((
     color: (
       theme-type: dark,
-      primary: mat.$azure-palette,
-      tertiary: mat.$azure-palette,
+      primary: mat.$green-palette,
+      tertiary: mat.$blue-palette,
     ),
   ));
   @include mat.all-component-colors($dark-theme);
