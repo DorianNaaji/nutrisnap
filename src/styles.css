@@ -81,6 +81,18 @@ html, body {
    MATERIAL COMPONENT OVERRIDES (SOCLE)
    ========================================================================== */
 
+/* Fixing the "Double Border" and "Material Blue" conflict */
+:root {
+  --mdc-outlined-text-field-focus-outline-color: var(--primary);
+  --mdc-outlined-text-field-focus-label-text-color: var(--primary);
+  --mdc-outlined-text-field-caret-color: var(--primary);
+  
+  /* Select / Dropdown Panel Fixes */
+  --mat-select-panel-background-color: var(--surface);
+  --mat-option-selected-state-label-text-color: var(--primary);
+  --mat-option-label-text-color: var(--md-sys-color-on-surface);
+}
+
 /* Unified Card Style */
 .mat-mdc-card {
   background-color: var(--surface) !important;
@@ -103,23 +115,21 @@ html, body {
   letter-spacing: 0.2px !important;
 }
 
-/* Inputs */
+/* Form Fields Refinement */
 .mat-mdc-form-field {
   width: 100%;
 }
 
 .mat-mdc-text-field-wrapper {
   background-color: var(--surface) !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  /* Clean up previous double-border hack */
 }
 
-.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
-  border-color: var(--primary) !important;
-  box-shadow: 0 0 0 2px var(--primary-container) !important;
-}
-
-.mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
-  color: var(--primary) !important;
+/* Fix for Select Panel background appearing grey */
+.mat-mdc-select-panel {
+  background-color: var(--surface) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
 }
 
 /* Stepper fun accents */
@@ -131,12 +141,6 @@ html, body {
 .mat-step-header .mat-step-label.mat-step-label-selected {
   color: var(--primary) !important;
   font-weight: 700 !important;
-}
-
-/* Checkbox/Radio (Future use) */
-.mat-mdc-checkbox.mat-primary .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
-  background-color: var(--primary) !important;
-  border-color: var(--primary) !important;
 }
 
 /* Utilities */
