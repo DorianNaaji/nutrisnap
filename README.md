@@ -1,7 +1,5 @@
 # NutriSnap — Take back control of your plate.
 
-**Tags:** `nutrition` `calorie-tracker` `macro-tracker` `pwa` `privacy-first` `gemini-ai` `angular` `indexeddb` `byok` `offline` `no-backend` `health` `fitness` `meal-scanner` `ai` · `suivi nutritionnel` `compteur calories` `application nutrition` `intelligence artificielle` `vie privée` `sans serveur` `installable`
-
 > *We only get one body. And 80% of the work of losing weight, building muscle, or simply feeling better happens at the table — not at the gym.*
 
 Most nutrition apps ask you to create an account, hand over your data, and trust that a remote server keeps your most intimate health information safe. NutriSnap takes the opposite approach: **your data never leaves your device.**
@@ -154,3 +152,7 @@ MIT — do whatever you want with it.
 ---
 
 *Built with [Claude Code](https://claude.ai/claude-code) by Dorian Naaji.*
+
+
+
+**Tags:** `nutrition` `calorie-tracker` `macro-tracker` `pwa` `privacy-first` `gemini-ai` `angular` `indexeddb` `byok` `offline` `no-backend` `health` `fitness` `meal-scanner` `ai` · `suivi nutritionnel` `compteur calories` `application nutrition` `intelligence artificielle` `vie privée` `sans serveur` `installable`
