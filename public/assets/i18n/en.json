@@ -156,7 +156,8 @@
     "imported_snack": "Data imported successfully",
     "import_error": "Import failed",
     "reset_btn": "Reset app",
-    "reset_confirm": "Are you sure you want to delete ALL your data? This action is irreversible."
+    "reset_confirm": "Are you sure you want to delete ALL your data? This action is irreversible.",
+    "save_btn": "Save"
   },
   "legal": {
     "legal_btn": "Legal Notice & Terms",

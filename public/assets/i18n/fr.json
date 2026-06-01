@@ -156,7 +156,8 @@
     "imported_snack": "Données importées avec succès",
     "import_error": "Échec de l'importation",
     "reset_btn": "Réinitialiser l'application",
-    "reset_confirm": "Êtes-vous sûr de vouloir supprimer TOUTES vos données ? Cette action est irréversible."
+    "reset_confirm": "Êtes-vous sûr de vouloir supprimer TOUTES vos données ? Cette action est irréversible.",
+    "save_btn": "Sauvegarder"
   },
   "legal": {
     "legal_btn": "Mentions Légales & Conditions",

@@ -1,10 +1,11 @@
 {
   "name": "nutrisnap",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "start:sync-prod": "concurrently \"ng build --watch --configuration production\" \"node scripts/deploy.js\"",
+    "deploy": "ng build --configuration production && node scripts/deploy-once.js",
     "tunnel": "ssh -R 80:localhost:4200 localhost.run",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
