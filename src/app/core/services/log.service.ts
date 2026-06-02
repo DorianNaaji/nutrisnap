@@ -29,11 +29,11 @@ export class LogService {
     }), { calories: 0, proteins: 0, carbs: 0, fats: 0 });
 
     return {
-      totalCalories: totals.calories,
-      totalProteins: totals.proteins,
-      totalCarbs: totals.carbs,
-      totalFats: totals.fats,
-      remainingCalories: target - totals.calories
+      totalCalories: Math.round(totals.calories * 10) / 10,
+      totalProteins: Math.round(totals.proteins * 10) / 10,
+      totalCarbs: Math.round(totals.carbs * 10) / 10,
+      totalFats: Math.round(totals.fats * 10) / 10,
+      remainingCalories: Math.round((target - totals.calories) * 10) / 10
     };
   });
 
