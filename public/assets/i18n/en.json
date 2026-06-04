@@ -157,7 +157,10 @@
     "import_error": "Import failed",
     "reset_btn": "Reset app",
     "reset_confirm": "Are you sure you want to delete ALL your data? This action is irreversible.",
-    "save_btn": "Save"
+    "save_btn": "Save",
+    "feedback_card": "Suggestions & Feedback",
+    "feedback_text": "Got an idea, found a bug, or want a new feature? Drop me a message.",
+    "feedback_btn": "Send a suggestion"
   },
   "legal": {
     "legal_btn": "Legal Notice & Terms",

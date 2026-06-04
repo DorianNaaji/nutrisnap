@@ -198,6 +198,17 @@
       </div>
     </ns-card>
 
+    <!-- SUGGESTIONS -->
+    <ns-card [title]="'profile.feedback_card' | t">
+      <p class="storage-info">{{ 'profile.feedback_text' | t }}</p>
+      <div class="data-actions">
+        <a mat-button color="primary" href="mailto:nutrisnap@dorian-naaji.fr">
+          <mat-icon fontSet="material-symbols-rounded">mail</mat-icon>
+          {{ 'profile.feedback_btn' | t }}
+        </a>
+      </div>
+    </ns-card>
+
     <app-legal-footer></app-legal-footer>
   </div>
 </div>
