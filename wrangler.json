@@ -1,0 +1,10 @@
+{
+	"name": "nutrisnap",
+	"compatibility_date": "2025-10-08",
+	"assets": {
+		"directory": "./dist/nutrisnap/browser"
+	},
+	"observability": {
+		"enabled": true
+	}
+}
