@@ -2,7 +2,8 @@
 	"name": "nutrisnap",
 	"compatibility_date": "2025-10-08",
 	"assets": {
-		"directory": "./dist/nutrisnap/browser"
+		"directory": "./dist/nutrisnap/browser",
+		"not_found_handling": "single-page-application"
 	},
 	"observability": {
 		"enabled": true
