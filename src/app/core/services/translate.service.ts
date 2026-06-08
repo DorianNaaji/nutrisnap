@@ -11,8 +11,13 @@ export class TranslateService {
 
   async init() {
     const settings = await this.storage.getSettings();
-    const lang = (settings?.language as Lang) ?? 'fr';
+    const lang = (settings?.language as Lang) ?? this.detectBrowserLang();
     await this.loadLang(lang);
+  }
+
+  private detectBrowserLang(): Lang {
+    const primary = navigator.language?.split('-')[0];
+    return primary === 'en' ? 'en' : 'fr';
   }
 
   async setLang(lang: Lang) {

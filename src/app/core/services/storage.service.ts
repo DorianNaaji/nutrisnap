@@ -6,7 +6,7 @@ import { MealLog, DailyRecap } from '../models/meal.model';
 export interface AppSettings {
   id: string;
   theme: 'light' | 'dark' | 'system';
-  language: string;
+  language?: string;
 }
 
 @Injectable({
@@ -90,7 +90,6 @@ export class StorageService extends Dexie {
     const existing = await this.getSettings();
     const updated: AppSettings = {
       theme: 'system',
-      language: 'fr',
       ...existing,
       ...patch,
       id: 'app'
