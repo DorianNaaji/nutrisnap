@@ -145,6 +145,15 @@ public/
 
 ---
 
+## Support
+
+NutriSnap is free, ad-free, and has no backend to monetize: it runs entirely on your device. If it helps you take back control of your plate, you can support its development.
+
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-DorianNaaji-EA4AAA?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/DorianNaaji)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/dorian.naaji)
+
+---
+
 ## License
 
 MIT — do whatever you want with it.
