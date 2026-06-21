@@ -160,7 +160,10 @@
     "save_btn": "Sauvegarder",
     "feedback_card": "Suggestions & Retours",
     "feedback_text": "Une idée, un bug, une envie de feature ? Écrivez-moi directement.",
-    "feedback_btn": "Envoyer une suggestion"
+    "feedback_btn": "Envoyer une suggestion",
+    "support_card": "Soutenir le projet",
+    "support_text": "NutriSnap est gratuit, sans pub et sans compte. Si l'app vous aide, un café c'est toujours sympa.",
+    "support_btn": "Offrir un café"
   },
   "legal": {
     "legal_btn": "Mentions Légales & Conditions",

@@ -288,3 +288,48 @@
   border-radius: var(--radius-full);
   overflow: hidden;
 }
+
+/* SUPPORT CARD */
+.support-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  text-align: center;
+  padding: var(--sp-2) 0;
+}
+
+.support-icon {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  color: #e63946;
+}
+
+.support-text {
+  font-size: 0.9rem;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.bmc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: #FFDD00;
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px rgba(255, 221, 0, 0.35);
+}
+
+.bmc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 221, 0, 0.5);
+}

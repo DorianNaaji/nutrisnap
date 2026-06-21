@@ -198,6 +198,21 @@
       </div>
     </ns-card>
 
+    <!-- SUPPORT -->
+    <ns-card [title]="'profile.support_card' | t" customClass="support-card">
+      <div class="support-content">
+        <mat-icon class="support-icon">favorite</mat-icon>
+        <p class="support-text">{{ 'profile.support_text' | t }}</p>
+        <a
+          class="bmc-btn"
+          href="https://buymeacoffee.com/dorian.naaji"
+          target="_blank"
+          rel="noopener noreferrer">
+          ☕ {{ 'profile.support_btn' | t }}
+        </a>
+      </div>
+    </ns-card>
+
     <!-- SUGGESTIONS -->
     <ns-card [title]="'profile.feedback_card' | t">
       <p class="storage-info">{{ 'profile.feedback_text' | t }}</p>
