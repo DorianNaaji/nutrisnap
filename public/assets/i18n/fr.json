@@ -56,7 +56,8 @@
     "recap_no_api": "Configurez votre clé API Gemini dans le profil.",
     "recap_error": "Impossible de générer le bilan. Vérifie ta clé API.",
     "recap_title": "Bilan IA du jour",
-    "recap_cached": "Généré par Gemini · Mis en cache"
+    "recap_cached": "Généré par Gemini · Mis en cache",
+    "weekly_intake": "Apport hebdomadaire"
   },
   "scanner": {
     "title": "Scanner un repas",

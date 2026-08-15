@@ -77,6 +77,11 @@ export class StorageService extends Dexie {
     return logs.map(l => this.normalizeMealLog(l));
   }
 
+  async getLogsByDateRange(from: string, to: string): Promise<MealLog[]> {
+    const logs = await this.logs.where('date').between(from, to, true, true).sortBy('timestamp');
+    return logs.map(l => this.normalizeMealLog(l));
+  }
+
   async deleteLog(id: number): Promise<void> {
     await this.logs.delete(id);
   }

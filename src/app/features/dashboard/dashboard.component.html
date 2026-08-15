@@ -88,6 +88,26 @@
       </ns-card>
     </div>
 
+    <!-- WEEKLY INTAKE -->
+    <section class="weekly-section">
+      <ns-card variant="surface-variant" padding="1rem">
+        <div class="weekly-header">
+          <div class="weekly-titles">
+            <span class="weekly-label">{{ 'dashboard.weekly_intake' | t }}</span>
+            <span class="weekly-range">{{ logService.weekStart() | date:'d MMM' }} - {{ logService.weekEnd() | date:'d MMM' }}</span>
+          </div>
+          <span class="weekly-value" [class.surplus]="logService.weeklyStats().isSurplus">
+            {{ logService.weeklyStats().totalCalories | number:'1.0-0' }} / {{ logService.weeklyStats().targetCalories | number:'1.0-0' }} <small>kcal</small>
+          </span>
+        </div>
+        <div class="weekly-progress">
+          <div class="weekly-fill"
+               [class.surplus]="logService.weeklyStats().isSurplus"
+               [style.width.%]="logService.weeklyStats().progress"></div>
+        </div>
+      </ns-card>
+    </section>
+
     <!-- RECENT LOGS SECTION -->
     <section class="logs-section">
       <div class="section-header">

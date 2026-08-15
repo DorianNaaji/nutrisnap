@@ -194,6 +194,74 @@
 .mini-fill.carbs { background-color: #a855f7; }
 .mini-fill.fats { background-color: var(--warning); }
 
+/* WEEKLY INTAKE */
+.weekly-section {
+  display: block;
+  margin-top: var(--sp-4);
+}
+
+.weekly-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.weekly-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.weekly-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.weekly-range {
+  font-size: 0.6rem;
+  color: var(--md-sys-color-on-surface-variant);
+  text-transform: capitalize;
+}
+
+.weekly-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  white-space: nowrap;
+}
+
+.weekly-value.surplus {
+  color: var(--error);
+}
+
+.weekly-value small {
+  font-size: 0.65rem;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.weekly-progress {
+  height: 8px;
+  background: var(--surface-dim);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.weekly-fill {
+  height: 100%;
+  background-color: var(--success);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+.weekly-fill.surplus {
+  background-color: var(--error);
+}
+
 /* LOGS SECTION */
 .logs-section {
   margin-top: var(--sp-10);

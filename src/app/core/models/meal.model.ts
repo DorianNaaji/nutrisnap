@@ -30,6 +30,13 @@ export interface DailyStats {
   remainingCalories: number;
 }
 
+export interface WeeklyStats {
+  totalCalories: number;
+  targetCalories: number;
+  progress: number; // 0-100, capped
+  isSurplus: boolean;
+}
+
 export interface DailyRecap {
   id?: number;
   date: string;        // YYYY-MM-DD
